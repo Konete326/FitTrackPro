@@ -77,24 +77,43 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  await connectDB();
-  await seedAdmin();
-  const server = app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-  });
+// Vercel serverless: connect DB then export app (no app.listen)
+// Local dev: call startServer() normally
+let isConnected = false;
 
-  process.on('unhandledRejection', (err) => {
-    console.error(`Unhandled Rejection: ${err.message}`);
-    server.close(() => process.exit(1));
-  });
-
-  process.on('SIGTERM', () => {
-    server.close(() => {
-      console.log('Server closed (SIGTERM)');
-      process.exit(0);
-    });
-  });
+const ensureDB = async () => {
+  if (!isConnected) {
+    await connectDB();
+    await seedAdmin();
+    isConnected = true;
+  }
 };
 
-startServer();
+if (process.env.VERCEL) {
+  // Serverless: connect on cold start, export app for Vercel
+  ensureDB();
+  module.exports = app;
+} else {
+  // Local dev
+  const startServer = async () => {
+    await connectDB();
+    await seedAdmin();
+    const server = app.listen(PORT, () => {
+      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
+
+    process.on('unhandledRejection', (err) => {
+      console.error(`Unhandled Rejection: ${err.message}`);
+      server.close(() => process.exit(1));
+    });
+
+    process.on('SIGTERM', () => {
+      server.close(() => {
+        console.log('Server closed (SIGTERM)');
+        process.exit(0);
+      });
+    });
+  };
+
+  startServer();
+}
