@@ -9,7 +9,7 @@ import { getGoals } from '../../services/goalService';
 import { getDailySummary as getWaterSummary } from '../../services/waterService';
 import { getDailySummary as getSleepSummary } from '../../services/sleepService';
 import { getNutritionStats } from '../../services/nutritionService';
-import { FiActivity, FiTarget, FiDroplet, FiMoon, FiFlame, FiCalendar } from 'react-icons/fi';
+import { FiActivity, FiTarget, FiDroplet, FiMoon, FiZap, FiCalendar } from 'react-icons/fi';
 import { format, subDays } from 'date-fns';
 
 function UserDashboard() {
@@ -75,7 +75,7 @@ function UserDashboard() {
             <StatCard
               title="Calories Burned"
               value={totalCalories > 999 ? `${(totalCalories / 1000).toFixed(1)}K` : totalCalories}
-              icon={<FiFlame className="w-5 h-5" />}
+              icon={<FiZap className="w-5 h-5" />}
               color="red"
             />
             <StatCard
