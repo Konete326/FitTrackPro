@@ -12,6 +12,7 @@ dist/
 dist-ssr/
 build/
 out/
+.output/
 
 # ===========================
 # Logs
@@ -29,6 +30,7 @@ lerna-debug.log*
 # ===========================
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # ===========================
 # Editor / IDE
@@ -43,12 +45,6 @@ Thumbs.db
 *.sw?
 
 # ===========================
-# Vite / React Specific
-# ===========================
-*.local
-*.tsbuildinfo
-
-# ===========================
 # Testing & Coverage
 # ===========================
 coverage/
@@ -57,9 +53,17 @@ coverage/
 # ===========================
 # Misc
 # ===========================
+*.local
+*.tsbuildinfo
 .cache/
 .temp/
 tmp/
+
+# ===========================
+# Qodana (static analysis)
+# ===========================
+.qoder/
+.qodana/
 
 # NOTE: .env files are intentionally NOT ignored
 # so they are tracked by git.
