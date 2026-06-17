@@ -136,6 +136,26 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  /* Cursor pointer for interactive elements */
+  button,
+  [role="button"],
+  a,
+  area,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+
+  /* Disabled elements should have default cursor */
+  button:disabled,
+  [disabled],
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   /* Custom scrollbar for light mode */
   ::-webkit-scrollbar {
     width: 6px;

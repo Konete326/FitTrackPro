@@ -17,6 +17,14 @@ import { FiPlus, FiSearch, FiTrash2, FiUserCheck, FiUserX, FiEdit2 } from 'react
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
+// Check if user is online (logged in within last 10 minutes)
+const isUserOnline = (lastLogin) => {
+  if (!lastLogin) return false;
+  const lastLoginTime = new Date(lastLogin).getTime();
+  const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
+  return lastLoginTime > tenMinutesAgo;
+};
+
 function UserManagement() {
   const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
@@ -172,8 +180,11 @@ function UserManagement() {
                   <tr key={u._id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
-                          {u.Profile?.ProfilePicture ? <img src={u.Profile.ProfilePicture} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-violet-500">{(u.Profile?.Name || u.Username || 'U')[0].toUpperCase()}</span>}
+                        <div className="relative shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-violet-500/10 flex items-center justify-center overflow-hidden">
+                            {u.Profile?.ProfilePicture ? <img src={u.Profile.ProfilePicture} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-violet-500">{(u.Profile?.Name || u.Username || 'U')[0].toUpperCase()}</span>}
+                          </div>
+                          <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 border-2 border-white dark:border-gray-900 rounded-full ${isUserOnline(u.LastLogin) ? 'bg-green-500' : 'bg-red-500'}`} />
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{u.Profile?.Name || u.Username}</p>

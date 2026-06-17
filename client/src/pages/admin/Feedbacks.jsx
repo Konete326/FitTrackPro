@@ -158,7 +158,7 @@ function Feedbacks() {
                 {/* Replies */}
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
-                    <FiShield className="w-4 h-4 text-violet-500" />
+                    <FiShield className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                     <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
                       Replies ({selected.Replies?.length || 0})
                     </h3>
@@ -167,15 +167,15 @@ function Feedbacks() {
                   {selected.Replies?.length > 0 ? (
                     <div className="space-y-3 mb-5">
                       {selected.Replies.map((reply) => (
-                        <div key={reply._id} className="bg-violet-500/5 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 rounded-lg p-3.5">
+                        <div key={reply._id} className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/60 rounded-lg p-3.5">
                           <div className="flex items-center gap-2 mb-1.5">
-                            <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center">
-                              <FiShield className="w-3 h-3 text-violet-500" />
+                            <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                              <FiShield className="w-3 h-3 text-gray-500 dark:text-gray-400" />
                             </div>
-                            <span className="text-xs font-semibold text-violet-600 dark:text-violet-400">FitTrack Pro</span>
+                            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">FitTrack Pro</span>
                             <span className="text-xs text-gray-400 dark:text-gray-500">{format(new Date(reply.createdAt), 'MMM dd, yyyy HH:mm')}</span>
                           </div>
-                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{reply.Message}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{reply.Message}</p>
                         </div>
                       ))}
                     </div>

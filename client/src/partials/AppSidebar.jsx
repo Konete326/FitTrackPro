@@ -105,11 +105,11 @@ function AppSidebar({
 
   /* Link style helpers */
   const linkStyle = (active) =>
-    `relative flex items-center h-[42px] mx-3 rounded-lg text-sm font-medium transition-all duration-300 ease-out ${
+    `relative flex items-center h-10 mx-2 rounded-lg text-[13px] font-medium transition-all duration-300 ease-out ${
       active
-        ? "text-white bg-[#161920]"
-        : "text-[#8392a5] hover:text-gray-100"
-    } ${sidebarExpanded ? "pl-3 pr-3" : "justify-center px-0"}`;
+        ? "text-white bg-violet-500/10"
+        : "text-gray-400 hover:text-gray-100 hover:bg-white/5"
+    } ${sidebarExpanded ? "pl-3 pr-3 gap-3" : "justify-center px-0"}`;
 
   const labelCls = `truncate transition-all duration-300 ease-out ${
     sidebarExpanded ? "opacity-100" : "opacity-0 w-0 overflow-hidden"
@@ -121,7 +121,7 @@ function AppSidebar({
     <div className="min-w-fit">
       {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 bg-gray-900/30 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-200 ${
+        className={`fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${
           sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
@@ -131,20 +131,20 @@ function AppSidebar({
         ref={sidebar}
         className={`flex flex-col fixed lg:static z-40 h-[100dvh] shrink-0 overflow-hidden
           transition-all duration-300 ease-out
-          bg-[#0a0b0c] lg:bg-[#0a0b0c]
-          w-64 lg:w-20
-          ${sidebarExpanded ? "lg:!w-64 2xl:!w-64" : ""}
+          bg-[#0f1117] border-r border-white/5
+          w-64 lg:w-[68px]
+          ${sidebarExpanded ? "lg:!w-64" : ""}
           ${sidebarOpen ? "translate-x-0" : "-translate-x-64 lg:translate-x-0"}
-          lg:ml-3 lg:my-3 lg:rounded-2xl lg:h-[calc(100dvh-24px)]
+          lg:ml-3 lg:my-3 lg:rounded-2xl lg:h-[calc(100dvh-24px)] lg:border lg:border-white/[0.06]
           no-scrollbar
         `}
       >
         {/* ═══ Header ═══ */}
-        <div className="relative shrink-0 flex items-center h-20 px-4">
+        <div className="relative shrink-0 flex items-center h-16 px-3">
           {/* Mobile close */}
           <button
             ref={trigger}
-            className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white transition"
+            className="lg:hidden absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -152,57 +152,70 @@ function AppSidebar({
             </svg>
           </button>
 
-          {/* Logo + title */}
-          <NavLink to={homePath} className="flex items-center gap-3 min-w-0">
-            <img src="/logo.svg" alt="FitTrack Pro" className="shrink-0 w-9 h-9" />
-            <div className={`transition-all duration-300 ease-out overflow-hidden ${sidebarExpanded ? "opacity-100" : "opacity-0"}`}>
-              <p className="text-sm font-bold text-white leading-tight whitespace-nowrap">{title}</p>
-              <p className="text-[11px] font-medium text-violet-400 whitespace-nowrap">{subtitle}</p>
-            </div>
-          </NavLink>
+          {/* Logo + title OR toggle button when collapsed */}
+          {sidebarExpanded ? (
+            <NavLink to={homePath} className="flex items-center gap-3 min-w-0 px-1">
+              <img src="/logo.svg" alt="FitTrack Pro" className="shrink-0 w-8 h-8" />
+              <div className="transition-all duration-300 ease-out overflow-hidden">
+                <p className="text-sm font-semibold text-white leading-tight whitespace-nowrap">{title}</p>
+                <p className="text-[10px] font-medium text-violet-400 whitespace-nowrap">{subtitle}</p>
+              </div>
+            </NavLink>
+          ) : (
+            <button
+              onClick={() => setSidebarExpanded(true)}
+              className="w-full flex items-center justify-center group"
+              title="Open sidebar"
+            >
+              <div className="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center group-hover:bg-violet-500/20 transition-all duration-300">
+                <img src="/logo.svg" alt="FitTrack Pro" className="w-5 h-5" />
+              </div>
+            </button>
+          )}
 
-          {/* Desktop toggle */}
-          <button
-            className="hidden lg:flex absolute right-0 top-0 h-full items-center justify-center w-12 cursor-pointer text-gray-500 hover:text-white transition-colors"
-            onClick={() => setSidebarExpanded(!sidebarExpanded)}
-          >
-            {/* Animated burger */}
-            <div className="relative w-4 h-0.5 rounded-full bg-current transition-all duration-300 ease-out">
-              <span
-                className={`absolute left-0 w-2.5 h-0.5 rounded-full bg-current transition-all duration-300 ease-out ${
-                  sidebarExpanded ? "-top-1.5 rotate-[30deg]" : "-top-1.5"
-                }`}
-              />
-              <span
-                className={`absolute left-0 w-2.5 h-0.5 rounded-full bg-current transition-all duration-300 ease-out ${
-                  sidebarExpanded ? "-bottom-1.5 -rotate-[30deg]" : "-bottom-1.5"
-                }`}
-              />
-            </div>
-          </button>
+          {/* Desktop collapse toggle - only when expanded */}
+          {sidebarExpanded && (
+            <button
+              className="hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 items-center justify-center rounded-lg text-gray-500 hover:text-white hover:bg-white/10 transition-all duration-300"
+              onClick={() => setSidebarExpanded(false)}
+              title="Collapse sidebar"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 19l-7-7 7-7" />
+                <path d="M18 19l-7-7 7-7" opacity="0.4" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Divider */}
-        <div className="mx-4 h-px bg-[#1a1d23]" />
+        <div className="mx-3 h-px bg-white/[0.06]" />
 
         {/* ═══ Navigation ═══ */}
-        <div className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden py-4 relative scroll-smooth">
+        <div className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden py-3 relative scroll-smooth">
           {/* Sliding highlight */}
-          {hoveredIndex !== null && (
+          {hoveredIndex !== null && sidebarExpanded && (
             <div
-              className="absolute left-3 right-3 h-[42px] bg-[#12151a] rounded-lg pointer-events-none transition-all duration-300 ease-out z-0"
+              className="absolute left-2 right-2 h-10 bg-white/[0.03] rounded-lg pointer-events-none transition-all duration-300 ease-out z-0"
               style={{ top: highlightTop }}
             />
           )}
 
           {sections.map((section, sIdx) => (
-            <div key={section.name} className={sIdx > 0 ? "mt-5" : ""}>
+            <div key={section.name} className={sIdx > 0 ? "mt-4" : ""}>
               {/* Section label */}
-              <div className={`px-4 mb-3 ${sidebarExpanded ? "" : "text-center"}`}>
-                <h3 className={`text-[10px] uppercase tracking-[0.18em] font-bold ${sidebarExpanded ? "text-[#4a5568]" : "text-[#4a5568]"}`}>
-                  {sidebarExpanded ? section.name : "···"}
-                </h3>
-              </div>
+              {sidebarExpanded && (
+                <div className="px-4 mb-2">
+                  <h3 className="text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-500">
+                    {section.name}
+                  </h3>
+                </div>
+              )}
+
+              {/* Section divider when collapsed */}
+              {!sidebarExpanded && sIdx > 0 && (
+                <div className="mx-4 my-3 h-px bg-white/[0.06]" />
+              )}
 
               {/* Nav items */}
               {section.links.map((link) => {
@@ -216,21 +229,22 @@ function AppSidebar({
                     className={({ isActive }) => linkStyle(isActive)}
                     onMouseEnter={() => handleHover(gIdx)}
                     onMouseLeave={() => setHoveredIndex(null)}
+                    title={!sidebarExpanded ? link.label : undefined}
                   >
                     {({ isActive }) => (
                       <>
-                        {/* Active indicator pill */}
-                        {isActive && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-violet-500 rounded-r-full" />
-                        )}
                         {/* Icon container */}
-                        <span className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ease-out ${
-                          isActive ? "text-violet-400 bg-violet-500/8" : "text-[#5a6b80]"
+                        <span className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ${
+                          isActive ? "text-violet-400" : "text-gray-500"
                         }`}>
                           {getIcon(link.to)}
                         </span>
                         {/* Label */}
                         <span className={labelCls}>{link.label}</span>
+                        {/* Active dot when collapsed */}
+                        {isActive && !sidebarExpanded && (
+                          <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-1 bg-violet-400 rounded-full" />
+                        )}
                       </>
                     )}
                   </NavLink>
@@ -245,20 +259,21 @@ function AppSidebar({
           {/* Panel switcher */}
           {panelSwitcherLinks.length > 0 && (
             <>
-              <div className="mx-4 h-px bg-[#1a1d23]" />
+              <div className="mx-3 h-px bg-white/[0.06]" />
               <div className="py-2">
                 {panelSwitcherLinks.map((link) => (
                   <NavLink
                     key={link.to}
                     to={link.to}
-                    className="relative flex items-center h-[42px] mx-3 rounded-lg text-sm font-medium transition-all duration-300 ease-out text-[#8392a5] hover:text-gray-100"
+                    className="relative flex items-center h-10 mx-2 rounded-lg text-[13px] font-medium transition-all duration-300 ease-out text-gray-400 hover:text-gray-100 hover:bg-white/5"
+                    title={!sidebarExpanded ? link.label : undefined}
                   >
                     {({ isActive: a }) => (
                       <>
-                        <span className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ease-out ${
+                        <span className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ${
                           a || pathname.startsWith(link.prefix)
-                            ? "text-violet-400 bg-violet-500/8"
-                            : "text-[#5a6b80]"
+                            ? "text-violet-400"
+                            : "text-gray-500"
                         }`}>
                           {getIcon(link.to)}
                         </span>
@@ -272,36 +287,32 @@ function AppSidebar({
           )}
 
           {/* Divider */}
-          <div className="mx-4 h-px bg-[#1a1d23]" />
+          <div className="mx-3 h-px bg-white/[0.06]" />
 
           {/* User info */}
-          <div className={`flex items-center h-14 transition-all duration-300 ease-out ${
-            sidebarExpanded ? "px-4 gap-3" : "justify-center"
+          <div className={`flex items-center transition-all duration-300 ease-out ${
+            sidebarExpanded ? "h-14 px-3 gap-3" : "h-12 justify-center"
           }`}>
             <div className="relative shrink-0">
               {userAvatar ? (
                 <img
                   src={userAvatar}
                   alt={userName}
-                  className={`rounded-full object-cover ring-2 ring-violet-500/30 transition-all duration-300 ease-out ${
-                    sidebarExpanded ? "w-9 h-9" : "w-10 h-10"
-                  }`}
+                  className="rounded-full object-cover ring-2 ring-violet-500/20 transition-all duration-300 w-8 h-8"
                 />
               ) : (
-                <div className={`rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white font-bold ring-2 ring-violet-500/30 transition-all duration-300 ease-out ${
-                  sidebarExpanded ? "w-9 h-9 text-sm" : "w-10 h-10 text-base"
-                }`}>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white text-xs font-bold ring-2 ring-violet-500/20">
                   {userInitial}
                 </div>
               )}
               {/* Online indicator */}
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#0a0b0c] rounded-full" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-[#0f1117] rounded-full" />
             </div>
             <div className={`overflow-hidden transition-all duration-300 ease-out ${
               sidebarExpanded ? "opacity-100" : "opacity-0 w-0"
             }`}>
-              <p className="text-sm font-semibold text-gray-200 leading-tight truncate">{userName}</p>
-              <p className="text-[11px] text-[#8392a5] truncate">{userRole}</p>
+              <p className="text-sm font-medium text-gray-200 leading-tight truncate">{userName}</p>
+              <p className="text-[10px] text-gray-500 truncate">{userRole}</p>
             </div>
           </div>
         </div>
