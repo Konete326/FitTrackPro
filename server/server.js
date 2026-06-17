@@ -31,8 +31,20 @@ const app = express();
 
 app.use(helmet());
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'https://fit-track-pro-gym.vercel.app',
+  'http://localhost:5173',
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
@@ -77,8 +89,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-// Vercel serverless: connect DB then export app (no app.listen)
-// Local dev: call startServer() normally
+
 let isConnected = false;
 
 const ensureDB = async () => {
@@ -90,11 +101,10 @@ const ensureDB = async () => {
 };
 
 if (process.env.VERCEL) {
-  // Serverless: connect on cold start, export app for Vercel
   ensureDB();
   module.exports = app;
 } else {
-  // Local dev
+ 
   const startServer = async () => {
     await connectDB();
     await seedAdmin();

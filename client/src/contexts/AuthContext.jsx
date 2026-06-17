@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await authService.login(email, password);
       if (data.success) {
+        if (data.token) localStorage.setItem('fittrack_token', data.token);
         setUser(data.user);
         return data;
       }
@@ -48,6 +49,7 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await authService.register(formData);
       if (data.success) {
+        if (data.token) localStorage.setItem('fittrack_token', data.token);
         setUser(data.user);
         return data;
       }
@@ -64,6 +66,7 @@ export function AuthProvider({ children }) {
       await authService.logout();
     } catch {
     } finally {
+      localStorage.removeItem('fittrack_token');
       setUser(null);
     }
   };

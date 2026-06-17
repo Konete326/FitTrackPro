@@ -17,6 +17,15 @@ const API = axios.create({
   },
 });
 
+
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem('fittrack_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 API.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -24,7 +33,10 @@ API.interceptors.response.use(
       const currentPath = window.location.pathname;
       const publicPaths = ['/', '/home', '/about', '/contact', '/login', '/register', '/forgot-password', '/reset-password'];
       const isPublicPath = publicPaths.some(p => currentPath === p || currentPath.startsWith('/reset-password'));
-      if (!isPublicPath) {
+ 
+      const isAuthCheck = error.config?.url?.includes('/auth/me');
+      if (!isPublicPath && !isAuthCheck) {
+        localStorage.removeItem('fittrack_token');
         window.location.href = '/login';
       }
     }
