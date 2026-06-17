@@ -70,7 +70,7 @@ function Settings() {
         }
       });
       if (fileRef.current?.files[0]) {
-        formData.append('profilePicture', fileRef.current.files[0]);
+        formData.append('ProfilePicture', fileRef.current.files[0]);
       }
       const { data } = await updateProfile(formData);
       if (data.success && data.user) {

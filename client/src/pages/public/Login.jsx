@@ -10,8 +10,8 @@ import Button from '../../components/common/Button';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const schema = yup.object({
-  email: yup.string().required('Email is required').email('Invalid email'),
-  password: yup.string().required('Password is required'),
+  Email: yup.string().required('Email is required').email('Invalid email'),
+  Password: yup.string().required('Password is required'),
 });
 
 function Login() {
@@ -31,7 +31,7 @@ function Login() {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
-      const result = await loginUser(data.email, data.password);
+      const result = await loginUser(data.Email, data.Password);
       toast.success('Welcome back!');
       const routes = { User: '/dashboard', Trainer: '/trainer/dashboard', Admin: '/admin/dashboard' };
       navigate(routes[result.user.Role] || '/home');
@@ -61,8 +61,8 @@ function Login() {
               type="email"
               placeholder="your@email.com"
               icon={<FiMail className="w-4 h-4" />}
-              {...register('email')}
-              error={errors.email?.message}
+              {...register('Email')}
+              error={errors.Email?.message}
             />
 
             <div>
@@ -72,8 +72,8 @@ function Login() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   icon={<FiLock className="w-4 h-4" />}
-                  {...register('password')}
-                  error={errors.password?.message}
+                  {...register('Password')}
+                  error={errors.Password?.message}
                 />
                 <button
                   type="button"

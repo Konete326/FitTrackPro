@@ -10,7 +10,7 @@ import { forgotPassword } from '../../services/authService';
 import { FiMail, FiArrowLeft } from 'react-icons/fi';
 
 const schema = yup.object({
-  email: yup.string().required('Email is required').email('Invalid email'),
+  Email: yup.string().required('Email is required').email('Invalid email'),
 });
 
 function ForgotPassword() {
@@ -21,7 +21,7 @@ function ForgotPassword() {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
-      await forgotPassword(data.email);
+      await forgotPassword(data.Email);
       setSubmitted(true);
       toast.success('Reset link sent! Check your notifications.');
     } catch (err) {
@@ -66,8 +66,8 @@ function ForgotPassword() {
                 type="email"
                 placeholder="your@email.com"
                 icon={<FiMail className="w-4 h-4" />}
-                {...register('email')}
-                error={errors.email?.message}
+                {...register('Email')}
+                error={errors.Email?.message}
               />
               <Button type="submit" loading={submitting} className="w-full">Send Reset Link</Button>
             </form>

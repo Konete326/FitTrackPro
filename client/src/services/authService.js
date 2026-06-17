@@ -6,24 +6,24 @@ export const register = (formData) =>
   });
 
 export const login = (email, password) =>
-  API.post('/auth/login', { email, password });
+  API.post('/auth/login', { Email: email, Password: password });
 
 export const logout = () => API.post('/auth/logout');
 
 export const getCurrentUser = () => API.get('/auth/me');
 
 export const updateProfile = (formData) =>
-  API.put('/auth/update-profile', formData, {
+  API.put('/auth/profile', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
 export const updatePassword = (currentPassword, newPassword) =>
-  API.put('/auth/update-password', { currentPassword, newPassword });
+  API.put('/auth/password', { currentPassword, newPassword });
 
 export const forgotPassword = (email) =>
-  API.post('/auth/forgot-password', { email });
+  API.post('/auth/forgot-password', { Email: email });
 
 export const resetPassword = (resetToken, password) =>
-  API.put(`/auth/reset-password/${resetToken}`, { password });
+  API.post(`/auth/reset-password/${resetToken}`, { Password: password });
 
-export const deleteAccount = () => API.delete('/auth/delete-account');
+export const deleteAccount = () => API.delete('/auth/account');

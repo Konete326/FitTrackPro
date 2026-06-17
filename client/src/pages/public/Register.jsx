@@ -14,12 +14,12 @@ const schema = yup.object({
   Username: yup.string().required('Username is required').min(3).max(30).matches(/^[a-zA-Z0-9_]+$/, 'Only letters, numbers, and underscores'),
   Email: yup.string().required('Email is required').email('Invalid email'),
   Password: yup.string().required('Password is required').min(8, 'Min 8 characters'),
-  ProfileName: yup.string().required('Name is required'),
-  Age: yup.number().required('Age is required').min(13).max(120).typeError('Age must be a number'),
-  Gender: yup.string().required('Gender is required').oneOf(['Male', 'Female', 'Other']),
-  Height: yup.number().required('Height is required').positive().typeError('Must be a number'),
-  Weight: yup.number().required('Weight is required').positive().typeError('Must be a number'),
-  FitnessLevel: yup.string().required('Fitness level is required').oneOf(['Beginner', 'Intermediate', 'Advanced']),
+  'Profile[Name]': yup.string().required('Name is required'),
+  'Profile[Age]': yup.number().required('Age is required').min(13).max(120).typeError('Age must be a number'),
+  'Profile[Gender]': yup.string().required('Gender is required').oneOf(['Male', 'Female', 'Other']),
+  'Profile[Height]': yup.number().required('Height is required').positive().typeError('Must be a number'),
+  'Profile[Weight]': yup.number().required('Weight is required').positive().typeError('Must be a number'),
+  'Profile[FitnessLevel]': yup.string().required('Fitness level is required').oneOf(['Beginner', 'Intermediate', 'Advanced']),
 });
 
 function Register() {
@@ -100,7 +100,7 @@ function Register() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Username" placeholder="john_doe" icon={<FiUser className="w-4 h-4" />} {...register('Username')} error={errors.Username?.message} />
-              <Input label="Full Name" placeholder="John Doe" {...register('ProfileName')} error={errors.ProfileName?.message} />
+              <Input label="Full Name" placeholder="John Doe" {...register('Profile[Name]')} error={errors['Profile[Name]']?.message} />
             </div>
 
             <Input label="Email" type="email" placeholder="your@email.com" icon={<FiMail className="w-4 h-4" />} {...register('Email')} error={errors.Email?.message} />
@@ -120,16 +120,16 @@ function Register() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input label="Age" type="number" placeholder="25" {...register('Age')} error={errors.Age?.message} />
-              <Select label="Gender" options={[{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }, { value: 'Other', label: 'Other' }]} placeholder="Select gender" {...register('Gender')} error={errors.Gender?.message} />
+              <Input label="Age" type="number" placeholder="25" {...register('Profile[Age]')} error={errors['Profile[Age]']?.message} />
+              <Select label="Gender" options={[{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }, { value: 'Other', label: 'Other' }]} placeholder="Select gender" {...register('Profile[Gender]')} error={errors['Profile[Gender]']?.message} />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input label="Height (cm)" type="number" placeholder="175" {...register('Height')} error={errors.Height?.message} />
-              <Input label="Weight (kg)" type="number" placeholder="70" {...register('Weight')} error={errors.Weight?.message} />
+              <Input label="Height (cm)" type="number" placeholder="175" {...register('Profile[Height]')} error={errors['Profile[Height]']?.message} />
+              <Input label="Weight (kg)" type="number" placeholder="70" {...register('Profile[Weight]')} error={errors['Profile[Weight]']?.message} />
             </div>
 
-            <Select label="Fitness Level" options={[{ value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]} placeholder="Select fitness level" {...register('FitnessLevel')} error={errors.FitnessLevel?.message} />
+            <Select label="Fitness Level" options={[{ value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]} placeholder="Select fitness level" {...register('Profile[FitnessLevel]')} error={errors['Profile[FitnessLevel]']?.message} />
 
             <Button type="submit" loading={submitting} className="w-full">Create Account</Button>
           </form>

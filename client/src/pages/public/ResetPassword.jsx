@@ -10,8 +10,8 @@ import { resetPassword } from '../../services/authService';
 import { FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const schema = yup.object({
-  password: yup.string().required('Password is required').min(8, 'Min 8 characters'),
-  confirmPassword: yup.string().required('Confirm your password').oneOf([yup.ref('password')], 'Passwords must match'),
+  Password: yup.string().required('Password is required').min(8, 'Min 8 characters'),
+  ConfirmPassword: yup.string().required('Confirm your password').oneOf([yup.ref('Password')], 'Passwords must match'),
 });
 
 function ResetPassword() {
@@ -24,7 +24,7 @@ function ResetPassword() {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
-      await resetPassword(token, data.password);
+      await resetPassword(token, data.Password);
       toast.success('Password reset successful! Please login.');
       navigate('/login');
     } catch (err) {
@@ -54,8 +54,8 @@ function ResetPassword() {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Min 8 characters"
                 icon={<FiLock className="w-4 h-4" />}
-                {...register('password')}
-                error={errors.password?.message}
+                {...register('Password')}
+                error={errors.Password?.message}
               />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-9 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                 {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
@@ -67,8 +67,8 @@ function ResetPassword() {
               type="password"
               placeholder="Confirm new password"
               icon={<FiLock className="w-4 h-4" />}
-              {...register('confirmPassword')}
-              error={errors.confirmPassword?.message}
+              {...register('ConfirmPassword')}
+              error={errors.ConfirmPassword?.message}
             />
 
             <Button type="submit" loading={submitting} className="w-full">Reset Password</Button>
