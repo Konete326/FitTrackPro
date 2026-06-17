@@ -6,6 +6,7 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import StatCard from '../../components/common/StatCard';
 import Skeleton from '../../components/common/Skeleton';
+import ConfirmModal from '../../components/common/ConfirmModal';
 import { getWaterIntake, logWater, deleteWater, getDailySummary, getHydrationStats, getHydrationStreak } from '../../services/waterService';
 import { FiDroplet, FiPlus, FiTrash2, FiAward } from 'react-icons/fi';
 import { format } from 'date-fns';
@@ -18,6 +19,7 @@ function WaterLog() {
   const [todayTotal, setTodayTotal] = useState(0);
   const [stats, setStats] = useState(null);
   const [streak, setStreak] = useState(0);
+  const [deleteId, setDeleteId] = useState(null);
 
   const GOAL = 2000;
 
@@ -50,10 +52,11 @@ function WaterLog() {
     } catch { toast.error('Failed to log water'); }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await deleteWater(id);
+      await deleteWater(deleteId);
       toast.success('Entry deleted');
+      setDeleteId(null);
       fetchData();
     } catch { toast.error('Failed to delete'); }
   };
@@ -63,6 +66,7 @@ function WaterLog() {
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
+    <>
     <DashboardLayout>
       <PageHeader
         title="Water Intake"
@@ -122,7 +126,7 @@ function WaterLog() {
                         <p className="text-xs text-gray-500 dark:text-gray-400">{entry.Time}</p>
                       </div>
                     </div>
-                    <button onClick={() => handleDelete(entry._id)} className="text-gray-400 hover:text-red-500 transition">
+                    <button onClick={() => setDeleteId(entry._id)} className="text-gray-400 hover:text-red-500 transition">
                       <FiTrash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -133,6 +137,8 @@ function WaterLog() {
         </div>
       </div>
     </DashboardLayout>
+    <ConfirmModal isOpen={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={handleDelete} title="Delete Entry" message="Are you sure you want to delete this water entry?" />
+    </>
   );
 }
 

@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
+import ConfirmModal from '../../components/common/ConfirmModal';
 import { getAllUsers, toggleUserActive, deleteUser } from '../../services/adminService';
 import { useNavigate } from 'react-router-dom';
 import { FiUserCheck, FiPlus, FiTrash2, FiUserX, FiSearch } from 'react-icons/fi';
@@ -15,6 +16,7 @@ function TrainerManagement() {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
 
   const fetchTrainers = useCallback(async () => {
     setLoading(true);
@@ -39,11 +41,11 @@ function TrainerManagement() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm('Delete this trainer?')) return;
+  const handleDelete = async () => {
     try {
-      await deleteUser(id);
+      await deleteUser(deleteId);
       toast.success('Trainer deleted');
+      setDeleteId(null);
       fetchTrainers();
     } catch {
       toast.error('Failed to delete');
@@ -56,6 +58,7 @@ function TrainerManagement() {
   });
 
   return (
+    <>
     <AdminLayout pageTitle="Trainer Management">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="relative">
@@ -94,7 +97,7 @@ function TrainerManagement() {
                 <Button size="sm" variant="secondary" className="flex-1" onClick={() => handleToggle(t._id)}>
                   {t.IsActive ? <><FiUserX className="w-3 h-3 mr-1" />Deactivate</> : <><FiUserCheck className="w-3 h-3 mr-1" />Activate</>}
                 </Button>
-                <Button size="sm" variant="secondary" onClick={() => handleDelete(t._id)}>
+                <Button size="sm" variant="secondary" onClick={() => setDeleteId(t._id)}>
                   <FiTrash2 className="w-3 h-3" />
                 </Button>
               </div>
@@ -103,6 +106,8 @@ function TrainerManagement() {
         </div>
       )}
     </AdminLayout>
+    <ConfirmModal isOpen={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={handleDelete} title="Delete Trainer" message="This will permanently delete this trainer and all their data. This action cannot be undone." />
+    </>
   );
 }
 

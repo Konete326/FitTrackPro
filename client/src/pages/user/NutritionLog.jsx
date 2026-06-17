@@ -9,6 +9,7 @@ import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
+import ConfirmModal from '../../components/common/ConfirmModal';
 import { getNutritions, createNutrition, deleteNutrition, searchFoods, getDailySummary } from '../../services/nutritionService';
 import { FiPlus, FiTrash2, FiSearch } from 'react-icons/fi';
 import { format } from 'date-fns';
@@ -25,6 +26,7 @@ function NutritionLog() {
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [mealType, setMealType] = useState('Breakfast');
   const [submitting, setSubmitting] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -80,10 +82,11 @@ function NutritionLog() {
     finally { setSubmitting(false); }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await deleteNutrition(id);
+      await deleteNutrition(deleteId);
       toast.success('Entry deleted');
+      setDeleteId(null);
       fetchData();
     } catch { toast.error('Failed to delete'); }
   };
@@ -91,6 +94,7 @@ function NutritionLog() {
   const mealColors = { Breakfast: 'violet', Lunch: 'sky', Dinner: 'green', Snack: 'yellow', 'Pre-workout': 'danger', 'Post-workout': 'success' };
 
   return (
+    <>
     <DashboardLayout>
       <PageHeader
         title="Nutrition Log"
@@ -135,7 +139,7 @@ function NutritionLog() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-semibold text-gray-800 dark:text-gray-100">{entry.TotalCalories} kcal</span>
-                    <button onClick={() => handleDelete(entry._id)} className="text-gray-400 hover:text-red-500 transition"><FiTrash2 className="w-4 h-4" /></button>
+                    <button onClick={() => setDeleteId(entry._id)} className="text-gray-400 hover:text-red-500 transition"><FiTrash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -199,6 +203,8 @@ function NutritionLog() {
         </div>
       </Modal>
     </DashboardLayout>
+    <ConfirmModal isOpen={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={handleDelete} title="Delete Meal Entry" message="Are you sure you want to delete this meal entry?" />
+    </>
   );
 }
 
