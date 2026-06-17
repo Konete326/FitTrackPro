@@ -20,7 +20,7 @@ const registration = async (req, res, next) => {
       Profile: { ...Profile, ProfilePicture: profilePictureUrl },
     });
     await Notification.create({
-      UserId: user._id, Type: 'System', Title: 'Welcome!', Message: `Welcome to FitTrack Pro, ${Profile.Name}!`,
+      UserId: user._id, Type: 'System', Title: 'Welcome!', Message: `Welcome to FitTrack Pro, ${Profile.Name}!`, Link: '/dashboard',
     });
     sendTokenResponse(user, 201, res);
   } catch (error) {
@@ -133,7 +133,7 @@ const delete_Account = async (req, res, next) => {
     }
     await User.findByIdAndUpdate(req.user._id, { IsActive: false });
     await Notification.create({
-      UserId: req.user._id, Type: 'System', Title: 'Account Deactivated', Message: 'Your account has been deactivated.',
+      UserId: req.user._id, Type: 'System', Title: 'Account Deactivated', Message: 'Your account has been deactivated.', Link: '/home',
     });
     res.status(200).json({ success: true, message: 'Account deactivated successfully' });
   } catch (error) {

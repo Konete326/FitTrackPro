@@ -53,8 +53,8 @@ const assignTrainer = async (req, res, next) => {
     const { userId, trainerId } = req.params;
     const user = await User.findByIdAndUpdate(userId, { TrainerId: trainerId }, { new: true });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    await Notification.create({ UserId: userId, Type: 'System', Title: 'Trainer Assigned', Message: 'A trainer has been assigned to you.' });
-    await Notification.create({ UserId: trainerId, Type: 'System', Title: 'New Client', Message: 'A new client has been assigned to you.' });
+    await Notification.create({ UserId: userId, Type: 'System', Title: 'Trainer Assigned', Message: 'A trainer has been assigned to you.', Link: '/browse-trainers' });
+    await Notification.create({ UserId: trainerId, Type: 'System', Title: 'New Client', Message: 'A new client has been assigned to you.', Link: '/trainer/clients' });
     res.status(200).json({ success: true, user: user.getSafeUser() });
   } catch (error) { next(error); }
 };

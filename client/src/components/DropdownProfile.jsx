@@ -33,7 +33,7 @@ function DropdownProfile({ align }) {
 
   const displayName = user?.Profile?.Name || user?.Username || 'User';
   const displayRole = user?.Role || 'User';
-  const avatarUrl = user?.Profile?.Picture || UserAvatar;
+  const avatarUrl = user?.Profile?.ProfilePicture || UserAvatar;
 
   const settingsPath = user?.Role === 'Admin' ? '/admin/settings' : user?.Role === 'Trainer' ? '/trainer/settings' : '/settings';
 

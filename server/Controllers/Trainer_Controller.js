@@ -27,7 +27,7 @@ const assignWorkout = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Client not found' });
     }
     const workout = await Workout.create({ ...req.body, UserId: client._id });
-    await Notification.create({ UserId: client._id, Type: 'Workout', Title: 'New Workout Assigned', Message: `Your trainer assigned "${workout.Title}".` });
+    await Notification.create({ UserId: client._id, Type: 'Workout', Title: 'New Workout Assigned', Message: `Your trainer assigned "${workout.Title}".`, Link: '/workouts' });
     res.status(201).json({ success: true, data: workout });
   } catch (error) { next(error); }
 };
@@ -39,7 +39,7 @@ const setClientGoal = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Client not found' });
     }
     const goal = await Goal.create({ ...req.body, UserId: client._id });
-    await Notification.create({ UserId: client._id, Type: 'Goal', Title: 'New Goal Set', Message: `Your trainer set a goal: "${goal.Title}".` });
+    await Notification.create({ UserId: client._id, Type: 'Goal', Title: 'New Goal Set', Message: `Your trainer set a goal: "${goal.Title}".`, Link: '/goals' });
     res.status(201).json({ success: true, data: goal });
   } catch (error) { next(error); }
 };
@@ -62,7 +62,7 @@ const sendMessageToClient = async (req, res, next) => {
     if (!client || client.TrainerId.toString() !== req.user._id.toString()) {
       return res.status(404).json({ success: false, message: 'Client not found' });
     }
-    await Notification.create({ UserId: client._id, Type: 'Message', Title: 'Message from Trainer', Message: req.body.message, Data: { trainerName: req.user.Profile.Name } });
+    await Notification.create({ UserId: client._id, Type: 'Message', Title: 'Message from Trainer', Message: req.body.message, Data: { trainerName: req.user.Profile.Name }, Link: '/dashboard' });
     res.status(201).json({ success: true, message: 'Message sent' });
   } catch (error) { next(error); }
 };
@@ -70,7 +70,7 @@ const sendMessageToClient = async (req, res, next) => {
 const removeClient = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.params.id, { TrainerId: null });
-    await Notification.create({ UserId: req.params.id, Type: 'System', Title: 'Trainer Removed', Message: 'Your trainer assignment has been removed.' });
+    await Notification.create({ UserId: req.params.id, Type: 'System', Title: 'Trainer Removed', Message: 'Your trainer assignment has been removed.', Link: '/browse-trainers' });
     res.status(200).json({ success: true, message: 'Client removed' });
   } catch (error) { next(error); }
 };

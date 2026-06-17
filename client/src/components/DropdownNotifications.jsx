@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
+import { useAuth } from '../contexts/AuthContext';
+import ConfirmModal from './common/ConfirmModal';
 import { getNotifications, markAsRead, markAllAsRead, deleteNotification, clearAllNotifications } from '../services/notificationService';
 
 const POLL_INTERVAL = 30000;
@@ -10,10 +13,15 @@ function DropdownNotifications({ align }) {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
   const pollRef = useRef(null);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const role = user?.Role;
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -81,11 +89,14 @@ function DropdownNotifications({ align }) {
   };
 
   const handleClearAll = async () => {
+    setClearing(true);
     try {
       await clearAllNotifications();
       setNotifications([]);
       setUnreadCount(0);
+      setShowClearConfirm(false);
     } catch {}
+    setClearing(false);
   };
 
   const handleMarkAllRead = async () => {
@@ -120,6 +131,45 @@ function DropdownNotifications({ align }) {
       'Password-Reset': 'bg-red-500',
     };
     return colors[type] || 'bg-gray-400';
+  };
+
+  const getNotificationLink = (notification) => {
+    if (notification.Link) return notification.Link;
+    const { Type, Title } = notification;
+    switch (Type) {
+      case 'Workout': return '/workouts';
+      case 'Goal': return '/goals';
+      case 'Achievement': return '/achievements';
+      case 'Streak': return '/dashboard';
+      case 'Feedback':
+        if (role === 'Admin') return '/admin/feedbacks';
+        return '/profile';
+      case 'Message':
+        if (role === 'Trainer') return '/trainer/clients';
+        return '/dashboard';
+      case 'Password-Reset': return '/';
+      case 'System':
+        if (role === 'Admin') {
+          if (Title?.includes('Trainer') || Title?.includes('Client')) return '/admin/trainers';
+          return '/admin/dashboard';
+        }
+        if (role === 'Trainer') {
+          if (Title?.includes('Request') || Title?.includes('Client')) return '/trainer/clients';
+          return '/trainer/dashboard';
+        }
+        if (Title?.includes('Trainer')) return '/browse-trainers';
+        return '/dashboard';
+      default: return '/dashboard';
+    }
+  };
+
+  const handleNotificationClick = async (notification) => {
+    if (!notification.IsRead) {
+      await handleMarkAsRead(notification._id);
+    }
+    const link = getNotificationLink(notification);
+    setDropdownOpen(false);
+    if (link) navigate(link);
   };
 
   return (
@@ -175,7 +225,7 @@ function DropdownNotifications({ align }) {
               )}
               {notifications.length > 0 && (
                 <button
-                  onClick={handleClearAll}
+                  onClick={() => setShowClearConfirm(true)}
                   className="text-xs text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
                 >
                   Clear all
@@ -195,12 +245,10 @@ function DropdownNotifications({ align }) {
                   key={n._id}
                   className={`border-b border-gray-200 dark:border-gray-700/60 last:border-0 group ${!n.IsRead ? 'bg-gray-100/50 dark:bg-gray-700/10' : ''}`}
                 >
-                  <div className="flex items-start py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/20 transition">
+                  <div className="flex items-start py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/20 transition cursor-pointer" onClick={() => handleNotificationClick(n)}>
                     <button
                       className="flex-1 text-left min-w-0"
-                      onClick={() => {
-                        if (!n.IsRead) handleMarkAsRead(n._id);
-                      }}
+                      type="button"
                     >
                       <div className="flex items-start gap-2.5">
                         <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${typeColor(n.Type)}`}></span>
@@ -230,6 +278,18 @@ function DropdownNotifications({ align }) {
 
         </div>
       </Transition>
+
+      <ConfirmModal
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={handleClearAll}
+        title="Clear All Notifications"
+        message="Are you sure you want to clear all notifications? This action cannot be undone."
+        confirmText="Clear All"
+        cancelText="Cancel"
+        variant="danger"
+        loading={clearing}
+      />
     </div>
   );
 }

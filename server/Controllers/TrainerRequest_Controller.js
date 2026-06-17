@@ -5,7 +5,7 @@ const Notification = require('../Models/Notification_Model');
 const createRequest = async (req, res, next) => {
   try {
     const request = await TrainerRequest.create({ ...req.body, UserId: req.user._id });
-    await Notification.create({ UserId: req.body.TrainerId, Type: 'System', Title: 'New Trainer Request', Message: `${req.user.Profile.Name} wants you as their trainer.` });
+    await Notification.create({ UserId: req.body.TrainerId, Type: 'System', Title: 'New Trainer Request', Message: `${req.user.Profile.Name} wants you as their trainer.`, Link: '/trainer/clients' });
     res.status(201).json({ success: true, data: request });
   } catch (error) { next(error); }
 };
@@ -26,7 +26,7 @@ const updateRequestStatus = async (req, res, next) => {
     await request.save();
     if (req.body.Status === 'Approved') {
       await User.findByIdAndUpdate(request.UserId, { TrainerId: request.TrainerId });
-      await Notification.create({ UserId: request.UserId, Type: 'System', Title: 'Trainer Approved', Message: 'Your trainer request has been approved.' });
+      await Notification.create({ UserId: request.UserId, Type: 'System', Title: 'Trainer Approved', Message: 'Your trainer request has been approved.', Link: '/browse-trainers' });
     }
     res.status(200).json({ success: true, data: request });
   } catch (error) { next(error); }

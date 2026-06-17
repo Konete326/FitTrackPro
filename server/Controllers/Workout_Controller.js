@@ -4,7 +4,7 @@ const Notification = require('../Models/Notification_Model');
 const createWorkout = async (req, res, next) => {
   try {
     const workout = await Workout.create({ ...req.body, UserId: req.user._id });
-    await Notification.create({ UserId: req.user._id, Type: 'Workout', Title: 'Workout Created', Message: `"${workout.Title}" has been added to your workouts.` });
+    await Notification.create({ UserId: req.user._id, Type: 'Workout', Title: 'Workout Created', Message: `"${workout.Title}" has been added to your workouts.`, Link: '/workouts' });
     res.status(201).json({ success: true, data: workout });
   } catch (error) { next(error); }
 };

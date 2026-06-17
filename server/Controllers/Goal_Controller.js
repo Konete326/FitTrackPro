@@ -4,7 +4,7 @@ const Notification = require('../Models/Notification_Model');
 const create_Goal = async (req, res, next) => {
   try {
     const goal = await Goal.create({ ...req.body, UserId: req.user._id });
-    await Notification.create({ UserId: req.user._id, Type: 'Goal', Title: 'Goal Created', Message: `"${goal.Title}" goal has been set.` });
+    await Notification.create({ UserId: req.user._id, Type: 'Goal', Title: 'Goal Created', Message: `"${goal.Title}" goal has been set.`, Link: '/goals' });
     res.status(201).json({ success: true, data: goal });
   } catch (error) { next(error); }
 };
@@ -44,7 +44,7 @@ const update_GoalProgress = async (req, res, next) => {
     if (goal.Progress >= 100) {
       goal.Status = 'Completed';
       await goal.save();
-      await Notification.create({ UserId: req.user._id, Type: 'Goal', Title: 'Goal Completed!', Message: `Congratulations! "${goal.Title}" has been completed.` });
+      await Notification.create({ UserId: req.user._id, Type: 'Goal', Title: 'Goal Completed!', Message: `Congratulations! "${goal.Title}" has been completed.`, Link: '/goals' });
     }
     res.status(200).json({ success: true, data: goal });
   } catch (error) { next(error); }
