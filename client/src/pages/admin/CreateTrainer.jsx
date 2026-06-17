@@ -47,11 +47,12 @@ function CreateTrainer() {
 
   return (
     <AdminLayout pageTitle="Create Trainer">
-      <button onClick={() => navigate('/admin/trainers')} className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition mb-6">
-        <FiArrowLeft className="w-4 h-4" /> Back to Trainers
-      </button>
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-12rem)]">
+        <button onClick={() => navigate('/admin/trainers')} className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition mb-6 self-start">
+          <FiArrowLeft className="w-4 h-4" /> Back to Trainers
+        </button>
 
-      <Card className="max-w-2xl">
+        <Card className="max-w-2xl w-full">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-sky-500/10 text-sky-500 rounded-full flex items-center justify-center">
             <FiUserCheck className="w-5 h-5" />
@@ -76,14 +77,15 @@ function CreateTrainer() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio / Specialization</label>
-            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={3} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Describe the trainer's expertise and specializations..." />
+            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={3} className="form-textarea w-full !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition" placeholder="Describe the trainer's expertise and specializations..." />
           </div>
           <div className="flex gap-3 pt-2">
             <Button type="submit" variant="primary" loading={saving}>Create Trainer</Button>
             <Button type="button" variant="secondary" onClick={() => navigate('/admin/trainers')}>Cancel</Button>
           </div>
         </form>
-      </Card>
+        </Card>
+      </div>
     </AdminLayout>
   );
 }
