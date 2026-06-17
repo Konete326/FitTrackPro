@@ -140,3 +140,48 @@ input[type="search"]::-webkit-search-results-decoration {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* ─── Professional Sidebar Styles ─── */
+
+/* Sidebar nav area scrollbar (visible on desktop) */
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: #1e2330;
+  border-radius: 9999px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #3a4560;
+}
+
+/* Active nav item glow - very subtle */
+.sidebar-nav-active {
+  box-shadow: 0 0 12px -4px rgba(132, 112, 255, 0.06);
+}
+
+/* Sidebar rounded corner illusion on hover highlight */
+.sidebar-highlight::before,
+.sidebar-highlight::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 6px 6px #0a0b0c;
+  pointer-events: none;
+}
+
+.sidebar-highlight::after {
+  top: 100%;
+  bottom: auto;
+  box-shadow: 6px -6px #0a0b0c;
+}

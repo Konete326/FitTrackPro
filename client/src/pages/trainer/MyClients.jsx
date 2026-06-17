@@ -8,7 +8,7 @@ import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import { getClients, removeClient } from '../../services/trainerService';
 import { useNavigate } from 'react-router-dom';
-import { FiUsers, FiSearch, FiUserX } from 'react-icons/fi';
+import { FiUsers, FiSearch, FiUserX, FiCoffee } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function MyClients() {
@@ -106,6 +106,9 @@ function MyClients() {
               <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex gap-2">
                 <Button size="sm" variant="primary" className="flex-1" onClick={(e) => { e.stopPropagation(); navigate(`/trainer/clients/${client._id}`); }}>
                   View Details
+                </Button>
+                <Button size="sm" variant="secondary" onClick={(e) => { e.stopPropagation(); navigate(`/trainer/clients/${client._id}/meal-plans`); }}>
+                  <FiCoffee className="w-3 h-3" />
                 </Button>
                 <Button size="sm" variant="secondary" onClick={(e) => { e.stopPropagation(); setRemoveId(client._id); }}>
                   <FiUserX className="w-3 h-3" />

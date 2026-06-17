@@ -32,3 +32,18 @@ export const deleteWorkoutTemplate = (id) =>
   API.delete(`/trainer/workout-templates/${id}`);
 
 export const getDashboardStats = () => API.get('/trainer/dashboard-stats');
+
+export const createClientMealPlan = (clientId, data) =>
+  API.post(`/trainer/clients/${clientId}/meal-plans`, data);
+
+export const getClientMealPlans = (clientId) =>
+  API.get(`/trainer/clients/${clientId}/meal-plans`);
+
+export const updateClientMealPlan = (clientId, planId, data) =>
+  API.put(`/trainer/clients/${clientId}/meal-plans/${planId}`, data);
+
+export const deleteClientMealPlan = (clientId, planId) =>
+  API.delete(`/trainer/clients/${clientId}/meal-plans/${planId}`);
+
+export const toggleClientMealPlan = (clientId, planId, isActive) =>
+  API.put(`/trainer/clients/${clientId}/meal-plans/${planId}/toggle`, { IsActive: isActive });

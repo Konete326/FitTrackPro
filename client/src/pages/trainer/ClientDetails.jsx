@@ -10,7 +10,7 @@ import Modal from '../../components/common/Modal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useValidation, validators } from '../../hooks/useValidation';
 import { getClientDetails, assignWorkout, setClientGoal, addClientNote, sendMessageToClient } from '../../services/trainerService';
-import { FiArrowLeft, FiPlus, FiTarget, FiMessageSquare, FiFileText, FiSend } from 'react-icons/fi';
+import { FiArrowLeft, FiPlus, FiTarget, FiMessageSquare, FiFileText, FiSend, FiCoffee } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
@@ -182,6 +182,7 @@ function ClientDetails() {
                 <Button size="sm" variant="primary" onClick={() => setShowWorkout(true)}><FiPlus className="w-3 h-3 mr-1" />Assign Workout</Button>
                 <Button size="sm" variant="secondary" onClick={() => setShowGoal(true)}><FiTarget className="w-3 h-3 mr-1" />Set Goal</Button>
                 <Button size="sm" variant="secondary" onClick={() => setShowMessage(true)}><FiSend className="w-3 h-3 mr-1" />Message</Button>
+                <Button size="sm" variant="secondary" onClick={() => navigate(`/trainer/clients/${id}/meal-plans`)}><FiCoffee className="w-3 h-3 mr-1" />Meal Plans</Button>
               </div>
             </div>
           </div>
@@ -278,6 +279,12 @@ function ClientDetails() {
             <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Send Message</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Send a direct message to client</p>
             <Button variant="primary" onClick={() => setShowMessage(true)}>Message</Button>
+          </Card>
+          <Card className="flex flex-col items-center text-center py-8">
+            <div className="w-14 h-14 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center mb-3"><FiCoffee className="w-7 h-7" /></div>
+            <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Meal Plans</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Create nutrition plans for this client</p>
+            <Button variant="primary" onClick={() => navigate(`/trainer/clients/${id}/meal-plans`)}>Manage Plans</Button>
           </Card>
         </div>
       )}

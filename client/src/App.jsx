@@ -36,6 +36,7 @@ import Settings from './pages/user/Settings';
 import TrainerDashboard from './pages/trainer/TrainerDashboard';
 import MyClients from './pages/trainer/MyClients';
 import ClientDetails from './pages/trainer/ClientDetails';
+import ClientMealPlans from './pages/trainer/ClientMealPlans';
 import WorkoutTemplates from './pages/trainer/WorkoutTemplates';
 import TrainerProfile from './pages/trainer/TrainerProfile';
 import TrainerSettings from './pages/trainer/TrainerSettings';
@@ -90,6 +91,7 @@ function App() {
         <Route path="/trainer/dashboard" element={<ProtectedRoute roles={['Trainer']}><TrainerDashboard /></ProtectedRoute>} />
         <Route path="/trainer/clients" element={<ProtectedRoute roles={['Trainer']}><MyClients /></ProtectedRoute>} />
         <Route path="/trainer/clients/:id" element={<ProtectedRoute roles={['Trainer']}><ClientDetails /></ProtectedRoute>} />
+        <Route path="/trainer/clients/:id/meal-plans" element={<ProtectedRoute roles={['Trainer']}><ClientMealPlans /></ProtectedRoute>} />
         <Route path="/trainer/templates" element={<ProtectedRoute roles={['Trainer']}><WorkoutTemplates /></ProtectedRoute>} />
         <Route path="/trainer/profile" element={<ProtectedRoute roles={['Trainer']}><TrainerProfile /></ProtectedRoute>} />
         <Route path="/trainer/settings" element={<ProtectedRoute roles={['Trainer']}><TrainerSettings /></ProtectedRoute>} />

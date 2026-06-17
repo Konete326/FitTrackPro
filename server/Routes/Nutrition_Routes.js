@@ -9,6 +9,7 @@ const {
   searchFoods,
   createFood,
 } = require('../Controllers/Nutrition_Controller');
+const { getMyMealPlans, getMyMealPlanById } = require('../Controllers/MealPlanUser_Controller');
 
 router.use(protect);
 
@@ -22,5 +23,8 @@ router.route('/:id')
 
 router.get('/foods/search', searchFoods);
 router.post('/foods', createFood);
+
+router.get('/meal-plans', getMyMealPlans);
+router.get('/meal-plans/:id', getMyMealPlanById);
 
 module.exports = router;

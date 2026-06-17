@@ -10,8 +10,8 @@ import Modal from '../../components/common/Modal';
 import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
-import { getNutritions, createNutrition, deleteNutrition, searchFoods, getDailySummary } from '../../services/nutritionService';
-import { FiPlus, FiTrash2, FiSearch } from 'react-icons/fi';
+import { getNutritions, createNutrition, deleteNutrition, searchFoods, getDailySummary, getMyMealPlans } from '../../services/nutritionService';
+import { FiPlus, FiTrash2, FiSearch, FiCoffee, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
@@ -27,16 +27,22 @@ function NutritionLog() {
   const [mealType, setMealType] = useState('Breakfast');
   const [submitting, setSubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [mealPlans, setMealPlans] = useState([]);
+  const [activeTab, setActiveTab] = useState('log');
+  const [expandedPlan, setExpandedPlan] = useState(null);
+  const [expandedDay, setExpandedDay] = useState(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [entriesRes, summaryRes] = await Promise.allSettled([
+      const [entriesRes, summaryRes, plansRes] = await Promise.allSettled([
         getNutritions({ date: selectedDate }),
         getDailySummary(selectedDate),
+        getMyMealPlans(),
       ]);
       if (entriesRes.status === 'fulfilled') setEntries(entriesRes.value.data?.data || []);
       if (summaryRes.status === 'fulfilled') setDailyTotals(summaryRes.value.data?.data || null);
+      if (plansRes.status === 'fulfilled') setMealPlans(plansRes.value.data?.data || []);
     } catch {
     } finally {
       setLoading(false);
@@ -97,8 +103,8 @@ function NutritionLog() {
     <>
     <DashboardLayout>
       <PageHeader
-        title="Nutrition Log"
-        description="Track your daily meals and nutrition"
+        title="Nutrition"
+        description="Track meals and view your nutrition plans"
         actions={
           <div className="flex gap-3">
             <Input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
@@ -106,6 +112,99 @@ function NutritionLog() {
           </div>
         }
       />
+
+      <div className="flex gap-1 mb-6 border-b border-gray-200 dark:border-gray-700">
+        <button onClick={() => setActiveTab('log')} className={`px-4 py-2 text-sm font-medium transition border-b-2 -mb-px ${activeTab === 'log' ? 'border-violet-500 text-violet-600 dark:text-violet-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}>
+          Meal Log
+        </button>
+        <button onClick={() => setActiveTab('plans')} className={`px-4 py-2 text-sm font-medium transition border-b-2 -mb-px flex items-center gap-2 ${activeTab === 'plans' ? 'border-violet-500 text-violet-600 dark:text-violet-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}>
+          <FiCoffee className="w-4 h-4" /> My Plans
+          {mealPlans.length > 0 && <span className="bg-violet-500/10 text-violet-500 text-xs px-1.5 py-0.5 rounded-full">{mealPlans.length}</span>}
+        </button>
+      </div>
+
+      {activeTab === 'plans' && (
+        <>
+          {mealPlans.length === 0 ? (
+            <Card><EmptyState icon={<FiCoffee className="w-12 h-12" />} title="No meal plans assigned" description="Your trainer hasn't assigned any nutrition plans yet." /></Card>
+          ) : (
+            <div className="space-y-4">
+              {mealPlans.map((plan) => (
+                <Card key={plan._id} className="!p-0">
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-gray-800 dark:text-gray-100">{plan.Title}</h3>
+                          <Badge variant="green">Active</Badge>
+                        </div>
+                        {plan.Description && <p className="text-sm text-gray-500 dark:text-gray-400">{plan.Description}</p>}
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {plan.DietaryPreference && <Badge variant="sky">{plan.DietaryPreference}</Badge>}
+                          <Badge variant="gray">{plan.DurationDays} days</Badge>
+                          {plan.TargetCalories && <Badge variant="yellow">{plan.TargetCalories} cal/day</Badge>}
+                          {plan.TrainerName && <Badge variant="violet">By {plan.TrainerName}</Badge>}
+                        </div>
+                      </div>
+                    </div>
+                    <button onClick={() => setExpandedPlan(expandedPlan === plan._id ? null : plan._id)} className="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600 font-medium">
+                      {expandedPlan === plan._id ? 'Hide' : 'View'} Schedule
+                      {expandedPlan === plan._id ? <FiChevronUp className="w-4 h-4" /> : <FiChevronDown className="w-4 h-4" />}
+                    </button>
+                    {expandedPlan === plan._id && (
+                      <div className="mt-4 space-y-2">
+                        {plan.Days?.map((day, dayIdx) => (
+                          <div key={dayIdx} className="border border-gray-200 dark:border-gray-700/60 rounded-lg overflow-hidden">
+                            <button onClick={() => setExpandedDay(expandedDay === `${plan._id}-${dayIdx}` ? null : `${plan._id}-${dayIdx}`)} className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                              <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{day.DayOfWeek}</span>
+                              <div className="flex items-center gap-3">
+                                {day.DailyCalories > 0 && <span className="text-xs text-gray-400">{day.DailyCalories} cal</span>}
+                                <span className="text-xs text-gray-400">{day.Meals?.length || 0} meals</span>
+                                {expandedDay === `${plan._id}-${dayIdx}` ? <FiChevronUp className="w-3 h-3 text-gray-400" /> : <FiChevronDown className="w-3 h-3 text-gray-400" />}
+                              </div>
+                            </button>
+                            {expandedDay === `${plan._id}-${dayIdx}` && (
+                              <div className="p-3 space-y-3">
+                                {day.Meals?.map((meal, mealIdx) => (
+                                  <div key={mealIdx} className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <Badge variant="violet">{meal.MealType}</Badge>
+                                      {meal.Time && <span className="text-xs text-gray-400">{meal.Time}</span>}
+                                    </div>
+                                    <div className="space-y-1">
+                                      {meal.FoodItems?.map((food, foodIdx) => (
+                                        <div key={foodIdx} className="flex items-center justify-between text-sm">
+                                          <span className="text-gray-700 dark:text-gray-300">{food.Name} <span className="text-gray-400 text-xs">({food.Quantity})</span></span>
+                                          <span className="text-xs text-gray-400">{food.Calories} cal · P:{food.Protein}g C:{food.Carbs}g F:{food.Fat}g</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {meal.Instructions && <p className="text-xs text-gray-400 mt-2 italic">{meal.Instructions}</p>}
+                                    <div className="flex gap-3 mt-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700/60 pt-2">
+                                      <span>{meal.TotalCalories || 0} cal</span>
+                                      <span>P: {meal.TotalProtein || 0}g</span>
+                                      <span>C: {meal.TotalCarbs || 0}g</span>
+                                      <span>F: {meal.TotalFat || 0}g</span>
+                                    </div>
+                                  </div>
+                                ))}
+                                {day.Notes && <p className="text-xs text-gray-400 italic px-1">{day.Notes}</p>}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {activeTab === 'log' && (
+        <>
 
       {dailyTotals && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
@@ -202,6 +301,9 @@ function NutritionLog() {
           )}
         </div>
       </Modal>
+        </>
+      )}
+
     </DashboardLayout>
     <ConfirmModal isOpen={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={handleDelete} title="Delete Meal Entry" message="Are you sure you want to delete this meal entry?" />
     </>

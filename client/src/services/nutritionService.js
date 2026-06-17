@@ -18,3 +18,7 @@ export const getNutritionStats = () => API.get('/nutrition/stats/summary');
 
 export const getDailySummary = (date) =>
   API.get(`/nutrition/daily-summary/${date || ''}`);
+
+export const getMyMealPlans = () => API.get('/nutrition/meal-plans');
+
+export const getMyMealPlanById = (id) => API.get(`/nutrition/meal-plans/${id}`);

@@ -123,10 +123,35 @@ function FAQ() {
     )
   })).filter(cat => cat.questions.length > 0);
 
+  // Check if any question in a category is expanded
+  const isCategoryExpanded = (catIndex) => {
+    return filteredCategories.some((cat, idx) => {
+      if (idx !== catIndex) return false;
+      return cat.questions.some((_, qIndex) => openIndex === `${catIndex}-${qIndex}`);
+    });
+  };
+
+  // Get the original category index for checking expansion
+  const getOriginalCatIndex = (filteredIndex) => {
+    let count = 0;
+    for (let i = 0; i < faqCategories.length; i++) {
+      const hasQuestions = faqCategories[i].questions.some(
+        item =>
+          item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.a.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      if (hasQuestions) {
+        if (count === filteredIndex) return i;
+        count++;
+      }
+    }
+    return filteredIndex;
+  };
+
   return (
     <PublicLayout>
       <section className="py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">
@@ -149,10 +174,10 @@ function FAQ() {
             />
           </div>
 
-          {/* FAQ Sections */}
-          <div className="space-y-6">
+          {/* FAQ Sections - 2 Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredCategories.length === 0 ? (
-              <Card className="text-center py-12">
+              <Card className="text-center py-12 col-span-2">
                 <FiMessageCircle className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No results found</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm">
@@ -160,38 +185,42 @@ function FAQ() {
                 </p>
               </Card>
             ) : (
-              filteredCategories.map((category, catIndex) => (
-                <Card key={catIndex} className="!p-0 overflow-hidden">
-                  <div className="px-5 py-4 bg-violet-500/5 dark:bg-violet-500/10 border-b border-gray-200 dark:border-gray-700/60">
-                    <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">{category.title}</h2>
-                  </div>
-                  <div className="divide-y divide-gray-100 dark:divide-gray-700/60">
-                    {category.questions.map((item, qIndex) => {
-                      const key = `${catIndex}-${qIndex}`;
-                      const isOpen = openIndex === key;
-                      return (
-                        <div key={qIndex}>
-                          <button
-                            onClick={() => toggleFAQ(catIndex, qIndex)}
-                            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 dark:hover:bg-gray-900/50 transition"
-                          >
-                            <span className="text-sm font-medium text-gray-800 dark:text-gray-200 pr-4">{item.q}</span>
-                            {isOpen
-                              ? <FiChevronUp className="w-4 h-4 text-violet-500 shrink-0" />
-                              : <FiChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
-                            }
-                          </button>
-                          {isOpen && (
-                            <div className="px-5 pb-4">
-                              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{item.a}</p>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </Card>
-              ))
+              filteredCategories.map((category, catIndex) => {
+                const originalIndex = getOriginalCatIndex(catIndex);
+                const isExpanded = isCategoryExpanded(originalIndex);
+                return (
+                  <Card key={catIndex} className={`!p-0 overflow-hidden transition-all duration-300 ${isExpanded ? 'md:col-span-2' : ''}`}>
+                    <div className="px-5 py-4 bg-violet-500/5 dark:bg-violet-500/10 border-b border-gray-200 dark:border-gray-700/60">
+                      <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">{category.title}</h2>
+                    </div>
+                    <div className="divide-y divide-gray-100 dark:divide-gray-700/60">
+                      {category.questions.map((item, qIndex) => {
+                        const key = `${originalIndex}-${qIndex}`;
+                        const isOpen = openIndex === key;
+                        return (
+                          <div key={qIndex}>
+                            <button
+                              onClick={() => toggleFAQ(originalIndex, qIndex)}
+                              className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 dark:hover:bg-gray-900/50 transition"
+                            >
+                              <span className="text-sm font-medium text-gray-800 dark:text-gray-200 pr-4">{item.q}</span>
+                              {isOpen
+                                ? <FiChevronUp className="w-4 h-4 text-violet-500 shrink-0" />
+                                : <FiChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
+                              }
+                            </button>
+                            {isOpen && (
+                              <div className="px-5 pb-4">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{item.a}</p>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Card>
+                );
+              })
             )}
           </div>
 

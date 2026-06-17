@@ -14,6 +14,13 @@ const {
   deleteWorkoutTemplate,
   getTrainerDashboardStats,
 } = require('../Controllers/Trainer_Controller');
+const {
+  createMealPlanForClient,
+  getClientMealPlans,
+  updateClientMealPlan,
+  deleteClientMealPlan,
+  toggleMealPlanActive,
+} = require('../Controllers/MealPlan_Controller');
 
 router.use(protect, authorize('Trainer'));
 
@@ -26,6 +33,14 @@ router.post('/clients/:id/goals', idParamValidation, setClientGoal);
 router.post('/clients/:id/notes', idParamValidation, addClientNote);
 router.post('/clients/:id/message', idParamValidation, sendMessageToClient);
 router.delete('/clients/:id', idParamValidation, removeClient);
+
+router.route('/clients/:id/meal-plans')
+  .post(idParamValidation, createMealPlanForClient)
+  .get(idParamValidation, getClientMealPlans);
+
+router.put('/clients/:id/meal-plans/:planId/toggle', idParamValidation, toggleMealPlanActive);
+router.put('/clients/:id/meal-plans/:planId', idParamValidation, updateClientMealPlan);
+router.delete('/clients/:id/meal-plans/:planId', idParamValidation, deleteClientMealPlan);
 
 router.route('/templates')
   .post(createWorkoutTemplate)
