@@ -158,10 +158,12 @@ function TrainerSettings() {
           {activeTab === 'password' && (
             <Card>
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Change Password</h3>
-              <form onSubmit={handlePasswordSubmit} className="space-y-5 max-w-md">
+              <form onSubmit={handlePasswordSubmit} className="space-y-5">
                 <Input label="Current Password" type="password" value={passwordForm.currentPassword} onChange={(e) => updatePasswordField('currentPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('currentPassword', e.target.value)} error={passwordErrors.currentPassword} required />
-                <Input label="New Password" type="password" value={passwordForm.newPassword} onChange={(e) => updatePasswordField('newPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('newPassword', e.target.value)} error={passwordErrors.newPassword} helperText={hints.password} required />
-                <Input label="Confirm New Password" type="password" value={passwordForm.confirmPassword} onChange={(e) => updatePasswordField('confirmPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('confirmPassword', e.target.value)} error={passwordErrors.confirmPassword} helperText={hints.confirmPassword} required />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Input label="New Password" type="password" value={passwordForm.newPassword} onChange={(e) => updatePasswordField('newPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('newPassword', e.target.value)} error={passwordErrors.newPassword} helperText={hints.password} required />
+                  <Input label="Confirm New Password" type="password" value={passwordForm.confirmPassword} onChange={(e) => updatePasswordField('confirmPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('confirmPassword', e.target.value)} error={passwordErrors.confirmPassword} helperText={hints.confirmPassword} required />
+                </div>
                 <div className="flex justify-end">
                   <Button type="submit" variant="primary" loading={saving}>Change Password</Button>
                 </div>
