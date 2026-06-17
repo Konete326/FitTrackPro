@@ -4,6 +4,15 @@ const { uploadToCloudinary, deleteFromCloudinary } = require('../Utils/Cloudinar
 const { sendTokenResponse } = require('../Utils/Token');
 const crypto = require('crypto');
 
+const notifyAdmins = async (title, message, link) => {
+  try {
+    const admins = await User.find({ Role: 'Admin' }).select('_id');
+    await Promise.all(admins.map(admin =>
+      Notification.create({ UserId: admin._id, Type: 'System', Title: title, Message: message, Link: link })
+    ));
+  } catch (e) { /* don't block auth flow */ }
+};
+
 const registration = async (req, res, next) => {
   try {
     const { Username, Email, Password, Profile } = req.body;
@@ -41,6 +50,9 @@ const login = async (req, res, next) => {
     await Notification.create({
       UserId: user._id, Type: 'System', Title: 'Welcome Back!', Message: `Hey ${user.Profile?.Name || user.Username}, welcome back to FitTrack Pro!`, Link: '/dashboard',
     });
+    const displayName = user.Profile?.Name || user.Username;
+    const role = user.Role === 'Trainer' ? 'Trainer' : 'User';
+    await notifyAdmins(`${role} Login`, `${displayName} (${role}) logged in.`, `/admin/users`);
     sendTokenResponse(user, 200, res);
   } catch (error) {
     next(error);
@@ -48,6 +60,11 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
+  if (req.user) {
+    const displayName = req.user.Profile?.Name || req.user.Username;
+    const role = req.user.Role === 'Trainer' ? 'Trainer' : 'User';
+    await notifyAdmins(`${role} Logout`, `${displayName} (${role}) logged out.`, `/admin/users`);
+  }
   res.cookie('token', '', { httpOnly: true, expires: new Date(0) });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
