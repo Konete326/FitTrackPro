@@ -4,6 +4,7 @@ import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
+import Textarea from '../../components/common/Textarea';
 import Badge from '../../components/common/Badge';
 import Skeleton from '../../components/common/Skeleton';
 import Modal from '../../components/common/Modal';
@@ -146,32 +147,37 @@ function WorkoutTemplates() {
       )}
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Create Template">
-        <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
-          <Input label="Title" value={formData.Title} onChange={(e) => setFormData({ ...formData, Title: e.target.value })} required />
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Title" value={formData.Title} onChange={(e) => setFormData({ ...formData, Title: e.target.value })} required />
+            <Input label="Duration (min)" type="number" min="1" value={formData.EstimatedDuration} onChange={(e) => setFormData({ ...formData, EstimatedDuration: e.target.value })} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select label="Type" value={formData.Type} onChange={(e) => setFormData({ ...formData, Type: e.target.value })} options={[{ value: 'Strength', label: 'Strength' }, { value: 'Cardio', label: 'Cardio' }, { value: 'HIIT', label: 'HIIT' }, { value: 'Yoga', label: 'Yoga' }, { value: 'Flexibility', label: 'Flexibility' }, { value: 'Mixed', label: 'Mixed' }]} />
             <Select label="Difficulty" value={formData.Difficulty} onChange={(e) => setFormData({ ...formData, Difficulty: e.target.value })} options={[{ value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]} />
           </div>
-          <Input label="Duration (min)" type="number" min="1" value={formData.EstimatedDuration} onChange={(e) => setFormData({ ...formData, EstimatedDuration: e.target.value })} />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-            <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Template description" />
-          </div>
+          <Textarea label="Description" value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} maxLength={500} placeholder="Template description" />
 
           <div className="border-t border-gray-100 dark:border-gray-700/60 pt-4">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Add Exercises</h4>
-            <div className="flex gap-2 mb-3">
-              <input value={exForm.Name} onChange={(e) => setExForm({ ...exForm, Name: e.target.value })} placeholder="Exercise name" className="form-input flex-1 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
-              <input value={exForm.Sets} onChange={(e) => setExForm({ ...exForm, Sets: e.target.value })} placeholder="Sets" type="number" className="form-input w-16 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
-              <input value={exForm.Reps} onChange={(e) => setExForm({ ...exForm, Reps: e.target.value })} placeholder="Reps" className="form-input w-20 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
-              <Button type="button" variant="secondary" size="sm" onClick={addExercise}><FiPlus className="w-3 h-3" /></Button>
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Exercises</h4>
+            <div className="grid grid-cols-12 gap-2 mb-3">
+              <Input className="col-span-5" value={exForm.Name} onChange={(e) => setExForm({ ...exForm, Name: e.target.value })} placeholder="Exercise name" />
+              <Input className="col-span-2" value={exForm.Sets} onChange={(e) => setExForm({ ...exForm, Sets: e.target.value })} placeholder="Sets" type="number" />
+              <Input className="col-span-2" value={exForm.Reps} onChange={(e) => setExForm({ ...exForm, Reps: e.target.value })} placeholder="Reps" />
+              <div className="col-span-3 flex items-end">
+                <Button type="button" variant="secondary" size="sm" className="w-full" onClick={addExercise}><FiPlus className="w-3 h-3 mr-1" />Add</Button>
+              </div>
             </div>
             {formData.Exercises.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {formData.Exercises.map((ex, i) => (
-                  <div key={i} className="flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-900 rounded-lg">
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{ex.Name} - {ex.Sets}x{ex.Reps}</span>
-                    <button type="button" onClick={() => removeExercise(i)} className="text-red-400 hover:text-red-500"><FiTrash2 className="w-3 h-3" /></button>
+                  <div key={i} className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-medium text-gray-400 dark:text-gray-500 w-5">{i + 1}.</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{ex.Name}</span>
+                      <Badge>{ex.Sets}x{ex.Reps}</Badge>
+                    </div>
+                    <button type="button" onClick={() => removeExercise(i)} className="text-gray-400 hover:text-red-500 transition"><FiTrash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 ))}
               </div>
