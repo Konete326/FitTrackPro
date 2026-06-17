@@ -38,6 +38,9 @@ const login = async (req, res, next) => {
     if (!isMatch) return res.status(401).json({ success: false, message: 'Invalid credentials' });
     user.LastLogin = Date.now();
     await user.save({ validateBeforeSave: false });
+    await Notification.create({
+      UserId: user._id, Type: 'System', Title: 'Welcome Back!', Message: `Hey ${user.Profile?.Name || user.Username}, welcome back to FitTrack Pro!`, Link: '/dashboard',
+    });
     sendTokenResponse(user, 200, res);
   } catch (error) {
     next(error);
