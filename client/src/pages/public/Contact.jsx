@@ -66,9 +66,9 @@ function Contact() {
 
             <div className="space-y-6">
               {[
-                { icon: <FiMail className="w-5 h-5" />, title: 'Email', value: 'support@fittrackpro.com' },
-                { icon: <FiPhone className="w-5 h-5" />, title: 'Phone', value: '+1 (555) 123-4567' },
-                { icon: <FiMapPin className="w-5 h-5" />, title: 'Location', value: 'Available Worldwide' },
+                { icon: <FiMail className="w-5 h-5" />, title: 'Email', value: 'sameerdevexpert@gmail.com' },
+                { icon: <FiPhone className="w-5 h-5" />, title: 'Phone', value: '0321-3265524' },
+                { icon: <FiMapPin className="w-5 h-5" />, title: 'Location', value: 'Nazimabad, Gole Market, Street 7, Karachi' },
               ].map((item, i) => (
                 <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-5 flex items-start gap-4">
                   <div className="w-10 h-10 bg-violet-500/10 text-violet-500 rounded-lg flex items-center justify-center flex-shrink-0">

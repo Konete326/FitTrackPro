@@ -10,11 +10,13 @@ const {
   assignTrainer,
   deleteUser,
   getSystemStats,
+  getAssignments,
 } = require('../Controllers/Admin_Controller');
 
 router.use(protect, authorize('Admin'));
 
 router.get('/stats', getSystemStats);
+router.get('/assignments', getAssignments);
 
 router.route('/users')
   .get(getAllUsers)

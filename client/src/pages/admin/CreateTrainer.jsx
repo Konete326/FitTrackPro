@@ -78,12 +78,12 @@ function CreateTrainer() {
 
   return (
     <AdminLayout pageTitle="Create Trainer">
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-12rem)]">
-        <button onClick={() => navigate('/admin/trainers')} className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition mb-6 self-start">
+      <div className="flex flex-col">
+        <button onClick={() => navigate('/admin/trainers')} className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition mb-4">
           <FiArrowLeft className="w-4 h-4" /> Back to Trainers
         </button>
 
-        <Card className="max-w-2xl w-full">
+        <Card className="w-full">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-sky-500/10 text-sky-500 rounded-full flex items-center justify-center">
             <FiUserCheck className="w-5 h-5" />
@@ -95,16 +95,16 @@ function CreateTrainer() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <Input
-            label="Full Name"
-            value={form['Profile.Name']}
-            onChange={(e) => updateField('Profile.Name', e.target.value)}
-            onBlur={(e) => handleBlur('Profile.Name', e.target.value)}
-            error={errors['Profile.Name']}
-            helperText={hints.name}
-            required
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Input
+              label="Full Name"
+              value={form['Profile.Name']}
+              onChange={(e) => updateField('Profile.Name', e.target.value)}
+              onBlur={(e) => handleBlur('Profile.Name', e.target.value)}
+              error={errors['Profile.Name']}
+              helperText={hints.name}
+              required
+            />
             <Input
               label="Username"
               value={form.Username}
@@ -124,17 +124,17 @@ function CreateTrainer() {
               helperText={hints.email}
               required
             />
+            <Input
+              label="Password"
+              type="password"
+              value={form.Password}
+              onChange={(e) => updateField('Password', e.target.value)}
+              onBlur={(e) => handleBlur('Password', e.target.value)}
+              error={errors.Password}
+              helperText={hints.password}
+              required
+            />
           </div>
-          <Input
-            label="Password"
-            type="password"
-            value={form.Password}
-            onChange={(e) => updateField('Password', e.target.value)}
-            onBlur={(e) => handleBlur('Password', e.target.value)}
-            error={errors.Password}
-            helperText={hints.password}
-            required
-          />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
               label="Age"
@@ -152,7 +152,7 @@ function CreateTrainer() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio / Specialization</label>
-            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={3} className="form-textarea w-full !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition" placeholder="Describe the trainer's expertise and specializations..." />
+            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={2} className="form-textarea w-full !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition" placeholder="Describe the trainer's expertise and specializations..." />
             <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">Optional, up to 500 characters</p>
           </div>
           <div className="flex gap-3 pt-2">

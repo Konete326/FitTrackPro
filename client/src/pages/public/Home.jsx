@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PublicLayout from '../../layouts/PublicLayout';
+import { useAuth } from '../../contexts/AuthContext';
 import { FiActivity, FiTarget, FiTrendingUp, FiDroplet, FiMoon, FiUsers } from 'react-icons/fi';
 
 function Home() {
+  const { user } = useAuth();
   const features = [
     { icon: <FiActivity className="w-6 h-6" />, title: 'Workout Tracking', desc: 'Log exercises, track sets and reps, monitor progress with detailed analytics.' },
     { icon: <FiTarget className="w-6 h-6" />, title: 'Goal Setting', desc: 'Set fitness goals with milestones and track your progress towards achieving them.' },
@@ -28,12 +30,21 @@ function Home() {
               Connect with trainers and achieve your fitness goals with FitTrack Pro.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                to="/register"
-                className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-6 py-3 rounded-lg shadow-lg shadow-violet-500/25"
-              >
-                Get Started Free
-              </Link>
+              {user ? (
+                <Link
+                  to="/dashboard"
+                  className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-6 py-3 rounded-lg shadow-lg shadow-violet-500/25"
+                >
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to="/register"
+                  className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-6 py-3 rounded-lg shadow-lg shadow-violet-500/25"
+                >
+                  Get Started Free
+                </Link>
+              )}
               <Link
                 to="/about"
                 className="btn bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 text-sm px-6 py-3 rounded-lg"
@@ -87,18 +98,37 @@ function Home() {
 
       <section className="py-20 bg-violet-500/5 dark:bg-violet-500/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-            Ready to Start Your Fitness Journey?
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-            Join FitTrack Pro today and take control of your health with comprehensive tracking tools and professional trainer support.
-          </p>
-          <Link
-            to="/register"
-            className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-8 py-3 rounded-lg shadow-lg shadow-violet-500/25"
-          >
-            Create Free Account
-          </Link>
+          {user ? (
+            <>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+                Welcome Back, {user.Profile?.Name?.split(' ')[0] || user.Username}!
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+                Continue your fitness journey. Track workouts, check progress, and stay on top of your goals.
+              </p>
+              <Link
+                to="/dashboard"
+                className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-8 py-3 rounded-lg shadow-lg shadow-violet-500/25"
+              >
+                Go to Dashboard
+              </Link>
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+                Ready to Start Your Fitness Journey?
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+                Join FitTrack Pro today and take control of your health with comprehensive tracking tools and professional trainer support.
+              </p>
+              <Link
+                to="/register"
+                className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-8 py-3 rounded-lg shadow-lg shadow-violet-500/25"
+              >
+                Create Free Account
+              </Link>
+            </>
+          )}
         </div>
       </section>
     </PublicLayout>

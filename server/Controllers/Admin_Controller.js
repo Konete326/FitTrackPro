@@ -79,4 +79,21 @@ const getSystemStats = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
-module.exports = { getAllUsers, getUserById, createUser, updateUser, toggleUserActive, assignTrainer, deleteUser, getSystemStats };
+const getAssignments = async (req, res, next) => {
+  try {
+    const users = await User.find({ TrainerId: { $exists: true, $ne: null } })
+      .select('Username Email Profile.Name TrainerId')
+      .populate('TrainerId', 'Username Email Profile.Name')
+      .lean();
+    const data = users.map(u => ({
+      _id: u._id,
+      clientName: u.Profile?.Name || u.Username,
+      clientEmail: u.Email,
+      trainerName: u.TrainerId?.Profile?.Name || u.TrainerId?.Username || 'Trainer',
+      trainerEmail: u.TrainerId?.Email || '',
+    }));
+    res.status(200).json({ success: true, count: data.length, data });
+  } catch (error) { next(error); }
+};
+
+module.exports = { getAllUsers, getUserById, createUser, updateUser, toggleUserActive, assignTrainer, deleteUser, getSystemStats, getAssignments };

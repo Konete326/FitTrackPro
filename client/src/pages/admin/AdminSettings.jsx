@@ -6,7 +6,7 @@ import Input from '../../components/common/Input';
 import { useAuth } from '../../contexts/AuthContext';
 import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { updateProfile, updatePassword } from '../../services/authService';
-import { FiUser, FiLock, FiUpload, FiX } from 'react-icons/fi';
+import { FiUser, FiLock, FiUpload, FiX, FiCamera } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function AdminSettings() {
@@ -109,17 +109,24 @@ function AdminSettings() {
             <Card>
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Profile Information</h3>
               <form onSubmit={handleProfileSubmit} className="space-y-5">
-                <div className="flex items-center gap-6">
-                  <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-red-500/10 flex items-center justify-center overflow-hidden ring-2 ring-red-500/20">
-                      {preview ? <img src={preview} alt="Preview" className="w-full h-full object-cover" /> : <span className="text-2xl font-bold text-red-500">{(profileForm['Profile.Name'] || 'A')[0].toUpperCase()}</span>}
+                <div className="flex items-center gap-6 pb-5 border-b border-gray-100 dark:border-gray-700/60">
+                  <div className="relative group">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-900/40 dark:to-violet-800/40 flex items-center justify-center overflow-hidden ring-2 ring-violet-200 dark:ring-violet-700/60">
+                      {preview ? <img src={preview} alt="Preview" className="w-full h-full object-cover" /> : <span className="text-2xl font-bold text-violet-500">{(profileForm['Profile.Name'] || 'A')[0].toUpperCase()}</span>}
                     </div>
-                    {preview && <button type="button" onClick={() => { setPreview(''); if (fileRef.current) fileRef.current.value = ''; }} className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center"><FiX className="w-3 h-3" /></button>}
+                    <button type="button" onClick={() => fileRef.current?.click()} className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                      <FiCamera className="w-5 h-5 text-white" />
+                    </button>
+                    {preview && <button type="button" onClick={() => { setPreview(''); if (fileRef.current) fileRef.current.value = ''; }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-sm transition"><FiX className="w-2.5 h-2.5" /></button>}
                   </div>
-                  <div>
-                    <Button type="button" variant="secondary" size="sm" onClick={() => fileRef.current?.click()}><FiUpload className="w-4 h-4 mr-1" />Upload Photo</Button>
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">Profile Photo</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">JPG, PNG or GIF. Max 5MB</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Button type="button" variant="secondary" size="sm" onClick={() => fileRef.current?.click()}><FiUpload className="w-3.5 h-3.5 mr-1" />Upload</Button>
+                      {preview && <Button type="button" variant="secondary" size="sm" onClick={() => { setPreview(''); if (fileRef.current) fileRef.current.value = ''; }}>Remove</Button>}
+                    </div>
                     <input ref={fileRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                    <p className="text-xs text-gray-400 mt-1">Max 5MB</p>
                   </div>
                 </div>
 

@@ -12,11 +12,13 @@ import Pagination from '../../components/common/Pagination';
 import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { getAllUsers, createUser, toggleUserActive, deleteUser, assignTrainer } from '../../services/adminService';
 import { getAvailableTrainers } from '../../services/trainerRequestService';
+import { useAuth } from '../../contexts/AuthContext';
 import { FiPlus, FiSearch, FiTrash2, FiUserCheck, FiUserX, FiEdit2 } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
 function UserManagement() {
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -191,10 +193,14 @@ function UserManagement() {
                         {u.Role === 'User' && (
                           <button onClick={() => openAssign(u._id)} className="text-gray-400 hover:text-violet-500 transition" title="Assign Trainer"><FiUserCheck className="w-4 h-4" /></button>
                         )}
-                        <button onClick={() => setToggleId(u._id)} className="text-gray-400 hover:text-yellow-500 transition" title="Toggle Active">
-                          {u.IsActive ? <FiUserX className="w-4 h-4" /> : <FiUserCheck className="w-4 h-4" />}
-                        </button>
-                        <button onClick={() => setDeleteId(u._id)} className="text-gray-400 hover:text-red-500 transition" title="Delete"><FiTrash2 className="w-4 h-4" /></button>
+                        {currentUser?._id !== u._id && (
+                          <>
+                            <button onClick={() => setToggleId(u._id)} className="text-gray-400 hover:text-yellow-500 transition" title="Toggle Active">
+                              {u.IsActive ? <FiUserX className="w-4 h-4" /> : <FiUserCheck className="w-4 h-4" />}
+                            </button>
+                            <button onClick={() => setDeleteId(u._id)} className="text-gray-400 hover:text-red-500 transition" title="Delete"><FiTrash2 className="w-4 h-4" /></button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>

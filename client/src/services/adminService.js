@@ -12,7 +12,7 @@ export const updateUserRole = (id, role) =>
   API.put(`/admin/users/${id}/role`, { role });
 
 export const assignTrainer = (userId, trainerId) =>
-  API.put(`/admin/users/${userId}/assign-trainer/${trainerId}`);
+  API.put(`/admin/assign-trainer/${userId}/${trainerId}`);
 
 export const toggleUserActive = (id) =>
   API.put(`/admin/users/${id}/toggle-active`);

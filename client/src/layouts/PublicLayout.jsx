@@ -142,13 +142,15 @@ function PublicLayout({ children }) {
                 ))}
               </div>
             </div>
-            <div>
-              <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Get Started</h4>
-              <div className="flex flex-col gap-2">
-                <Link to="/register" className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition">Create Account</Link>
-                <Link to="/login" className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition">Sign In</Link>
+            {!user && (
+              <div>
+                <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4">Get Started</h4>
+                <div className="flex flex-col gap-2">
+                  <Link to="/register" className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition">Create Account</Link>
+                  <Link to="/login" className="text-sm text-gray-500 dark:text-gray-400 hover:text-violet-500 transition">Sign In</Link>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700/60 text-center">
             <p className="text-sm text-gray-400 dark:text-gray-500">
