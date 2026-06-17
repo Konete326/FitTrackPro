@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Transition from '../utils/Transition';
-import { getNotifications, markAsRead, markAllAsRead } from '../services/notificationService';
+import { getNotifications, markAsRead, markAllAsRead, deleteNotification, clearAllNotifications } from '../services/notificationService';
 
 const POLL_INTERVAL = 30000;
 const MAX_ITEMS = 5;
@@ -68,6 +68,23 @@ function DropdownNotifications({ align }) {
       await markAsRead(id);
       setNotifications((prev) => prev.map((n) => (n._id === id ? { ...n, IsRead: true } : n)));
       setUnreadCount((prev) => Math.max(0, prev - 1));
+    } catch {}
+  };
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    try {
+      await deleteNotification(id);
+      setNotifications((prev) => prev.filter((n) => n._id !== id));
+      setUnreadCount((prev) => Math.max(0, prev - (notifications.find((n) => n._id === id && !n.IsRead) ? 1 : 0)));
+    } catch {}
+  };
+
+  const handleClearAll = async () => {
+    try {
+      await clearAllNotifications();
+      setNotifications([]);
+      setUnreadCount(0);
     } catch {}
   };
 
@@ -146,15 +163,25 @@ function DropdownNotifications({ align }) {
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="flex items-center justify-between pt-2 pb-2 px-4">
-            <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase">Notifications</span>
-            {unreadCount > 0 && (
-              <button
-                onClick={handleMarkAllRead}
-                className="text-xs text-violet-500 hover:text-violet-600 dark:text-violet-400 dark:hover:text-violet-300"
-              >
-                Mark all read
-              </button>
-            )}
+            <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase">Notifications {unreadCount > 0 && `(${unreadCount})`}</span>
+            <div className="flex items-center gap-2">
+              {unreadCount > 0 && (
+                <button
+                  onClick={handleMarkAllRead}
+                  className="text-xs text-violet-500 hover:text-violet-600 dark:text-violet-400 dark:hover:text-violet-300"
+                >
+                  Mark all read
+                </button>
+              )}
+              {notifications.length > 0 && (
+                <button
+                  onClick={handleClearAll}
+                  className="text-xs text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
           </div>
 
           {loading ? (
@@ -166,25 +193,36 @@ function DropdownNotifications({ align }) {
               {notifications.map((n) => (
                 <li
                   key={n._id}
-                  className={`border-b border-gray-200 dark:border-gray-700/60 last:border-0 ${!n.IsRead ? 'bg-gray-100/50 dark:bg-gray-700/10' : ''}`}
+                  className={`border-b border-gray-200 dark:border-gray-700/60 last:border-0 group ${!n.IsRead ? 'bg-gray-100/50 dark:bg-gray-700/10' : ''}`}
                 >
-                  <button
-                    className="w-full text-left block py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/20 transition"
-                    onClick={() => {
-                      if (!n.IsRead) handleMarkAsRead(n._id);
-                    }}
-                  >
-                    <div className="flex items-start gap-2.5">
-                      <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${typeColor(n.Type)}`}></span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm leading-snug">
-                          <span className="font-medium text-gray-800 dark:text-gray-100">{n.Title}</span>
-                          {' '}{n.Message}
-                        </p>
-                        <span className="block text-xs text-gray-400 dark:text-gray-500 mt-1">{formatTime(n.createdAt)}</span>
+                  <div className="flex items-start py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700/20 transition">
+                    <button
+                      className="flex-1 text-left min-w-0"
+                      onClick={() => {
+                        if (!n.IsRead) handleMarkAsRead(n._id);
+                      }}
+                    >
+                      <div className="flex items-start gap-2.5">
+                        <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${typeColor(n.Type)}`}></span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm leading-snug">
+                            <span className="font-medium text-gray-800 dark:text-gray-100">{n.Title}</span>
+                            {' '}{n.Message}
+                          </p>
+                          <span className="block text-xs text-gray-400 dark:text-gray-500 mt-1">{formatTime(n.createdAt)}</span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                    <button
+                      onClick={(e) => handleDelete(e, n._id)}
+                      className="shrink-0 ml-2 mt-0.5 p-1 text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity rounded"
+                      title="Delete"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
