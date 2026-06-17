@@ -22,7 +22,7 @@ function PublicLayout({ children }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/home" className="flex items-center gap-2">
-              <img src="/logo.png" alt="FitTrack Pro" className="w-8 h-8" />
+              <img src="/logo.svg" alt="FitTrack Pro" className="w-8 h-8" />
               <span className="text-lg font-bold text-gray-800 dark:text-gray-100">FitTrack Pro</span>
             </Link>
 
@@ -125,7 +125,7 @@ function PublicLayout({ children }) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src="/logo.png" alt="FitTrack Pro" className="w-8 h-8" />
+                <img src="/logo.svg" alt="FitTrack Pro" className="w-8 h-8" />
                 <span className="text-lg font-bold text-gray-800 dark:text-gray-100">FitTrack Pro</span>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -23,7 +23,7 @@ function Splash() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-violet-500/10 via-gray-100 to-sky-500/10 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       <div className="flex flex-col items-center animate-fade-in">
-        <img src="/logo.png" alt="FitTrack Pro" className="w-20 h-20 mb-6 animate-pulse" />
+        <img src="/logo.svg" alt="FitTrack Pro" className="w-20 h-20 mb-6 animate-pulse" />
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 tracking-tighter mb-2">
           FitTrack Pro
         </h1>
