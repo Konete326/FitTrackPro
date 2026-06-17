@@ -184,10 +184,10 @@ function ClientDetails() {
           <Card>
             <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Physical Info</h3>
             <div className="grid grid-cols-2 gap-3">
-              {client.Profile?.Age && <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.Age}</p><p className="text-xs text-gray-400">Age</p></div>}
-              {client.Profile?.Height && <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.Height} cm</p><p className="text-xs text-gray-400">Height</p></div>}
-              {client.Profile?.Weight && <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.Weight} kg</p><p className="text-xs text-gray-400">Weight</p></div>}
-              {client.Profile?.FitnessLevel && <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.FitnessLevel}</p><p className="text-xs text-gray-400">Level</p></div>}
+              {client.Profile?.Age && <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.Age}</p><p className="text-xs text-gray-400">Age</p></div>}
+              {client.Profile?.Height && <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.Height} cm</p><p className="text-xs text-gray-400">Height</p></div>}
+              {client.Profile?.Weight && <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.Weight} kg</p><p className="text-xs text-gray-400">Weight</p></div>}
+              {client.Profile?.FitnessLevel && <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Profile.FitnessLevel}</p><p className="text-xs text-gray-400">Level</p></div>}
             </div>
             {client.Profile?.Goals && <p className="mt-3 text-sm text-gray-600 dark:text-gray-400"><span className="font-medium">Goals:</span> {client.Profile.Goals}</p>}
           </Card>
@@ -195,10 +195,10 @@ function ClientDetails() {
           <Card>
             <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Activity Stats</h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.TotalWorkouts || 0}</p><p className="text-xs text-gray-400">Workouts</p></div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.TotalCaloriesBurned || 0}</p><p className="text-xs text-gray-400">Calories</p></div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.CurrentStreak || 0}</p><p className="text-xs text-gray-400">Streak</p></div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.LongestStreak || 0}</p><p className="text-xs text-gray-400">Best Streak</p></div>
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.TotalWorkouts || 0}</p><p className="text-xs text-gray-400">Workouts</p></div>
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.TotalCaloriesBurned || 0}</p><p className="text-xs text-gray-400">Calories</p></div>
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.CurrentStreak || 0}</p><p className="text-xs text-gray-400">Streak</p></div>
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center"><p className="font-bold text-gray-800 dark:text-gray-100">{client.Stats?.LongestStreak || 0}</p><p className="text-xs text-gray-400">Best Streak</p></div>
             </div>
             <p className="mt-3 text-xs text-gray-400">Last login: {client.LastLogin ? format(new Date(client.LastLogin), 'MMM dd, yyyy') : 'Never'}</p>
           </Card>
@@ -214,7 +214,7 @@ function ClientDetails() {
                 value={noteText}
                 onChange={(e) => setNoteText(e.target.value)}
                 rows={2}
-                className="form-textarea flex-1 bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
+                className="form-textarea flex-1 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
                 placeholder="Write a note about this client..."
               />
               <Button variant="primary" onClick={handleAddNote} disabled={!noteText.trim()}>
@@ -302,7 +302,7 @@ function ClientDetails() {
         <form onSubmit={handleSendMessage} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
-            <textarea value={messageText} onChange={(e) => setMessageText(e.target.value)} rows={4} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Type your message..." required />
+            <textarea value={messageText} onChange={(e) => setMessageText(e.target.value)} rows={4} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Type your message..." required />
           </div>
           <div className="flex gap-3 pt-2">
             <Button type="submit" variant="primary" className="flex-1" loading={saving}><FiSend className="w-4 h-4 mr-1" />Send</Button>

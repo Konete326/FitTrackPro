@@ -87,19 +87,19 @@ function AdminDashboard() {
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">System Overview</h3>
               </Card.Header>
               <div className="p-5 space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-900 rounded-lg">
                   <span className="text-sm text-gray-600 dark:text-gray-400">User-to-Trainer Ratio</span>
                   <span className="font-bold text-gray-800 dark:text-gray-100">
                     {stats?.trainers > 0 ? `${Math.round((stats.users || 0) / stats.trainers)}:1` : 'N/A'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-900 rounded-lg">
                   <span className="text-sm text-gray-600 dark:text-gray-400">Avg Workouts per User</span>
                   <span className="font-bold text-gray-800 dark:text-gray-100">
                     {stats?.users > 0 ? ((stats.workouts || 0) / stats.users).toFixed(1) : '0'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-900 rounded-lg">
                   <span className="text-sm text-gray-600 dark:text-gray-400">Total Accounts</span>
                   <span className="font-bold text-gray-800 dark:text-gray-100">{(stats?.users || 0) + (stats?.trainers || 0)}</span>
                 </div>

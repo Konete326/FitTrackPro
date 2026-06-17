@@ -263,7 +263,7 @@ function Goals() {
                       placeholder="New value"
                       value={progressInputs[goal._id] || ''}
                       onChange={(e) => setProgressInputs({ ...progressInputs, [goal._id]: e.target.value })}
-                      className="form-input w-28 text-sm bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg"
+                      className="form-input w-28 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg"
                     />
                     <Button size="sm" variant="secondary" onClick={() => handleProgressUpdate(goal._id)}>Update</Button>
                   </div>
@@ -274,7 +274,7 @@ function Goals() {
                 <div className="border-t border-gray-100 dark:border-gray-700/60">
                   <button
                     onClick={() => setExpandedId(expandedId === goal._id ? null : goal._id)}
-                    className="w-full flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition"
+                    className="w-full flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition"
                   >
                     {expandedId === goal._id ? <FiChevronDown className="w-4 h-4" /> : <FiChevronRight className="w-4 h-4" />}
                     Milestones ({goal.Milestones.filter(m => m.Achieved).length}/{goal.Milestones.length})
@@ -304,7 +304,7 @@ function Goals() {
           <Input label="Title" value={formData.Title} onChange={(e) => setFormData({ ...formData, Title: e.target.value })} required placeholder="e.g., Lose 10kg" />
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-            <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Optional description" />
+            <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Optional description" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Select label="Type" value={formData.Type} onChange={(e) => setFormData({ ...formData, Type: e.target.value })} options={typeOptions} />

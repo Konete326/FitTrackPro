@@ -155,21 +155,21 @@ function WorkoutTemplates() {
           <Input label="Duration (min)" type="number" min="1" value={formData.EstimatedDuration} onChange={(e) => setFormData({ ...formData, EstimatedDuration: e.target.value })} />
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-            <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Template description" />
+            <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Template description" />
           </div>
 
           <div className="border-t border-gray-100 dark:border-gray-700/60 pt-4">
             <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Add Exercises</h4>
             <div className="flex gap-2 mb-3">
-              <input value={exForm.Name} onChange={(e) => setExForm({ ...exForm, Name: e.target.value })} placeholder="Exercise name" className="form-input flex-1 text-sm bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg" />
-              <input value={exForm.Sets} onChange={(e) => setExForm({ ...exForm, Sets: e.target.value })} placeholder="Sets" type="number" className="form-input w-16 text-sm bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg" />
-              <input value={exForm.Reps} onChange={(e) => setExForm({ ...exForm, Reps: e.target.value })} placeholder="Reps" className="form-input w-20 text-sm bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg" />
+              <input value={exForm.Name} onChange={(e) => setExForm({ ...exForm, Name: e.target.value })} placeholder="Exercise name" className="form-input flex-1 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
+              <input value={exForm.Sets} onChange={(e) => setExForm({ ...exForm, Sets: e.target.value })} placeholder="Sets" type="number" className="form-input w-16 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
+              <input value={exForm.Reps} onChange={(e) => setExForm({ ...exForm, Reps: e.target.value })} placeholder="Reps" className="form-input w-20 text-sm bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
               <Button type="button" variant="secondary" size="sm" onClick={addExercise}><FiPlus className="w-3 h-3" /></Button>
             </div>
             {formData.Exercises.length > 0 && (
               <div className="space-y-2">
                 {formData.Exercises.map((ex, i) => (
-                  <div key={i} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+                  <div key={i} className="flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-900 rounded-lg">
                     <span className="text-sm text-gray-700 dark:text-gray-300">{ex.Name} - {ex.Sets}x{ex.Reps}</span>
                     <button type="button" onClick={() => removeExercise(i)} className="text-red-400 hover:text-red-500"><FiTrash2 className="w-3 h-3" /></button>
                   </div>

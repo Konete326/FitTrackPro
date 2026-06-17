@@ -108,19 +108,19 @@ function WorkoutDetails() {
               <Badge size="md">{workout.Difficulty}</Badge>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-              <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3 text-center">
+              <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{workout.Duration || 0}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Minutes</p>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3 text-center">
+              <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{workout.CaloriesBurned || 0}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Calories</p>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3 text-center">
+              <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{workout.Exercises?.length || 0}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Exercises</p>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3 text-center">
+              <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{workout.CompletionRate || 0}%</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Complete</p>
               </div>

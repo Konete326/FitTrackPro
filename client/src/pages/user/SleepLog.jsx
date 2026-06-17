@@ -283,7 +283,7 @@ function SleepLog() {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60">
                 {entries.map((entry) => (
-                  <tr key={entry._id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition">
+                  <tr key={entry._id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition">
                     <td className="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">{format(new Date(entry.Date), 'MMM dd, yyyy')}</td>
                     <td className="px-5 py-3 text-sm text-gray-600 dark:text-gray-400">{entry.SleepTime}</td>
                     <td className="px-5 py-3 text-sm text-gray-600 dark:text-gray-400">{entry.WakeTime}</td>
@@ -343,7 +343,7 @@ function SleepLog() {
               value={formData.Notes}
               onChange={(e) => setFormData({ ...formData, Notes: e.target.value })}
               rows={2}
-              className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
+              className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
               placeholder="How did you feel?"
             />
           </div>

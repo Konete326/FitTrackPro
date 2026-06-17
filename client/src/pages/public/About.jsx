@@ -34,7 +34,7 @@ function About() {
                 Our platform provides the tools, insights, and professional support you need to reach your goals.
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-8">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">What We Offer</h3>
               <ul className="space-y-4">
                 {['Comprehensive workout logging with exercise tracking', 'Nutrition tracking with food database search', 'Sleep quality monitoring with recommendations', 'Water intake tracking with hydration streaks', 'Body measurement and progress photo tracking', 'Goal setting with milestone tracking', 'Professional trainer integration', 'Achievement system with gamification'].map((item, i) => (
@@ -54,7 +54,7 @@ function About() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-xs text-center">
+              <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-xs text-center">
                 <div className="w-12 h-12 bg-violet-500/10 text-violet-500 rounded-lg flex items-center justify-center mx-auto mb-4">
                   {v.icon}
                 </div>

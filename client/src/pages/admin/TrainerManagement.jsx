@@ -60,7 +60,7 @@ function TrainerManagement() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="relative">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input type="text" placeholder="Search trainers..." value={search} onChange={(e) => setSearch(e.target.value)} className="form-input pl-10 w-52 bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg" />
+          <input type="text" placeholder="Search trainers..." value={search} onChange={(e) => setSearch(e.target.value)} className="form-input pl-10 w-52 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
         </div>
         <Button variant="primary" icon={<FiPlus className="w-4 h-4" />} onClick={() => navigate('/admin/create-trainer')}>Add Trainer</Button>
       </div>

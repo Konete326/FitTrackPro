@@ -76,7 +76,7 @@ function WorkoutList() {
         actions={<Link to="/workouts/log"><Button icon={<FiPlus className="w-4 h-4" />}>Log Workout</Button></Link>}
       />
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-4 mb-6">
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-3">
           <Input
             placeholder="Search workouts..."

@@ -55,19 +55,19 @@ function AdminProfile() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center">
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center">
                 <p className="text-sm font-medium text-gray-800 dark:text-gray-100">User Management</p>
                 <p className="text-xs text-gray-400">CRUD operations</p>
               </div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center">
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center">
                 <p className="text-sm font-medium text-gray-800 dark:text-gray-100">Trainer Management</p>
                 <p className="text-xs text-gray-400">Assign & manage trainers</p>
               </div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center">
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center">
                 <p className="text-sm font-medium text-gray-800 dark:text-gray-100">System Stats</p>
                 <p className="text-xs text-gray-400">Analytics & monitoring</p>
               </div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg text-center">
+              <div className="p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-center">
                 <p className="text-sm font-medium text-gray-800 dark:text-gray-100">Feedback Review</p>
                 <p className="text-xs text-gray-400">User submissions</p>
               </div>

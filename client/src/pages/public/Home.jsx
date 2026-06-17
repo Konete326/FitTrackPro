@@ -36,7 +36,7 @@ function Home() {
               </Link>
               <Link
                 to="/about"
-                className="btn bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 text-sm px-6 py-3 rounded-lg"
+                className="btn bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 text-sm px-6 py-3 rounded-lg"
               >
                 Learn More
               </Link>
@@ -45,7 +45,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-white dark:bg-gray-800">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">Everything You Need</h2>
@@ -55,7 +55,7 @@ function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, i) => (
-              <div key={i} className="bg-gray-50 dark:bg-gray-900/30 rounded-xl p-6 hover:shadow-md transition-shadow">
+              <div key={i} className="bg-gray-100 dark:bg-gray-900 rounded-xl p-6 hover:shadow-md transition-shadow">
                 <div className="w-12 h-12 bg-violet-500/10 text-violet-500 rounded-lg flex items-center justify-center mb-4">
                   {feature.icon}
                 </div>

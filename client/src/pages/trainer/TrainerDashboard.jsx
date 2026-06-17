@@ -69,7 +69,7 @@ function TrainerDashboard() {
                   {clients.slice(0, 6).map((client) => (
                     <div
                       key={client._id}
-                      className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition cursor-pointer"
+                      className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-900 transition cursor-pointer"
                       onClick={() => navigate(`/trainer/clients/${client._id}`)}
                     >
                       <div className="flex items-center gap-3">

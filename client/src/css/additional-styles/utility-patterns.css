@@ -63,7 +63,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .form-select,
 .form-checkbox,
 .form-radio {
-    @apply bg-white dark:bg-gray-900/30 border focus:ring-0 focus:ring-offset-0 dark:disabled:bg-gray-700/30 dark:disabled:border-gray-700 dark:disabled:hover:border-gray-700;
+    @apply bg-gray-50 dark:bg-gray-900 border focus:ring-0 focus:ring-offset-0 dark:disabled:bg-gray-800 dark:disabled:border-gray-700 dark:disabled:hover:border-gray-700;
 }
 
 .form-checkbox {

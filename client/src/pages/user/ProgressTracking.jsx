@@ -253,7 +253,7 @@ function ProgressTracking() {
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60">
                     {entries.map((entry) => (
-                      <tr key={entry._id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition">
+                      <tr key={entry._id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition">
                         <td className="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                           <div className="flex items-center gap-2">
                             {format(new Date(entry.Date), 'MMM dd, yyyy')}
@@ -372,7 +372,7 @@ function ProgressTracking() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
-            <textarea value={formData.Notes} onChange={(e) => setFormData({ ...formData, Notes: e.target.value })} rows={2} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="How are you feeling?" />
+            <textarea value={formData.Notes} onChange={(e) => setFormData({ ...formData, Notes: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="How are you feeling?" />
           </div>
 
           <label className="flex items-center gap-2 cursor-pointer">

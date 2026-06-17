@@ -125,7 +125,7 @@ function BrowseTrainers() {
           placeholder="Search trainers..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="form-input w-full sm:w-72 bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
+          className="form-input w-full sm:w-72 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
         />
       </div>
 
@@ -196,7 +196,7 @@ function BrowseTrainers() {
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={`Request ${selectedTrainer?.Profile?.Name || selectedTrainer?.Username || 'Trainer'}`}>
         <form onSubmit={handleSendRequest} className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+          <div className="flex items-center gap-3 p-3 bg-gray-100 dark:bg-gray-900 rounded-lg">
             <div className="w-12 h-12 rounded-full bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
               {selectedTrainer?.Profile?.ProfilePicture ? (
                 <img src={selectedTrainer.Profile.ProfilePicture} alt="" className="w-full h-full object-cover" />
@@ -215,7 +215,7 @@ function BrowseTrainers() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
-              className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
+              className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
               placeholder="Tell the trainer why you'd like to work with them..."
             />
           </div>

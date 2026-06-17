@@ -84,7 +84,7 @@ function TrainerSettings() {
         <Card className="lg:col-span-1 !p-2 h-fit">
           <nav className="space-y-1">
             {tabs.map((tab) => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition ${activeTab === tab.id ? 'bg-violet-500/10 text-violet-600 dark:text-violet-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/30'}`}>
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition ${activeTab === tab.id ? 'bg-violet-500/10 text-violet-600 dark:text-violet-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900'}`}>
                 {tab.icon}{tab.label}
               </button>
             ))}
@@ -126,7 +126,7 @@ function TrainerSettings() {
                 <Input label="Specialization / Goals" value={profileForm['Profile.Goals']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Goals': e.target.value })} placeholder="e.g., Strength training, HIIT" />
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
-                  <textarea value={profileForm['Profile.Bio']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Bio': e.target.value })} rows={3} maxLength={500} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Tell clients about your expertise..." />
+                  <textarea value={profileForm['Profile.Bio']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Bio': e.target.value })} rows={3} maxLength={500} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Tell clients about your expertise..." />
                   <p className="text-xs text-gray-400 mt-1">{(profileForm['Profile.Bio'] || '').length}/500</p>
                 </div>
                 <div className="flex justify-end">

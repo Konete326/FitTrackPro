@@ -67,7 +67,7 @@ function WaterLog() {
       <PageHeader
         title="Water Intake"
         description="Track your daily hydration"
-        actions={<input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="form-input bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg" />}
+        actions={<input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="form-input bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

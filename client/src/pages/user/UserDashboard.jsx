@@ -140,11 +140,11 @@ function UserDashboard() {
                 {stats?.nutrition?.summary ? (
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3 text-center">
+                      <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 text-center">
                         <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{Math.round(stats.nutrition.summary.avgDailyCalories || 0)}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Avg Calories</p>
                       </div>
-                      <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3 text-center">
+                      <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 text-center">
                         <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{Math.round(stats.nutrition.summary.avgDailyProtein || 0)}g</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Avg Protein</p>
                       </div>

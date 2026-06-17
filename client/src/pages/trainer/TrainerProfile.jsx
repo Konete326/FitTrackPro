@@ -81,10 +81,10 @@ function TrainerProfile() {
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Physical Info</h3>
               </Card.Header>
               <div className="p-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {profile.Gender && <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.Gender}</p><p className="text-xs text-gray-500 dark:text-gray-400">Gender</p></div>}
-                {profile.Height && <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.Height} cm</p><p className="text-xs text-gray-500 dark:text-gray-400">Height</p></div>}
-                {profile.Weight && <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.Weight} kg</p><p className="text-xs text-gray-500 dark:text-gray-400">Weight</p></div>}
-                {profile.FitnessLevel && <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.FitnessLevel}</p><p className="text-xs text-gray-500 dark:text-gray-400">Level</p></div>}
+                {profile.Gender && <div className="text-center p-3 bg-gray-100 dark:bg-gray-900 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.Gender}</p><p className="text-xs text-gray-500 dark:text-gray-400">Gender</p></div>}
+                {profile.Height && <div className="text-center p-3 bg-gray-100 dark:bg-gray-900 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.Height} cm</p><p className="text-xs text-gray-500 dark:text-gray-400">Height</p></div>}
+                {profile.Weight && <div className="text-center p-3 bg-gray-100 dark:bg-gray-900 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.Weight} kg</p><p className="text-xs text-gray-500 dark:text-gray-400">Weight</p></div>}
+                {profile.FitnessLevel && <div className="text-center p-3 bg-gray-100 dark:bg-gray-900 rounded-lg"><p className="text-lg font-bold text-gray-800 dark:text-gray-100">{profile.FitnessLevel}</p><p className="text-xs text-gray-500 dark:text-gray-400">Level</p></div>}
               </div>
             </Card>
           )}

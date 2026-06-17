@@ -173,7 +173,7 @@ function NutritionLog() {
           {foodResults.length > 0 && (
             <div className="border border-gray-200 dark:border-gray-700/60 rounded-lg max-h-40 overflow-y-auto">
               {foodResults.map((food, i) => (
-                <button key={i} onClick={() => addFood(food)} className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition text-sm text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
+                <button key={i} onClick={() => addFood(food)} className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition text-sm text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
                   {food.Name} {food.Brand && <span className="text-gray-400">- {food.Brand}</span>} <span className="text-gray-400">({food.Calories} cal)</span>
                 </button>
               ))}
@@ -183,13 +183,13 @@ function NutritionLog() {
             <div className="space-y-2">
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Selected Foods</p>
               {selectedFoods.map((food, i) => (
-                <div key={i} className="flex items-center justify-between bg-gray-50 dark:bg-gray-900/30 rounded-lg p-3">
+                <div key={i} className="flex items-center justify-between bg-gray-100 dark:bg-gray-900 rounded-lg p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{food.Name}</p>
                     <p className="text-xs text-gray-500">{food.Calories} cal per serving</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <input type="number" min="1" value={food.Quantity} onChange={(e) => { const f = [...selectedFoods]; f[i].Quantity = Number(e.target.value) || 1; setSelectedFoods(f); }} className="w-16 form-input text-center bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 rounded text-sm" />
+                    <input type="number" min="1" value={food.Quantity} onChange={(e) => { const f = [...selectedFoods]; f[i].Quantity = Number(e.target.value) || 1; setSelectedFoods(f); }} className="w-16 form-input text-center bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 rounded text-sm" />
                     <button onClick={() => removeFood(i)} className="text-red-500 hover:text-red-600"><FiTrash2 className="w-4 h-4" /></button>
                   </div>
                 </div>

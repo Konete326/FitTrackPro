@@ -10,7 +10,7 @@ function StatCard({ title, value, icon, trend, trendValue, trendLabel, color = '
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 shadow-xs rounded-xl p-5 ${className}`}>
+    <div className={`bg-gray-50 dark:bg-gray-800 shadow-xs rounded-xl p-5 ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colors[color]}`}>
           {icon}

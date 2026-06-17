@@ -35,7 +35,7 @@ function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/home" className="inline-flex items-center gap-2 mb-6">
@@ -46,7 +46,7 @@ function ResetPassword() {
           <p className="text-gray-500 dark:text-gray-400">Enter your new password below</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="relative">
               <Input

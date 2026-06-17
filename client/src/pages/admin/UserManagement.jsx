@@ -127,7 +127,7 @@ function UserManagement() {
         <div className="flex flex-wrap gap-3">
           <div className="relative">
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input type="text" placeholder="Search users..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="form-input pl-10 w-52 bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg" />
+            <input type="text" placeholder="Search users..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="form-input pl-10 w-52 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
           </div>
           <Select value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); setPage(1); }} options={[{ value: '', label: 'All Roles' }, { value: 'User', label: 'User' }, { value: 'Trainer', label: 'Trainer' }, { value: 'Admin', label: 'Admin' }]} className="w-32" />
           <Select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }} options={[{ value: '', label: 'All Status' }, { value: 'true', label: 'Active' }, { value: 'false', label: 'Inactive' }]} className="w-32" />
@@ -152,7 +152,7 @@ function UserManagement() {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60">
                 {users.map((u) => (
-                  <tr key={u._id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition">
+                  <tr key={u._id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
@@ -200,10 +200,14 @@ function UserManagement() {
 
       <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Create User">
         <form onSubmit={handleCreate} className="space-y-4">
-          <Input label="Full Name" value={createForm['Profile.Name']} onChange={(e) => setCreateForm({ ...createForm, 'Profile.Name': e.target.value })} required />
-          <Input label="Username" value={createForm.Username} onChange={(e) => setCreateForm({ ...createForm, Username: e.target.value })} required />
-          <Input label="Email" type="email" value={createForm.Email} onChange={(e) => setCreateForm({ ...createForm, Email: e.target.value })} required />
-          <Input label="Password" type="password" value={createForm.Password} onChange={(e) => setCreateForm({ ...createForm, Password: e.target.value })} required />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Full Name" value={createForm['Profile.Name']} onChange={(e) => setCreateForm({ ...createForm, 'Profile.Name': e.target.value })} required />
+            <Input label="Username" value={createForm.Username} onChange={(e) => setCreateForm({ ...createForm, Username: e.target.value })} required />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Email" type="email" value={createForm.Email} onChange={(e) => setCreateForm({ ...createForm, Email: e.target.value })} required />
+            <Input label="Password" type="password" value={createForm.Password} onChange={(e) => setCreateForm({ ...createForm, Password: e.target.value })} required />
+          </div>
           <Select label="Role" value={createForm.Role} onChange={(e) => setCreateForm({ ...createForm, Role: e.target.value })} options={[{ value: 'User', label: 'User' }, { value: 'Trainer', label: 'Trainer' }, { value: 'Admin', label: 'Admin' }]} />
           <div className="flex gap-3 pt-2">
             <Button type="submit" variant="primary" className="flex-1" loading={saving}>Create User</Button>

@@ -77,7 +77,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen, align }) {
       >
         <div
           ref={modalContent}
-          className="bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700/60 rounded-lg shadow-lg overflow-hidden max-w-2xl w-full mx-auto"
+          className="bg-gray-50 dark:bg-gray-800 border border-transparent dark:border-gray-700/60 rounded-lg shadow-lg overflow-hidden max-w-2xl w-full mx-auto"
         >
           {/* Search form */}
           <form onSubmit={handleSearch} className="border-b border-gray-200 dark:border-gray-700/60">

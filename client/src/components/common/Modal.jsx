@@ -45,7 +45,7 @@ function Modal({ isOpen, onClose, title, children, footer, size = 'md' }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className={`relative w-full ${sizes[size]} bg-white dark:bg-gray-800 rounded-xl shadow-xl max-h-[90vh] flex flex-col`}
+            className={`relative w-full ${sizes[size]} bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xl max-h-[90vh] flex flex-col`}
           >
             {title && (
               <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700/60">

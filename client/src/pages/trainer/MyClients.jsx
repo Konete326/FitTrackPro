@@ -57,7 +57,7 @@ function MyClients() {
             placeholder="Search clients..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="form-input pl-10 w-full sm:w-72 bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
+            className="form-input pl-10 w-full sm:w-72 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500"
           />
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400">{clients.length} client{clients.length !== 1 ? 's' : ''}</p>

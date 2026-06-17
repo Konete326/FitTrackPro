@@ -51,7 +51,7 @@ function Contact() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input label="Name" {...register('name')} error={errors.name?.message} placeholder="Your name" />
@@ -69,7 +69,7 @@ function Contact() {
                 { icon: <FiPhone className="w-5 h-5" />, title: 'Phone', value: '+1 (555) 123-4567' },
                 { icon: <FiMapPin className="w-5 h-5" />, title: 'Location', value: 'Available Worldwide' },
               ].map((item, i) => (
-                <div key={i} className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-5 flex items-start gap-4">
+                <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-5 flex items-start gap-4">
                   <div className="w-10 h-10 bg-violet-500/10 text-violet-500 rounded-lg flex items-center justify-center flex-shrink-0">
                     {item.icon}
                   </div>

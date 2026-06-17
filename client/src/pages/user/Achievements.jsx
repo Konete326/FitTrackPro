@@ -143,7 +143,7 @@ function Achievements() {
           ) : (
             <div className="divide-y divide-gray-100 dark:divide-gray-700/60">
               {leaderboard.map((entry, i) => (
-                <div key={i} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition">
+                <div key={i} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                     i === 0 ? 'bg-yellow-500 text-white' : i === 1 ? 'bg-gray-300 text-gray-700' : i === 2 ? 'bg-amber-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                   }`}>

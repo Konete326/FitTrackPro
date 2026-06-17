@@ -101,7 +101,7 @@ function TrainerRequests() {
                 </div>
               </div>
               {req.AdminNotes && (
-                <div className="px-5 py-3 bg-gray-50 dark:bg-gray-900/30 border-t border-gray-100 dark:border-gray-700/60">
+                <div className="px-5 py-3 bg-gray-100 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700/60">
                   <p className="text-xs text-gray-500 dark:text-gray-400">Admin notes: {req.AdminNotes}</p>
                 </div>
               )}
@@ -113,14 +113,14 @@ function TrainerRequests() {
       <Modal isOpen={!!reviewModal} onClose={() => { setReviewModal(null); setAdminNotes(''); }} title="Review Request">
         {reviewModal && (
           <div className="space-y-4">
-            <div className="p-4 bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+            <div className="p-4 bg-gray-100 dark:bg-gray-900 rounded-lg">
               <p className="text-sm text-gray-700 dark:text-gray-300"><span className="font-medium">User:</span> {reviewModal.UserId?.Profile?.Name}</p>
               <p className="text-sm text-gray-700 dark:text-gray-300"><span className="font-medium">Requested Trainer:</span> {reviewModal.TrainerId?.Profile?.Name}</p>
               {reviewModal.message && <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 italic">"{reviewModal.message}"</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Admin Notes</label>
-              <textarea value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} rows={2} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Optional notes..." />
+              <textarea value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Optional notes..." />
             </div>
             <div className="flex gap-3">
               <Button variant="primary" className="flex-1" onClick={() => handleDecision('Approved')} loading={saving}><FiCheck className="w-4 h-4 mr-1" />Approve</Button>

@@ -76,7 +76,7 @@ function CreateTrainer() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio / Specialization</label>
-            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={3} className="form-textarea w-full bg-white dark:bg-gray-900/30 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Describe the trainer's expertise and specializations..." />
+            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={3} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Describe the trainer's expertise and specializations..." />
           </div>
           <div className="flex gap-3 pt-2">
             <Button type="submit" variant="primary" loading={saving}>Create Trainer</Button>

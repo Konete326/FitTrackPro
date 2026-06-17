@@ -55,7 +55,7 @@ function AssignedTrainers() {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60">
                 {assignmentList.map((a, i) => (
-                  <tr key={a._id || i} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition">
+                  <tr key={a._id || i} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition">
                     <td className="px-5 py-3">
                       <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{a.clientName || a.client?.Profile?.Name || a.User?.Profile?.Name || 'User'}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">{a.clientEmail || a.client?.Email || a.User?.Email || ''}</p>
