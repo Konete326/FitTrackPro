@@ -1,12 +1,44 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
+import { useAuth } from '../contexts/AuthContext';
 
 function ModalSearch({ id, searchId, modalOpen, setModalOpen, align }) {
 
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
   const modalContent = useRef(null);
+  const { user } = useAuth();
+
+  const quickLinks = useMemo(() => {
+    const role = user?.Role;
+    if (role === 'Admin') {
+      return [
+        { label: 'Dashboard', path: '/admin/dashboard' },
+        { label: 'User Management', path: '/admin/users' },
+        { label: 'Trainer Management', path: '/admin/trainers' },
+        { label: 'Trainer Requests', path: '/admin/trainer-requests' },
+        { label: 'Assigned Trainers', path: '/admin/assigned-trainers' },
+        { label: 'Feedbacks', path: '/admin/feedbacks' },
+      ];
+    }
+    if (role === 'Trainer') {
+      return [
+        { label: 'Dashboard', path: '/trainer/dashboard' },
+        { label: 'My Clients', path: '/trainer/clients' },
+        { label: 'Workout Templates', path: '/trainer/templates' },
+        { label: 'Profile', path: '/trainer/profile' },
+      ];
+    }
+    return [
+      { label: 'Dashboard', path: '/dashboard' },
+      { label: 'Workouts', path: '/workouts' },
+      { label: 'Nutrition Log', path: '/nutrition' },
+      { label: 'Progress Tracking', path: '/progress' },
+      { label: 'Goals', path: '/goals' },
+      { label: 'Browse Trainers', path: '/browse-trainers' },
+    ];
+  }, [user]);
 
   // close on click outside
   useEffect(() => {
@@ -37,15 +69,6 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen, align }) {
       setModalOpen(false);
     }
   };
-
-  const quickLinks = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Workouts', path: '/workouts' },
-    { label: 'Nutrition Log', path: '/nutrition' },
-    { label: 'Progress Tracking', path: '/progress' },
-    { label: 'Browse Trainers', path: '/browse-trainers' },
-    { label: 'Goals', path: '/goals' },
-  ];
 
   return (
     <>

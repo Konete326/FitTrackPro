@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
-import SidebarLinkGroup from "./SidebarLinkGroup";
-
 function AdminSidebar({
   sidebarOpen,
   setSidebarOpen,
@@ -49,7 +47,7 @@ function AdminSidebar({
     "block transition duration-150 truncate " + (active ? "text-violet-500" : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200");
 
   const iconClasses = (active) =>
-    `shrink-0 fill-current ${active ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'}`;
+    `shrink-0 ${active ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'}`;
 
   return (
     <div className="min-w-fit">
@@ -110,62 +108,41 @@ function AdminSidebar({
               <li className="mb-0.5">
                 <NavLink end to="/admin/dashboard" className={({ isActive }) => linkClasses(isActive)}>
                   <div className="flex items-center">
-                    <svg className={iconClasses(pathname === '/admin/dashboard')} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <path d="M5.936.278A7.983 7.983 0 0 1 8 0a8 8 0 1 1-8 8c0-.722.104-1.413.278-2.064a1 1 0 1 1 1.932.516A5.99 5.99 0 0 0 2 8a6 6 0 1 0 6-6c-.53 0-1.045.076-1.548.21A1 1 0 1 1 5.936.278Z" />
-                      <path d="M6.068 7.482A2.003 2.003 0 0 0 8 10a2 2 0 1 0-.518-3.932L3.707 2.293a1 1 0 0 0-1.414 1.414l3.775 3.775Z" />
+                    <svg className={iconClasses(pathname === '/admin/dashboard')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" />
                     </svg>
                     <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dashboard</span>
                   </div>
                 </NavLink>
               </li>
 
-              <SidebarLinkGroup activecondition={pathname.includes('/admin/users')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <a
-                        href="#" role="button"
-                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${pathname.includes('/admin/users') ? "" : "hover:text-gray-900 dark:hover:text-white"}`}
-                        onClick={(e) => { e.preventDefault(); handleClick(); setSidebarExpanded(true); }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <svg className={iconClasses(pathname.includes('/admin/users'))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                              <path d="M8 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 1c-4 0-7 2-7 4.5V15h14v-1.5c0-2.5-3-4.5-7-4.5Z" />
-                            </svg>
-                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Users</span>
-                          </div>
-                          <div className="flex shrink-0 ml-2">
-                            <svg className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${open ? "rotate-180" : ""}`} viewBox="0 0 12 12">
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
-                          </div>
-                        </div>
-                      </a>
-                      <div>
-                        <ul className="pl-8 mt-1">
-                          <li className="mb-1 last:mb-0">
-                            <NavLink to="/admin/users" className={({ isActive }) => linkClasses(isActive)}>
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">All Users</span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink to="/admin/trainers" className={({ isActive }) => linkClasses(isActive)}>
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Trainers</span>
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+              <li className="mb-0.5">
+                <NavLink to="/admin/users" className={({ isActive }) => linkClasses(isActive)}>
+                  <div className="flex items-center">
+                    <svg className={iconClasses(pathname === '/admin/users')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">All Users</span>
+                  </div>
+                </NavLink>
+              </li>
+
+              <li className="mb-0.5">
+                <NavLink to="/admin/trainers" className={({ isActive }) => linkClasses(isActive)}>
+                  <div className="flex items-center">
+                    <svg className={iconClasses(pathname === '/admin/trainers')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 20a6 6 0 0 0-12 0" /><circle cx="12" cy="10" r="4" /><circle cx="12" cy="12" r="10" />
+                    </svg>
+                    <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Trainers</span>
+                  </div>
+                </NavLink>
+              </li>
 
               <li className="mb-0.5">
                 <NavLink to="/admin/trainer-requests" className={({ isActive }) => linkClasses(isActive)}>
                   <div className="flex items-center">
-                    <svg className={iconClasses(pathname.includes('/admin/trainer-requests'))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <path d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7ZM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5Z" />
+                    <svg className={iconClasses(pathname === '/admin/trainer-requests')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="m9 14 2 2 4-4" />
                     </svg>
                     <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Trainer Requests</span>
                   </div>
@@ -175,8 +152,8 @@ function AdminSidebar({
               <li className="mb-0.5">
                 <NavLink to="/admin/assigned-trainers" className={({ isActive }) => linkClasses(isActive)}>
                   <div className="flex items-center">
-                    <svg className={iconClasses(pathname.includes('/admin/assigned-trainers'))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <path d="M3.5 2A1.5 1.5 0 0 0 2 3.5v9A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 12.5 2h-9Z" />
+                    <svg className={iconClasses(pathname === '/admin/assigned-trainers')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="19" x2="19" y1="8" y2="14" /><line x1="22" x2="16" y1="11" y2="11" />
                     </svg>
                     <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Assignments</span>
                   </div>
@@ -186,8 +163,8 @@ function AdminSidebar({
               <li className="mb-0.5">
                 <NavLink to="/admin/feedbacks" className={({ isActive }) => linkClasses(isActive)}>
                   <div className="flex items-center">
-                    <svg className={iconClasses(pathname.includes('/admin/feedbacks'))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6l-4 4V2Z" />
+                    <svg className={iconClasses(pathname === '/admin/feedbacks')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
                     </svg>
                     <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Feedbacks</span>
                   </div>
@@ -205,8 +182,8 @@ function AdminSidebar({
               <li className="mb-0.5">
                 <NavLink to="/admin/profile" className={({ isActive }) => linkClasses(isActive)}>
                   <div className="flex items-center">
-                    <svg className={iconClasses(pathname.includes('/admin/profile'))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <path d="M8 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 1c-4 0-7 2-7 4.5V15h14v-1.5c0-2.5-3-4.5-7-4.5Z" />
+                    <svg className={iconClasses(pathname === '/admin/profile')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                     </svg>
                     <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Profile</span>
                   </div>
@@ -216,8 +193,8 @@ function AdminSidebar({
               <li className="mb-0.5">
                 <NavLink to="/admin/settings" className={({ isActive }) => linkClasses(isActive)}>
                   <div className="flex items-center">
-                    <svg className={iconClasses(pathname.includes('/admin/settings'))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <path d="M13.6 9.352a4.97 4.97 0 0 0 0-2.704l1.44-1.124a.342.342 0 0 0 .082-.442l-1.36-2.358a.342.342 0 0 0-.424-.146l-1.696.684a4.97 4.97 0 0 0-2.344-1.356L8.968.362a.342.342 0 0 0-.336 0L6.942.906a4.97 4.97 0 0 0-2.344 1.356l-1.696-.684a.342.342 0 0 0-.424.146L1.118 4.082a.342.342 0 0 0 .082.442l1.44 1.124a4.97 4.97 0 0 0 0 2.704L1.2 9.476a.342.342 0 0 0-.082.442l1.36 2.358c.1.172.304.238.424.146l1.696-.684a4.97 4.97 0 0 0 2.344 1.356l.33 1.544a.342.342 0 0 0 .336 0l1.69-.544a4.97 4.97 0 0 0 2.344-1.356l1.696.684a.342.342 0 0 0 .424-.146l1.36-2.358a.342.342 0 0 0-.082-.442l-1.44-1.124ZM8 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z" />
+                    <svg className={iconClasses(pathname === '/admin/settings')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" />
                     </svg>
                     <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Settings</span>
                   </div>
@@ -231,8 +208,8 @@ function AdminSidebar({
           <div className="pt-3 pb-4 border-t border-gray-200 dark:border-gray-700/60">
             <NavLink to="/dashboard" className={({ isActive }) => linkClasses(isActive)}>
               <div className="flex items-center">
-                <svg className={iconClasses(false)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                  <path d="M5.936.278A7.983 7.983 0 0 1 8 0a8 8 0 1 1-8 8c0-.722.104-1.413.278-2.064a1 1 0 1 1 1.932.516A5.99 5.99 0 0 0 2 8a6 6 0 1 0 6-6c-.53 0-1.045.076-1.548.21A1 1 0 1 1 5.936.278Z" />
+                <svg className={iconClasses(pathname === '/dashboard')} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
                 <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">User Panel</span>
               </div>
