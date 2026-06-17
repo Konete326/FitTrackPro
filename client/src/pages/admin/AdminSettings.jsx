@@ -92,7 +92,8 @@ function AdminSettings() {
 
   return (
     <AdminLayout pageTitle="Admin Settings">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <Card className="lg:col-span-1 !p-2 h-fit">
           <nav className="space-y-1">
             {tabs.map((tab) => (
@@ -163,6 +164,7 @@ function AdminSettings() {
               </form>
             </Card>
           )}
+        </div>
         </div>
       </div>
     </AdminLayout>

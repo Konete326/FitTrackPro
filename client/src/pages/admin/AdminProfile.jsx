@@ -17,11 +17,12 @@ function AdminProfile() {
 
   return (
     <AdminLayout pageTitle="Admin Profile">
-      <div className="flex justify-end mb-6">
-        <Button variant="secondary" icon={<FiEdit2 className="w-4 h-4" />} onClick={() => navigate('/admin/settings')}>Edit Profile</Button>
-      </div>
+      <div className="max-w-5xl mx-auto">
+        <div className="flex justify-end mb-6">
+          <Button variant="secondary" icon={<FiEdit2 className="w-4 h-4" />} onClick={() => navigate('/admin/settings')}>Edit Profile</Button>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="flex flex-col items-center text-center py-8">
           <div className="w-28 h-28 rounded-full bg-red-500/10 flex items-center justify-center overflow-hidden mb-4 ring-4 ring-red-500/20">
             {profile.ProfilePicture ? (
@@ -80,6 +81,7 @@ function AdminProfile() {
               <p className="text-sm text-gray-600 dark:text-gray-400">{profile.Bio}</p>
             </Card>
           )}
+        </div>
         </div>
       </div>
     </AdminLayout>
