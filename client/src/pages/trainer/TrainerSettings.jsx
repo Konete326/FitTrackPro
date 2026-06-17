@@ -68,7 +68,7 @@ function TrainerSettings() {
       Object.entries(profileForm).forEach(([key, value]) => {
         if (value !== '' && value !== null && value !== undefined) formData.append(key, value);
       });
-      if (fileRef.current?.files[0]) formData.append('profilePicture', fileRef.current.files[0]);
+      if (fileRef.current?.files[0]) formData.append('ProfilePicture', fileRef.current.files[0]);
       const { data } = await updateProfile(formData);
       if (data.success && data.user) { updateUser(data.user); toast.success('Profile updated'); }
     } catch {

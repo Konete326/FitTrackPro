@@ -19,8 +19,7 @@ function AdminSettings() {
   const [profileForm, setProfileForm] = useState({
     'Profile.Name': user?.Profile?.Name || '',
     Username: user?.Username || '',
-    'Profile.Age': user?.Profile?.Age || '',
-    'Profile.Gender': user?.Profile?.Gender || '',
+    Email: user?.Email || '',
     'Profile.Bio': user?.Profile?.Bio || '',
   });
 
@@ -28,7 +27,6 @@ function AdminSettings() {
 
   const profileRules = useMemo(() => ({
     'Profile.Name': [(v) => validators.required(v, 'Full name'), (v) => validators.name(v, 'Full name')],
-    'Profile.Age': [(v) => validators.numberRange(v, 13, 120, 'Age')],
   }), []);
   const { errors: profileErrors, handleChange: profileHandleChange, handleBlur: profileHandleBlur, validateAll: profileValidateAll } = useValidation(profileRules);
 
@@ -61,7 +59,7 @@ function AdminSettings() {
       Object.entries(profileForm).forEach(([key, value]) => {
         if (value !== '' && value !== null && value !== undefined) formData.append(key, value);
       });
-      if (fileRef.current?.files[0]) formData.append('profilePicture', fileRef.current.files[0]);
+      if (fileRef.current?.files[0]) formData.append('ProfilePicture', fileRef.current.files[0]);
       const { data } = await updateProfile(formData);
       if (data.success && data.user) { updateUser(data.user); toast.success('Profile updated'); }
     } catch {
@@ -134,18 +132,7 @@ function AdminSettings() {
                   <Input label="Full Name" value={profileForm['Profile.Name']} onChange={(e) => updateProfileField('Profile.Name', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Name', e.target.value)} error={profileErrors['Profile.Name']} helperText={hints.name} required />
                   <Input label="Username" value={profileForm.Username} disabled />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="Age" type="number" min="13" max="120" value={profileForm['Profile.Age']} onChange={(e) => updateProfileField('Profile.Age', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Age', e.target.value)} error={profileErrors['Profile.Age']} helperText={hints.age} />
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gender</label>
-                    <select value={profileForm['Profile.Gender']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Gender': e.target.value })} className="form-select w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500">
-                      <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
+                <Input label="Email" type="email" value={profileForm.Email} disabled />
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
                   <textarea value={profileForm['Profile.Bio']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Bio': e.target.value })} rows={3} maxLength={500} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="About yourself..." />

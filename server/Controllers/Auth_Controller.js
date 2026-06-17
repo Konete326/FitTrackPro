@@ -62,8 +62,12 @@ const update_Profile = async (req, res, next) => {
   try {
     const updateData = { ...req.body };
     if (req.file) {
-      if (req.user.Profile.ProfilePicture) {
-        await deleteFromCloudinary(req.user.Profile.ProfilePicture);
+      try {
+        if (req.user.Profile?.ProfilePicture) {
+          await deleteFromCloudinary(req.user.Profile.ProfilePicture);
+        }
+      } catch (e) {
+        console.warn('Failed to delete old profile picture:', e.message);
       }
       updateData['Profile.ProfilePicture'] = await uploadToCloudinary(req.file.buffer, 'fittrack-pro/profiles');
     }
