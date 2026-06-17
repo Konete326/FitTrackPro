@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import PageHeader from '../../components/common/PageHeader';
@@ -7,6 +7,7 @@ import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 import Textarea from '../../components/common/Textarea';
 import Button from '../../components/common/Button';
+import { useValidation, validators } from '../../hooks/useValidation';
 import { createWorkout } from '../../services/workoutService';
 import { FiPlus, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -22,7 +23,13 @@ function LogWorkout() {
   });
   const [exercises, setExercises] = useState([{ Name: '', Category: 'Strength', MuscleGroups: [], Sets: '', Reps: '', Weight: '', Duration: '', Notes: '' }]);
 
-  const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+  const updateField = (field, value) => { setForm((prev) => ({ ...prev, [field]: value })); handleChange(field, value); };
+
+  const rules = useMemo(() => ({
+    Title: [(v) => validators.required(v, 'Workout title')],
+    Duration: [(v) => validators.numberRange(v, 0, 1440, 'Duration')],
+  }), []);
+  const { errors, handleChange, handleBlur, validateAll } = useValidation(rules);
 
   const updateExercise = (index, field, value) => {
     const updated = [...exercises];
@@ -41,7 +48,7 @@ function LogWorkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.Title) { toast.error('Please enter a workout title'); return; }
+    if (!validateAll(form)) return;
     setSubmitting(true);
     try {
       const payload = {
@@ -74,10 +81,10 @@ function LogWorkout() {
           <Card>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Workout Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Title" placeholder="e.g., Morning Upper Body" value={form.Title} onChange={(e) => updateField('Title', e.target.value)} />
+              <Input label="Title" placeholder="e.g., Morning Upper Body" value={form.Title} onChange={(e) => updateField('Title', e.target.value)} onBlur={(e) => handleBlur('Title', e.target.value)} error={errors.Title} required />
               <Select label="Type" options={['Weightlifting', 'Cardio', 'HIIT', 'Yoga', 'Sports', 'Other'].map((v) => ({ value: v, label: v }))} value={form.Type} onChange={(e) => updateField('Type', e.target.value)} />
               <Select label="Difficulty" options={['Beginner', 'Intermediate', 'Advanced'].map((v) => ({ value: v, label: v }))} value={form.Difficulty} onChange={(e) => updateField('Difficulty', e.target.value)} />
-              <Input label="Duration (minutes)" type="number" placeholder="45" value={form.Duration} onChange={(e) => updateField('Duration', e.target.value)} />
+              <Input label="Duration (minutes)" type="number" placeholder="45" value={form.Duration} onChange={(e) => updateField('Duration', e.target.value)} onBlur={(e) => handleBlur('Duration', e.target.value)} error={errors.Duration} helperText="0-1440 minutes" />
               <Input label="Location" placeholder="e.g., Home Gym" value={form.Location} onChange={(e) => updateField('Location', e.target.value)} />
               <Input label="Tags (comma separated)" placeholder="e.g., strength, upper body" value={form.Tags} onChange={(e) => updateField('Tags', e.target.value)} />
             </div>

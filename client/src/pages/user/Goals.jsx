@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import PageHeader from '../../components/common/PageHeader';
 import Card from '../../components/common/Card';
@@ -10,6 +10,7 @@ import Modal from '../../components/common/Modal';
 import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import Skeleton from '../../components/common/Skeleton';
+import { useValidation, validators } from '../../hooks/useValidation';
 import { createGoal, getGoals, updateGoal, deleteGoal, updateGoalProgress, completeGoal, activateGoal, pauseGoal, getGoalStats } from '../../services/goalService';
 import { FiTarget, FiPlus, FiTrash2, FiEdit2, FiPlay, FiPause, FiCheck, FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { format } from 'date-fns';
@@ -30,6 +31,13 @@ function Goals() {
     Title: '', Description: '', Type: 'Custom', TargetValue: '', CurrentValue: 0, Unit: '',
     Frequency: 'Daily', StartDate: format(new Date(), 'yyyy-MM-dd'), EndDate: '',
   });
+
+  const goalRules = useMemo(() => ({
+    Title: [(v) => validators.required(v, 'Goal title')],
+  }), []);
+  const { errors: goalErrors, handleChange: goalHandleChange, handleBlur: goalHandleBlur, validateAll: goalValidateAll } = useValidation(goalRules);
+
+  const updateGoalField = (name, value) => { setFormData({ ...formData, [name]: value }); goalHandleChange(name, value); };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -71,6 +79,7 @@ function Goals() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!goalValidateAll(formData)) return;
     const payload = {
       ...formData,
       TargetValue: formData.TargetValue ? parseFloat(formData.TargetValue) : undefined,
@@ -301,7 +310,7 @@ function Goals() {
 
       <Modal isOpen={showModal} onClose={() => { setShowModal(false); resetForm(); }} title={editingGoal ? 'Edit Goal' : 'Create Goal'}>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Title" value={formData.Title} onChange={(e) => setFormData({ ...formData, Title: e.target.value })} required placeholder="e.g., Lose 10kg" />
+          <Input label="Title" value={formData.Title} onChange={(e) => updateGoalField('Title', e.target.value)} onBlur={(e) => goalHandleBlur('Title', e.target.value)} error={goalErrors.Title} required placeholder="e.g., Lose 10kg" />
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
             <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Optional description" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
@@ -9,6 +9,7 @@ import Skeleton from '../../components/common/Skeleton';
 import Modal from '../../components/common/Modal';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import Pagination from '../../components/common/Pagination';
+import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { getAllUsers, createUser, toggleUserActive, deleteUser, assignTrainer } from '../../services/adminService';
 import { getAvailableTrainers } from '../../services/trainerRequestService';
 import { FiPlus, FiSearch, FiTrash2, FiUserCheck, FiUserX, FiEdit2 } from 'react-icons/fi';
@@ -31,6 +32,19 @@ function UserManagement() {
   const [selectedTrainer, setSelectedTrainer] = useState('');
   const [saving, setSaving] = useState(false);
   const [createForm, setCreateForm] = useState({ Username: '', Email: '', Password: '', Role: 'User', 'Profile.Name': '' });
+
+  const createRules = useMemo(() => ({
+    'Profile.Name': [(v) => validators.required(v, 'Full name'), (v) => validators.name(v, 'Full name')],
+    Username: [(v) => validators.required(v, 'Username'), (v) => validators.username(v)],
+    Email: [(v) => validators.required(v, 'Email'), (v) => validators.email(v)],
+    Password: [(v) => validators.required(v, 'Password'), (v) => validators.password(v)],
+  }), []);
+  const { errors: createErrors, handleChange: createHandleChange, handleBlur: createHandleBlur, validateAll: createValidateAll } = useValidation(createRules);
+
+  const updateCreateField = (name, value) => {
+    setCreateForm({ ...createForm, [name]: value });
+    createHandleChange(name, value);
+  };
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -59,6 +73,7 @@ function UserManagement() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (!createValidateAll(createForm)) return;
     setSaving(true);
     try {
       const payload = { ...createForm, Profile: { Name: createForm['Profile.Name'] } };
@@ -201,12 +216,12 @@ function UserManagement() {
       <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Create User">
         <form onSubmit={handleCreate} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Full Name" value={createForm['Profile.Name']} onChange={(e) => setCreateForm({ ...createForm, 'Profile.Name': e.target.value })} required />
-            <Input label="Username" value={createForm.Username} onChange={(e) => setCreateForm({ ...createForm, Username: e.target.value })} required />
+            <Input label="Full Name" value={createForm['Profile.Name']} onChange={(e) => updateCreateField('Profile.Name', e.target.value)} onBlur={(e) => createHandleBlur('Profile.Name', e.target.value)} error={createErrors['Profile.Name']} helperText={hints.name} required />
+            <Input label="Username" value={createForm.Username} onChange={(e) => updateCreateField('Username', e.target.value)} onBlur={(e) => createHandleBlur('Username', e.target.value)} error={createErrors.Username} helperText={hints.username} required />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Email" type="email" value={createForm.Email} onChange={(e) => setCreateForm({ ...createForm, Email: e.target.value })} required />
-            <Input label="Password" type="password" value={createForm.Password} onChange={(e) => setCreateForm({ ...createForm, Password: e.target.value })} required />
+            <Input label="Email" type="email" value={createForm.Email} onChange={(e) => updateCreateField('Email', e.target.value)} onBlur={(e) => createHandleBlur('Email', e.target.value)} error={createErrors.Email} helperText={hints.email} required />
+            <Input label="Password" type="password" value={createForm.Password} onChange={(e) => updateCreateField('Password', e.target.value)} onBlur={(e) => createHandleBlur('Password', e.target.value)} error={createErrors.Password} helperText={hints.password} required />
           </div>
           <Select label="Role" value={createForm.Role} onChange={(e) => setCreateForm({ ...createForm, Role: e.target.value })} options={[{ value: 'User', label: 'User' }, { value: 'Trainer', label: 'Trainer' }, { value: 'Admin', label: 'Admin' }]} />
           <div className="flex gap-3 pt-2">

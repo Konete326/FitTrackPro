@@ -22,6 +22,7 @@ function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(schema),
+    mode: 'onBlur',
     defaultValues: { name: user?.Profile?.Name || '', email: user?.Email || '', message: '' },
   });
 

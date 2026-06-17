@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import TrainerLayout from '../../layouts/TrainerLayout';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 import { useAuth } from '../../contexts/AuthContext';
+import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { updateProfile, updatePassword } from '../../services/authService';
 import { FiUser, FiLock, FiUpload, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -30,6 +31,24 @@ function TrainerSettings() {
 
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
+  const profileRules = useMemo(() => ({
+    'Profile.Name': [(v) => validators.required(v, 'Full name'), (v) => validators.name(v, 'Full name')],
+    'Profile.Age': [(v) => validators.numberRange(v, 13, 120, 'Age')],
+    'Profile.Height': [(v) => validators.numberRange(v, 50, 300, 'Height')],
+    'Profile.Weight': [(v) => validators.numberRange(v, 20, 500, 'Weight')],
+  }), []);
+  const { errors: profileErrors, handleChange: profileHandleChange, handleBlur: profileHandleBlur, validateAll: profileValidateAll } = useValidation(profileRules);
+
+  const passwordRules = useMemo(() => ({
+    currentPassword: [(v) => validators.required(v, 'Current password')],
+    newPassword: [(v) => validators.required(v, 'New password'), (v) => validators.password(v)],
+    confirmPassword: [(v) => validators.required(v, 'Confirm password'), (v) => validators.match(v, passwordForm.newPassword, 'Passwords')],
+  }), [passwordForm.newPassword]);
+  const { errors: passwordErrors, handleChange: passwordHandleChange, handleBlur: passwordHandleBlur, validateAll: passwordValidateAll } = useValidation(passwordRules);
+
+  const updateProfileField = (name, value) => { setProfileForm({ ...profileForm, [name]: value }); profileHandleChange(name, value); };
+  const updatePasswordField = (name, value) => { setPasswordForm({ ...passwordForm, [name]: value }); passwordHandleChange(name, value); };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -42,6 +61,7 @@ function TrainerSettings() {
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
+    if (!profileValidateAll(profileForm)) return;
     setSaving(true);
     try {
       const formData = new FormData();
@@ -60,8 +80,7 @@ function TrainerSettings() {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) { toast.error('Passwords do not match'); return; }
-    if (passwordForm.newPassword.length < 8) { toast.error('Password must be at least 8 characters'); return; }
+    if (!passwordValidateAll(passwordForm)) return;
     setSaving(true);
     try {
       const { data } = await updatePassword(passwordForm.currentPassword, passwordForm.newPassword);
@@ -111,17 +130,17 @@ function TrainerSettings() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="Full Name" value={profileForm['Profile.Name']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Name': e.target.value })} required />
+                  <Input label="Full Name" value={profileForm['Profile.Name']} onChange={(e) => updateProfileField('Profile.Name', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Name', e.target.value)} error={profileErrors['Profile.Name']} helperText={hints.name} required />
                   <Input label="Username" value={profileForm.Username} disabled />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <Input label="Age" type="number" min="13" max="120" value={profileForm['Profile.Age']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Age': e.target.value })} />
+                  <Input label="Age" type="number" min="13" max="120" value={profileForm['Profile.Age']} onChange={(e) => updateProfileField('Profile.Age', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Age', e.target.value)} error={profileErrors['Profile.Age']} helperText={hints.age} />
                   <Select label="Gender" value={profileForm['Profile.Gender']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Gender': e.target.value })} options={[{ value: '', label: 'Select' }, { value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }, { value: 'Other', label: 'Other' }]} />
                   <Select label="Fitness Level" value={profileForm['Profile.FitnessLevel']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.FitnessLevel': e.target.value })} options={[{ value: '', label: 'Select' }, { value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="Height (cm)" type="number" min="0" value={profileForm['Profile.Height']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Height': e.target.value })} />
-                  <Input label="Weight (kg)" type="number" step="0.1" min="0" value={profileForm['Profile.Weight']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Weight': e.target.value })} />
+                  <Input label="Height (cm)" type="number" min="0" value={profileForm['Profile.Height']} onChange={(e) => updateProfileField('Profile.Height', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Height', e.target.value)} error={profileErrors['Profile.Height']} helperText="50-300 cm" />
+                  <Input label="Weight (kg)" type="number" step="0.1" min="0" value={profileForm['Profile.Weight']} onChange={(e) => updateProfileField('Profile.Weight', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Weight', e.target.value)} error={profileErrors['Profile.Weight']} helperText="20-500 kg" />
                 </div>
                 <Input label="Specialization / Goals" value={profileForm['Profile.Goals']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Goals': e.target.value })} placeholder="e.g., Strength training, HIIT" />
                 <div>
@@ -140,9 +159,9 @@ function TrainerSettings() {
             <Card>
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Change Password</h3>
               <form onSubmit={handlePasswordSubmit} className="space-y-5 max-w-md">
-                <Input label="Current Password" type="password" value={passwordForm.currentPassword} onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} required />
-                <Input label="New Password" type="password" value={passwordForm.newPassword} onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} required />
-                <Input label="Confirm New Password" type="password" value={passwordForm.confirmPassword} onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} required />
+                <Input label="Current Password" type="password" value={passwordForm.currentPassword} onChange={(e) => updatePasswordField('currentPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('currentPassword', e.target.value)} error={passwordErrors.currentPassword} required />
+                <Input label="New Password" type="password" value={passwordForm.newPassword} onChange={(e) => updatePasswordField('newPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('newPassword', e.target.value)} error={passwordErrors.newPassword} helperText={hints.password} required />
+                <Input label="Confirm New Password" type="password" value={passwordForm.confirmPassword} onChange={(e) => updatePasswordField('confirmPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('confirmPassword', e.target.value)} error={passwordErrors.confirmPassword} helperText={hints.confirmPassword} required />
                 <div className="flex justify-end">
                   <Button type="submit" variant="primary" loading={saving}>Change Password</Button>
                 </div>

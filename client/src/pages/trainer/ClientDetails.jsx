@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import TrainerLayout from '../../layouts/TrainerLayout';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
@@ -8,6 +8,7 @@ import Badge from '../../components/common/Badge';
 import Skeleton from '../../components/common/Skeleton';
 import Modal from '../../components/common/Modal';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useValidation, validators } from '../../hooks/useValidation';
 import { getClientDetails, assignWorkout, setClientGoal, addClientNote, sendMessageToClient } from '../../services/trainerService';
 import { FiArrowLeft, FiPlus, FiTarget, FiMessageSquare, FiFileText, FiSend } from 'react-icons/fi';
 import { format } from 'date-fns';
@@ -34,6 +35,20 @@ function ClientDetails() {
     Title: '', Type: 'Custom', TargetValue: '', Unit: '', EndDate: '',
   });
 
+  const workoutRules = useMemo(() => ({
+    Title: [(v) => validators.required(v, 'Workout title')],
+    EstimatedDuration: [(v) => validators.numberRange(v, 1, 600, 'Duration')],
+  }), []);
+  const { errors: workoutErrors, handleChange: workoutHandleChange, handleBlur: workoutHandleBlur, validateAll: workoutValidateAll } = useValidation(workoutRules);
+
+  const goalRules = useMemo(() => ({
+    Title: [(v) => validators.required(v, 'Goal title')],
+  }), []);
+  const { errors: goalErrors, handleChange: goalHandleChange, handleBlur: goalHandleBlur, validateAll: goalValidateAll } = useValidation(goalRules);
+
+  const updateWorkoutField = (name, value) => { setWorkoutForm({ ...workoutForm, [name]: value }); workoutHandleChange(name, value); };
+  const updateGoalField = (name, value) => { setGoalForm({ ...goalForm, [name]: value }); goalHandleChange(name, value); };
+
   const fetchClient = useCallback(async () => {
     setLoading(true);
     try {
@@ -50,6 +65,7 @@ function ClientDetails() {
 
   const handleAssignWorkout = async (e) => {
     e.preventDefault();
+    if (!workoutValidateAll(workoutForm)) return;
     setSaving(true);
     try {
       await assignWorkout(id, {
@@ -68,6 +84,7 @@ function ClientDetails() {
 
   const handleSetGoal = async (e) => {
     e.preventDefault();
+    if (!goalValidateAll(goalForm)) return;
     setSaving(true);
     try {
       await setClientGoal(id, {
@@ -267,12 +284,12 @@ function ClientDetails() {
 
       <Modal isOpen={showWorkout} onClose={() => setShowWorkout(false)} title="Assign Workout">
         <form onSubmit={handleAssignWorkout} className="space-y-4">
-          <Input label="Title" value={workoutForm.Title} onChange={(e) => setWorkoutForm({ ...workoutForm, Title: e.target.value })} required />
+          <Input label="Title" value={workoutForm.Title} onChange={(e) => updateWorkoutField('Title', e.target.value)} onBlur={(e) => workoutHandleBlur('Title', e.target.value)} error={workoutErrors.Title} required />
           <div className="grid grid-cols-2 gap-4">
             <Select label="Type" value={workoutForm.Type} onChange={(e) => setWorkoutForm({ ...workoutForm, Type: e.target.value })} options={[{ value: 'Strength', label: 'Strength' }, { value: 'Cardio', label: 'Cardio' }, { value: 'HIIT', label: 'HIIT' }, { value: 'Yoga', label: 'Yoga' }, { value: 'Flexibility', label: 'Flexibility' }, { value: 'Mixed', label: 'Mixed' }]} />
             <Select label="Difficulty" value={workoutForm.Difficulty} onChange={(e) => setWorkoutForm({ ...workoutForm, Difficulty: e.target.value })} options={[{ value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]} />
           </div>
-          <Input label="Duration (min)" type="number" min="1" value={workoutForm.EstimatedDuration} onChange={(e) => setWorkoutForm({ ...workoutForm, EstimatedDuration: e.target.value })} />
+          <Input label="Duration (min)" type="number" min="1" value={workoutForm.EstimatedDuration} onChange={(e) => updateWorkoutField('EstimatedDuration', e.target.value)} onBlur={(e) => workoutHandleBlur('EstimatedDuration', e.target.value)} error={workoutErrors.EstimatedDuration} helperText="1-600 minutes" />
           <div className="flex gap-3 pt-2">
             <Button type="submit" variant="primary" className="flex-1" loading={saving}>Assign Workout</Button>
             <Button type="button" variant="secondary" onClick={() => setShowWorkout(false)}>Cancel</Button>
@@ -282,7 +299,7 @@ function ClientDetails() {
 
       <Modal isOpen={showGoal} onClose={() => setShowGoal(false)} title="Set Goal">
         <form onSubmit={handleSetGoal} className="space-y-4">
-          <Input label="Title" value={goalForm.Title} onChange={(e) => setGoalForm({ ...goalForm, Title: e.target.value })} required />
+          <Input label="Title" value={goalForm.Title} onChange={(e) => updateGoalField('Title', e.target.value)} onBlur={(e) => goalHandleBlur('Title', e.target.value)} error={goalErrors.Title} required />
           <div className="grid grid-cols-2 gap-4">
             <Select label="Type" value={goalForm.Type} onChange={(e) => setGoalForm({ ...goalForm, Type: e.target.value })} options={[{ value: 'Weight-Loss', label: 'Weight Loss' }, { value: 'Muscle-Building', label: 'Muscle Building' }, { value: 'Endurance', label: 'Endurance' }, { value: 'Nutrition', label: 'Nutrition' }, { value: 'Custom', label: 'Custom' }]} />
             <Input label="Target" type="number" step="any" value={goalForm.TargetValue} onChange={(e) => setGoalForm({ ...goalForm, TargetValue: e.target.value })} />

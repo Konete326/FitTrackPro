@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { useAuth } from '../../contexts/AuthContext';
+import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { updateProfile, updatePassword } from '../../services/authService';
 import { FiUser, FiLock, FiUpload, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -25,6 +26,22 @@ function AdminSettings() {
 
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
+  const profileRules = useMemo(() => ({
+    'Profile.Name': [(v) => validators.required(v, 'Full name'), (v) => validators.name(v, 'Full name')],
+    'Profile.Age': [(v) => validators.numberRange(v, 13, 120, 'Age')],
+  }), []);
+  const { errors: profileErrors, handleChange: profileHandleChange, handleBlur: profileHandleBlur, validateAll: profileValidateAll } = useValidation(profileRules);
+
+  const passwordRules = useMemo(() => ({
+    currentPassword: [(v) => validators.required(v, 'Current password')],
+    newPassword: [(v) => validators.required(v, 'New password'), (v) => validators.password(v)],
+    confirmPassword: [(v) => validators.required(v, 'Confirm password'), (v) => validators.match(v, passwordForm.newPassword, 'Passwords')],
+  }), [passwordForm.newPassword]);
+  const { errors: passwordErrors, handleChange: passwordHandleChange, handleBlur: passwordHandleBlur, validateAll: passwordValidateAll } = useValidation(passwordRules);
+
+  const updateProfileField = (name, value) => { setProfileForm({ ...profileForm, [name]: value }); profileHandleChange(name, value); };
+  const updatePasswordField = (name, value) => { setPasswordForm({ ...passwordForm, [name]: value }); passwordHandleChange(name, value); };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -37,6 +54,7 @@ function AdminSettings() {
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
+    if (!profileValidateAll(profileForm)) return;
     setSaving(true);
     try {
       const formData = new FormData();
@@ -55,8 +73,7 @@ function AdminSettings() {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) { toast.error('Passwords do not match'); return; }
-    if (passwordForm.newPassword.length < 8) { toast.error('Password must be at least 8 characters'); return; }
+    if (!passwordValidateAll(passwordForm)) return;
     setSaving(true);
     try {
       const { data } = await updatePassword(passwordForm.currentPassword, passwordForm.newPassword);
@@ -106,11 +123,11 @@ function AdminSettings() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="Full Name" value={profileForm['Profile.Name']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Name': e.target.value })} required />
+                  <Input label="Full Name" value={profileForm['Profile.Name']} onChange={(e) => updateProfileField('Profile.Name', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Name', e.target.value)} error={profileErrors['Profile.Name']} helperText={hints.name} required />
                   <Input label="Username" value={profileForm.Username} disabled />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="Age" type="number" min="13" max="120" value={profileForm['Profile.Age']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Age': e.target.value })} />
+                  <Input label="Age" type="number" min="13" max="120" value={profileForm['Profile.Age']} onChange={(e) => updateProfileField('Profile.Age', e.target.value)} onBlur={(e) => profileHandleBlur('Profile.Age', e.target.value)} error={profileErrors['Profile.Age']} helperText={hints.age} />
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gender</label>
                     <select value={profileForm['Profile.Gender']} onChange={(e) => setProfileForm({ ...profileForm, 'Profile.Gender': e.target.value })} className="form-select w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500">
@@ -137,9 +154,9 @@ function AdminSettings() {
             <Card>
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Change Password</h3>
               <form onSubmit={handlePasswordSubmit} className="space-y-5 max-w-md">
-                <Input label="Current Password" type="password" value={passwordForm.currentPassword} onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} required />
-                <Input label="New Password" type="password" value={passwordForm.newPassword} onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} required />
-                <Input label="Confirm New Password" type="password" value={passwordForm.confirmPassword} onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} required />
+                <Input label="Current Password" type="password" value={passwordForm.currentPassword} onChange={(e) => updatePasswordField('currentPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('currentPassword', e.target.value)} error={passwordErrors.currentPassword} required />
+                <Input label="New Password" type="password" value={passwordForm.newPassword} onChange={(e) => updatePasswordField('newPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('newPassword', e.target.value)} error={passwordErrors.newPassword} helperText={hints.password} required />
+                <Input label="Confirm New Password" type="password" value={passwordForm.confirmPassword} onChange={(e) => updatePasswordField('confirmPassword', e.target.value)} onBlur={(e) => passwordHandleBlur('confirmPassword', e.target.value)} error={passwordErrors.confirmPassword} helperText={hints.confirmPassword} required />
                 <div className="flex justify-end">
                   <Button type="submit" variant="primary" loading={saving}>Change Password</Button>
                 </div>

@@ -29,7 +29,7 @@ function Register() {
   const [submitting, setSubmitting] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
   const [preview, setPreview] = useState(null);
-  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
   useEffect(() => {
     if (!authLoading && user) {
