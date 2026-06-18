@@ -73,7 +73,7 @@ function Feedbacks() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-3">
           {['', 'unread', 'read'].map(s => (
-            <button key={s} onClick={() => setFilter(s)} className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === s ? 'bg-violet-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+            <button key={s} onClick={() => setFilter(s)} className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === s ? 'bg-violet-500 text-white' : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               {s ? s.charAt(0).toUpperCase() + s.slice(1) : 'All'} {s === 'unread' && unreadCount > 0 && `(${unreadCount})`}
             </button>
           ))}
@@ -97,7 +97,7 @@ function Feedbacks() {
                 onClick={() => handleSelect(fb)}
                 className={`p-4 rounded-xl cursor-pointer transition border ${selected?._id === fb._id
                   ? 'border-gray-400 dark:border-gray-500 bg-gray-100 dark:bg-gray-700/50'
-                  : 'border-gray-200 dark:border-gray-700/60 bg-gray-50 dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                  : 'border-gray-200 dark:border-gray-700/60 bg-gray-50 dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600'
                 } ${!fb.IsRead ? 'border-l-4 border-l-blue-500' : ''}`}
               >
                 <div className="flex items-start gap-3">
@@ -167,7 +167,7 @@ function Feedbacks() {
                   {selected.Replies?.length > 0 ? (
                     <div className="space-y-3 mb-5">
                       {selected.Replies.map((reply) => (
-                        <div key={reply._id} className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/60 rounded-lg p-3.5">
+                        <div key={reply._id} className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700/60 rounded-lg p-3.5">
                           <div className="flex items-center gap-2 mb-1.5">
                             <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                               <FiShield className="w-3 h-3 text-gray-500 dark:text-gray-400" />
@@ -192,7 +192,7 @@ function Feedbacks() {
                       placeholder="Type your reply... It will be sent to the user's email as FitTrack Pro."
                       rows={3}
                       maxLength={2000}
-                      className="form-textarea w-full !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition text-sm"
+                      className="form-textarea w-full !bg-gray-50 dark:!bg-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition text-sm"
                     />
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-xs text-gray-400 dark:text-gray-500">{replyText.length}/2000</span>

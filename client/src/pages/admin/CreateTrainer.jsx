@@ -152,7 +152,7 @@ function CreateTrainer() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio / Specialization</label>
-            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={2} className="form-textarea w-full !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition" placeholder="Describe the trainer's expertise and specializations..." />
+            <textarea value={form['Profile.Bio']} onChange={(e) => setForm({ ...form, 'Profile.Bio': e.target.value })} rows={2} className="form-textarea w-full !bg-gray-50 dark:!bg-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition" placeholder="Describe the trainer's expertise and specializations..." />
             <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">Optional, up to 500 characters</p>
           </div>
           <div className="flex gap-3 pt-2">

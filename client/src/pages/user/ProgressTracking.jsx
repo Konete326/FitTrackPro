@@ -354,7 +354,7 @@ function ProgressTracking() {
                     ? 'bg-violet-500 text-white'
                     : i < step
                     ? 'bg-violet-500/10 text-violet-500'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
+                    : 'bg-gray-100 dark:bg-gray-900 text-gray-400 dark:text-gray-500'
                 }`}
               >
                 {i < step ? <FiCheck className="w-3 h-3" /> : s.icon}

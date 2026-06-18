@@ -46,7 +46,7 @@ function ResetPassword() {
           <p className="text-gray-500 dark:text-gray-400">Enter your new password below</p>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl shadow-xs p-6 md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="relative">
               <Input

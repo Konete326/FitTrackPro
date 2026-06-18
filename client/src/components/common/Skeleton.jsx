@@ -9,7 +9,7 @@ function Skeleton({ type = 'text', count = 1, className = '' }) {
     circle: <div className={`${base} rounded-full w-12 h-12 ${className}`} />,
     rect: <div className={`${base} h-40 w-full ${className}`} />,
     card: (
-      <div className={`bg-gray-50 dark:bg-gray-800 rounded-xl p-5 shadow-xs ${className}`}>
+      <div className={`bg-gray-50 dark:bg-gray-900 rounded-xl p-5 shadow-xs ${className}`}>
         <div className={`${base} h-4 w-1/3 mb-4`} />
         <div className={`${base} h-8 w-1/2 mb-4`} />
         <div className={`${base} h-3 w-full mb-2`} />
@@ -17,7 +17,7 @@ function Skeleton({ type = 'text', count = 1, className = '' }) {
       </div>
     ),
     table: (
-      <div className={`bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs overflow-hidden ${className}`}>
+      <div className={`bg-gray-50 dark:bg-gray-900 rounded-xl shadow-xs overflow-hidden ${className}`}>
         <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
           <div className={`${base} h-4 w-1/4`} />
         </div>

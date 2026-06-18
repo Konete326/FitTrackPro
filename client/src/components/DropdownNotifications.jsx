@@ -5,13 +5,11 @@ import { useAuth } from '../contexts/AuthContext';
 import ConfirmModal from './common/ConfirmModal';
 import Skeleton from './common/Skeleton';
 import { getNotifications, markAsRead, markAllAsRead, deleteNotification, clearAllNotifications } from '../services/notificationService';
-import { getLatestVersion, getLatestChanges } from '../data/changelog';
-import { FiZap, FiArrowRight } from 'react-icons/fi';
+
 
 const POLL_INTERVAL = 30000;
 const MAX_ITEMS = 5;
-const CURRENT_VERSION = '1.3.0';
-const DISMISSED_VERSION_KEY = 'fittrack_dismissed_version';
+
 
 function DropdownNotifications({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -20,7 +18,7 @@ function DropdownNotifications({ align }) {
   const [loading, setLoading] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [clearing, setClearing] = useState(false);
-  const [showUpdateBanner, setShowUpdateBanner] = useState(false);
+
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -29,23 +27,7 @@ function DropdownNotifications({ align }) {
   const { user } = useAuth();
   const role = user?.Role;
 
-  useEffect(() => {
-    const dismissed = localStorage.getItem(DISMISSED_VERSION_KEY);
-    if (dismissed !== CURRENT_VERSION) {
-      setShowUpdateBanner(true);
-    }
-  }, []);
 
-  const handleDismissUpdate = () => {
-    setShowUpdateBanner(false);
-    localStorage.setItem(DISMISSED_VERSION_KEY, CURRENT_VERSION);
-  };
-
-  const handleGoToChangelog = () => {
-    handleDismissUpdate();
-    setDropdownOpen(false);
-    navigate('/settings?tab=changelog');
-  };
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -200,7 +182,7 @@ function DropdownNotifications({ align }) {
     <div className="relative inline-flex">
       <button
         ref={trigger}
-        className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 lg:hover:bg-gray-200 dark:hover:bg-gray-700/50 dark:lg:hover:bg-gray-800 rounded-full relative ${dropdownOpen && 'bg-gray-200 dark:bg-gray-800'}`}
+        className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 lg:hover:bg-gray-200 dark:hover:bg-gray-700/50 dark:lg:hover:bg-gray-900 rounded-full relative ${dropdownOpen && 'bg-gray-200 dark:bg-gray-900'}`}
         aria-haspopup="true"
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
@@ -222,7 +204,7 @@ function DropdownNotifications({ align }) {
       </button>
 
       <Transition
-        className={`origin-top-right z-10 absolute top-full -mr-48 sm:mr-0 min-w-80 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-lg overflow-hidden mt-1 ${align === 'right' ? 'right-0' : 'left-0'}`}
+        className={`origin-top-right z-10 absolute top-full -mr-48 sm:mr-0 min-w-80 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-lg overflow-hidden mt-1 ${align === 'right' ? 'right-0' : 'left-0'}`}
         show={dropdownOpen}
         enter="transition ease-out duration-200 transform"
         enterStart="opacity-0 -translate-y-2"
@@ -258,25 +240,7 @@ function DropdownNotifications({ align }) {
             </div>
           </div>
 
-          {showUpdateBanner && (
-            <div className="mx-4 mb-2 p-3 rounded-lg bg-gradient-to-r from-violet-500/10 to-indigo-500/10 border border-violet-200 dark:border-violet-800/40">
-              <div className="flex items-center gap-2 mb-1.5">
-                <FiZap className="w-3.5 h-3.5 text-violet-500" />
-                <span className="text-xs font-bold text-violet-600 dark:text-violet-400">v{CURRENT_VERSION} available</span>
-              </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 leading-relaxed">
-                {getLatestChanges()[0]?.text || 'New features and improvements'}
-              </p>
-              <div className="flex items-center gap-2">
-                <button onClick={handleGoToChangelog} className="text-xs font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 flex items-center gap-1">
-                  View changelog <FiArrowRight className="w-3 h-3" />
-                </button>
-                <button onClick={handleDismissUpdate} className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                  Dismiss
-                </button>
-              </div>
-            </div>
-          )}
+
 
           {loading ? (
             <div className="divide-y divide-gray-100 dark:divide-gray-700/60">

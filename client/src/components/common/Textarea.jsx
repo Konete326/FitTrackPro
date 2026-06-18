@@ -9,7 +9,7 @@ function Textarea({ label, error, maxLength, className = '', ...props }) {
         </label>
       )}
       <textarea
-        className={`form-textarea w-full !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition ${error ? 'border-red-500 focus:border-red-500' : ''}`}
+        className={`form-textarea w-full !bg-gray-50 dark:!bg-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition ${error ? 'border-red-500 focus:border-red-500' : ''}`}
         maxLength={maxLength}
         {...props}
       />

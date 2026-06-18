@@ -66,7 +66,7 @@ function NavMain({ items, expanded }) {
             } ${
               item.items?.some((sub) => isActive(pathname, sub.url))
                 ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10"
-                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
             }`}
             title={!expanded ? item.title : undefined}
           >
@@ -93,7 +93,7 @@ function NavMain({ items, expanded }) {
                   className={`flex items-center h-8 px-3 rounded-lg text-sm transition-colors ${
                     isActive(pathname, sub.url)
                       ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10 font-medium"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900"
                   }`}
                 >
                   {sub.title}
@@ -127,8 +127,8 @@ function NavUser({ expanded, user, onLogout }) {
   return (
     <div ref={ref} className="relative px-3 py-2">
       <button
-        onClick={() => setOpen(!open)}
-        className={`flex items-center w-full rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${
+        onClick={() => expanded && setOpen(!open)}
+        className={`flex items-center w-full rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-900 ${
           expanded ? "h-12 px-3 gap-3" : "h-10 justify-center"
         }`}
       >
@@ -153,7 +153,7 @@ function NavUser({ expanded, user, onLogout }) {
         )}
       </button>
       {open && (
-        <div className="absolute bottom-full left-3 right-3 mb-1 rounded-lg border border-gray-200 dark:border-gray-700/60 bg-white dark:bg-gray-800 shadow-lg overflow-hidden z-50">
+        <div className="absolute bottom-full left-3 right-3 mb-1 rounded-lg border border-gray-200 dark:border-gray-700/60 bg-white dark:bg-gray-900 shadow-lg overflow-hidden z-50">
           <div className="p-3 border-b border-gray-200 dark:border-gray-700/60">
             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{name}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">{email}</p>
@@ -249,7 +249,7 @@ function AppSidebar({ sections, homePath, title, subtitle, sidebarOpen, setSideb
           {expanded && (
             <button
               onClick={() => setExpanded(false)}
-              className="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 18l-6-6 6-6" />
@@ -265,13 +265,13 @@ function AppSidebar({ sections, homePath, title, subtitle, sidebarOpen, setSideb
           </button>
         </div>
 
-        <div className="h-px bg-gray-200 dark:bg-gray-800 mx-3" />
+        <div className="h-px bg-gray-200 dark:bg-gray-900 mx-3" />
 
         <div className="flex-1 overflow-y-auto overflow-x-hidden py-2">
           <NavMain items={sections} expanded={expanded} />
         </div>
 
-        <div className="h-px bg-gray-200 dark:bg-gray-800 mx-3" />
+        <div className="h-px bg-gray-200 dark:bg-gray-900 mx-3" />
         <NavUser expanded={expanded} user={user} onLogout={logoutUser} />
       </aside>
     </div>

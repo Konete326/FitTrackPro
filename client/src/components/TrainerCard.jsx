@@ -67,7 +67,7 @@ function TrainerCard({
           whileHover={shouldAnimate ? { scale: 1.02 } : {}}
           whileTap={shouldAnimate ? { scale: 0.98 } : {}}
           onClick={(e) => { e.stopPropagation(); onSendRequest(); }}
-          className="w-full py-2.5 px-4 rounded-2xl font-semibold text-sm border border-gray-200 dark:border-gray-700/60 shadow-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center justify-center gap-2"
+          className="w-full py-2.5 px-4 rounded-2xl font-semibold text-sm border border-gray-200 dark:border-gray-700/60 shadow-sm bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center justify-center gap-2"
         >
           <FiSend className="w-3.5 h-3.5" /> Re-send Request
         </motion.button>

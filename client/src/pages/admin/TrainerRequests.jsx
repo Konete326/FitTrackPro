@@ -55,7 +55,7 @@ function TrainerRequests() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-3">
           {['', 'Pending', 'Approved', 'Rejected'].map(s => (
-            <button key={s} onClick={() => setStatusFilter(s)} className={`px-3 py-1.5 text-sm rounded-lg transition ${statusFilter === s ? 'bg-violet-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+            <button key={s} onClick={() => setStatusFilter(s)} className={`px-3 py-1.5 text-sm rounded-lg transition ${statusFilter === s ? 'bg-violet-500 text-white' : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               {s || 'All'} {s === 'Pending' && pendingCount > 0 && `(${pendingCount})`}
             </button>
           ))}

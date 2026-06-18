@@ -2,7 +2,7 @@ import React from 'react';
 
 function Card({ children, className = '', padding = true, hover = false }) {
   return (
-    <div className={`bg-gray-50 dark:bg-gray-800 shadow-xs rounded-xl ${padding ? 'p-5' : ''} ${hover ? 'hover:shadow-md transition-shadow duration-200' : ''} ${className}`}>
+    <div className={`bg-gray-50 dark:bg-gray-900 shadow-xs rounded-xl ${padding ? 'p-5' : ''} ${hover ? 'hover:shadow-md transition-shadow duration-200' : ''} ${className}`}>
       {children}
     </div>
   );

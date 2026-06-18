@@ -118,7 +118,7 @@ function LogWorkout() {
             </div>
             <div className="space-y-4">
               {exercises.map((ex, i) => (
-                <div key={i} className="border border-gray-200 dark:border-gray-700/60 rounded-xl p-4 bg-gray-50/50 dark:bg-gray-800/30">
+                <div key={i} className="border border-gray-200 dark:border-gray-700/60 rounded-xl p-4 bg-gray-50/50 dark:bg-gray-900/30">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <span className="w-6 h-6 rounded-full bg-violet-500/10 text-violet-500 text-xs font-semibold flex items-center justify-center">{i + 1}</span>

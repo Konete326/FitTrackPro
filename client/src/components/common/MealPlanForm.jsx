@@ -94,7 +94,7 @@ function MealPlanForm({ initialData, onSubmit, loading, onClose }) {
       <Input label="Plan Title" value={form.Title} onChange={(e) => updateField('Title', e.target.value)} required placeholder="e.g., 7-Day Cutting Plan" />
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-        <textarea value={form.Description} onChange={(e) => updateField('Description', e.target.value)} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 rounded-lg" placeholder="Describe the plan goals..." />
+        <textarea value={form.Description} onChange={(e) => updateField('Description', e.target.value)} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" placeholder="Describe the plan goals..." />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Select label="Diet" value={form.DietaryPreference} onChange={(e) => updateField('DietaryPreference', e.target.value)} options={DIET_OPTIONS.map((v) => ({ value: v, label: v }))} />
@@ -107,7 +107,7 @@ function MealPlanForm({ initialData, onSubmit, loading, onClose }) {
         <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Weekly Schedule</h4>
         {form.Days.map((day, dayIdx) => (
           <div key={dayIdx} className="border border-gray-200 dark:border-gray-700/60 rounded-lg overflow-hidden">
-            <button type="button" onClick={() => toggleDay(dayIdx)} className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+            <button type="button" onClick={() => toggleDay(dayIdx)} className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-900 transition">
               <span className="font-medium text-sm text-gray-800 dark:text-gray-100">{day.DayOfWeek}</span>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-gray-400">{day.Meals.length} meal{day.Meals.length !== 1 ? 's' : ''}</span>

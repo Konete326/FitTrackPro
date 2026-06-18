@@ -171,7 +171,7 @@ function WorkoutTemplates() {
             {formData.Exercises.length > 0 && (
               <div className="space-y-1.5">
                 {formData.Exercises.map((ex, i) => (
-                  <div key={i} className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 rounded-lg">
+                  <div key={i} className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700/60 rounded-lg">
                     <div className="flex items-center gap-3">
                       <span className="text-xs font-medium text-gray-400 dark:text-gray-500 w-5">{i + 1}.</span>
                       <span className="text-sm text-gray-700 dark:text-gray-300">{ex.Name}</span>

@@ -140,7 +140,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen, align }) {
       >
         <div
           ref={modalContent}
-          className="bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700/60 rounded-xl shadow-xl overflow-hidden max-w-2xl w-full mx-auto"
+          className="bg-white dark:bg-gray-900 border border-transparent dark:border-gray-700/60 rounded-xl shadow-xl overflow-hidden max-w-2xl w-full mx-auto"
         >
           {/* Search form */}
           <form onSubmit={handleSearch} className="border-b border-gray-200 dark:border-gray-700/60">
@@ -153,7 +153,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen, align }) {
               <input
                 ref={searchInputRef}
                 id={searchId}
-                className="w-full dark:text-gray-100 dark:bg-gray-800 border-0 focus:ring-transparent dark:focus:ring-transparent placeholder-gray-400 dark:placeholder-gray-500 appearance-none py-3 pl-3 pr-4 text-sm"
+                className="w-full dark:text-gray-100 dark:bg-gray-900 border-0 focus:ring-transparent dark:focus:ring-transparent placeholder-gray-400 dark:placeholder-gray-500 appearance-none py-3 pl-3 pr-4 text-sm"
                 type="text"
                 placeholder="Search pages, workouts, goals..."
                 value={searchValue}

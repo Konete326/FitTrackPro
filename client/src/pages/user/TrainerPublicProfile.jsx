@@ -23,7 +23,7 @@ function AnimatedImage({ src, alt, ratio, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.05 }}
-      className="rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800"
+      className="rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-900"
       style={{ aspectRatio: ratio }}
     >
       <img
@@ -150,7 +150,7 @@ function TrainerPublicProfile() {
 
           <div className="px-6 sm:px-8 pb-6 -mt-16 relative">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-6">
-              <div className="w-28 h-28 rounded-2xl bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden ring-4 ring-white dark:ring-gray-800 shadow-lg">
+              <div className="w-28 h-28 rounded-2xl bg-white dark:bg-gray-900 flex items-center justify-center overflow-hidden ring-4 ring-white dark:ring-gray-800 shadow-lg">
                 {image ? (
                   <img src={image} alt={name} className="w-full h-full object-cover" />
                 ) : (
@@ -190,19 +190,19 @@ function TrainerPublicProfile() {
 
             <div className="flex flex-wrap gap-4 mb-6">
               {experience > 0 && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-3 py-1.5 rounded-lg">
                   <FiBriefcase className="w-4 h-4 text-violet-500" />
                   <span>{experience} years experience</span>
                 </div>
               )}
               {trainer.Stats?.TotalClients > 0 && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-3 py-1.5 rounded-lg">
                   <FiUsers className="w-4 h-4 text-blue-500" />
                   <span>{trainer.Stats.TotalClients} clients</span>
                 </div>
               )}
               {trainer.Stats?.TotalWorkouts > 0 && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-3 py-1.5 rounded-lg">
                   <FiTarget className="w-4 h-4 text-green-500" />
                   <span>{trainer.Stats.TotalWorkouts} workouts</span>
                 </div>

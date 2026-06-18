@@ -236,7 +236,7 @@ function Goals() {
             placeholder="Search goals..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="form-input w-full pl-10 !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition"
+            className="form-input w-full pl-10 !bg-gray-50 dark:!bg-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition"
           />
         </div>
         <div className="col-span-2">
@@ -371,7 +371,7 @@ function Goals() {
                     ? 'bg-violet-500 text-white shadow-sm'
                     : i < step
                     ? 'bg-violet-500/10 text-violet-600 dark:text-violet-400'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
+                    : 'bg-gray-100 dark:bg-gray-900 text-gray-400 dark:text-gray-500'
                 }`}
               >
                 {i < step ? <FiCheck className="w-3 h-3" /> : <span className="w-4 h-4 rounded-full border border-current flex items-center justify-center text-[10px]">{i + 1}</span>}
@@ -415,7 +415,7 @@ function Goals() {
                         className={`relative flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-200 ${
                           isSelected
                             ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10 shadow-sm'
-                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-900'
                         }`}
                       >
                         <span className={isSelected ? 'text-violet-600 dark:text-violet-400' : 'text-gray-500 dark:text-gray-400'}>
@@ -440,7 +440,7 @@ function Goals() {
           {/* ═══ Step 2: Target & Schedule ═══ */}
           {step === 1 && (
             <div className="space-y-5">
-              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 space-y-3">
+              <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 space-y-3">
                 <div className="flex items-center gap-2 mb-1">
                   <FiTarget className="w-4 h-4 text-gray-500" />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Target & Progress</span>
@@ -506,7 +506,7 @@ function Goals() {
               </div>
 
               {/* Summary */}
-              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 space-y-3">
+              <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 space-y-3">
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   <FiCheck className="w-4 h-4 text-violet-500" /> Summary
                 </h4>

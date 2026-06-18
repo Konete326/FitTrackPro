@@ -47,7 +47,7 @@ function Home() {
               )}
               <Link
                 to="/about"
-                className="w-full sm:w-auto btn bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-violet-300 dark:hover:border-violet-600 hover:text-violet-600 dark:hover:text-violet-400 text-base px-8 py-3.5 rounded-xl font-semibold"
+                className="w-full sm:w-auto btn bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-violet-300 dark:hover:border-violet-600 hover:text-violet-600 dark:hover:text-violet-400 text-base px-8 py-3.5 rounded-xl font-semibold"
               >
                 Learn More
               </Link>
@@ -66,7 +66,7 @@ function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, i) => (
-              <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 hover:shadow-lg transition-shadow border border-gray-100 dark:border-gray-700/50">
+              <div key={i} className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 hover:shadow-lg transition-shadow border border-gray-100 dark:border-gray-700/50">
                 <div className="w-12 h-12 bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-lg flex items-center justify-center mb-4">
                   {feature.icon}
                 </div>
@@ -130,7 +130,7 @@ function Home() {
                 </Link>
                 <Link
                   to="/login"
-                  className="w-full sm:w-auto btn bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-violet-300 dark:hover:border-violet-600 text-base px-8 py-3.5 rounded-xl font-semibold"
+                  className="w-full sm:w-auto btn bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-violet-300 dark:hover:border-violet-600 text-base px-8 py-3.5 rounded-xl font-semibold"
                 >
                   Sign In
                 </Link>

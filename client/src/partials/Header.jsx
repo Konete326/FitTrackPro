@@ -42,7 +42,7 @@ function Header({
           <div className="flex items-center space-x-3">
             <div>
               <button
-                className={`w-8 h-8 flex items-center justify-center hover:bg-gray-200 lg:hover:bg-gray-200 dark:hover:bg-gray-700/50 dark:lg:hover:bg-gray-800 rounded-full ml-3 ${searchModalOpen && 'bg-gray-200 dark:bg-gray-800'}`}
+                className={`w-8 h-8 flex items-center justify-center hover:bg-gray-200 lg:hover:bg-gray-200 dark:hover:bg-gray-700/50 dark:lg:hover:bg-gray-900 rounded-full ml-3 ${searchModalOpen && 'bg-gray-200 dark:bg-gray-900'}`}
                 onClick={(e) => { e.stopPropagation(); setSearchModalOpen(true); }}
                 aria-controls="search-modal"
               >

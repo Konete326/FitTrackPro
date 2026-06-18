@@ -17,7 +17,7 @@ function Input({ label, error, helperText, icon, className = '', id, ...props })
         )}
         <input
           id={inputId}
-          className={`form-input w-full ${icon ? 'pl-10' : ''} ${error ? 'border-red-500 focus:border-red-500' : ''} !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition`}
+          className={`form-input w-full ${icon ? 'pl-10' : ''} ${error ? 'border-red-500 focus:border-red-500' : ''} !bg-gray-50 dark:!bg-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition`}
           {...props}
         />
       </div>

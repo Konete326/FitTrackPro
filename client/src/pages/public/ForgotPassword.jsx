@@ -43,7 +43,7 @@ function ForgotPassword() {
           <p className="text-gray-500 dark:text-gray-400">We'll send you a link to reset your password</p>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl shadow-xs p-6 md:p-8">
           {submitted ? (
             <div className="text-center py-6">
               <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">

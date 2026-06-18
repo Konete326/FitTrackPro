@@ -58,7 +58,7 @@ function Register() {
           <p className="text-gray-500 dark:text-gray-400">Start your fitness journey today</p>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl shadow-xs p-6 md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Username" placeholder="john_doe" icon={<FiUser className="w-4 h-4" />} {...register('Username')} error={errors.Username?.message} />

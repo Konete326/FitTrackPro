@@ -175,7 +175,7 @@ function TrainerSettings() {
             <Card>
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Help & Support</h3>
               <div className="space-y-4">
-                <a href="/about" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition group">
+                <a href="/about" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition group">
                   <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
                     <FiBookOpen className="w-5 h-5 text-blue-500" />
                   </div>
@@ -184,7 +184,7 @@ function TrainerSettings() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Browse guides and learn how to use FitTrack</p>
                   </div>
                 </a>
-                <a href="/faq" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition group">
+                <a href="/faq" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition group">
                   <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
                     <FiGlobe className="w-5 h-5 text-emerald-500" />
                   </div>
@@ -193,7 +193,7 @@ function TrainerSettings() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Find answers to frequently asked questions</p>
                   </div>
                 </a>
-                <a href="/contact" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition group">
+                <a href="/contact" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition group">
                   <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
                     <FiMessageCircle className="w-5 h-5 text-violet-500" />
                   </div>

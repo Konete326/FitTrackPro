@@ -18,7 +18,7 @@ function VersionCard({ entry, isLatest, defaultExpanded }) {
       <div className={`absolute left-0 top-0 bottom-0 w-px ${isLatest ? 'bg-violet-300 dark:bg-violet-600' : 'bg-gray-200 dark:bg-gray-700/60'}`} />
       <div className={`absolute left-[-5px] top-1.5 w-[11px] h-[11px] rounded-full border-2 ${isLatest ? 'bg-violet-500 border-violet-200 dark:border-violet-800' : 'bg-gray-300 dark:bg-gray-600 border-gray-100 dark:border-gray-800'}`} />
 
-      <div className={`bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700/60 overflow-hidden transition-all ${expanded ? '' : ''}`}>
+      <div className={`bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700/60 overflow-hidden transition-all ${expanded ? '' : ''}`}>
         <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-100/50 dark:hover:bg-gray-700/30 transition">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-lg font-bold text-gray-900 dark:text-white">v{entry.version}</span>
@@ -61,6 +61,18 @@ function VersionCard({ entry, isLatest, defaultExpanded }) {
 }
 
 function Changelog() {
+  if (changelog.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center mb-4">
+          <FiZap className="w-5 h-5 text-gray-400" />
+        </div>
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">No updates yet</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Changelog will appear here when available</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
