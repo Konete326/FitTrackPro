@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FiCheck, FiSend, FiClock, FiTrash2, FiTarget, FiBriefcase } from 'react-icons/fi';
 
@@ -11,7 +11,6 @@ function TrainerCard({
   onRemove,
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [hovered, setHovered] = useState(false);
   const shouldAnimate = !shouldReduceMotion;
 
   const name = trainer.Profile?.Name || trainer.Username || 'Trainer';
@@ -20,15 +19,6 @@ function TrainerCard({
   const experience = trainer.Profile?.Experience || 0;
   const workouts = trainer.Stats?.TotalWorkouts || 0;
   const specialties = trainer.Profile?.Specialties || [];
-
-  const containerVariants = {
-    rest: { scale: 1, y: 0 },
-    hover: shouldAnimate ? {
-      scale: 1.02,
-      y: -4,
-      transition: { type: 'spring', stiffness: 400, damping: 28, mass: 0.6 },
-    } : {},
-  };
 
   const contentVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -97,24 +87,21 @@ function TrainerCard({
 
   return (
     <motion.div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       initial="rest"
-      whileHover="hover"
-      variants={containerVariants}
+      animate="visible"
       onClick={onViewProfile}
       className="relative w-full h-80 rounded-3xl border border-gray-200/50 dark:border-gray-700/30 text-gray-900 dark:text-gray-100 overflow-hidden shadow-lg shadow-black/5 dark:shadow-black/20 cursor-pointer group"
     >
       {image ? (
-        <motion.img
+        <img
           src={image}
           alt={name}
           className="absolute inset-0 w-full h-full object-cover"
-          animate={shouldAnimate && hovered ? { scale: 1.05 } : { scale: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         />
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 via-purple-500/10 to-indigo-500/20 dark:from-violet-900/30 dark:via-purple-900/20 dark:to-indigo-900/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 via-purple-500/10 to-indigo-500/20 dark:from-violet-900/30 dark:via-purple-900/20 dark:to-indigo-900/30 flex items-center justify-center">
+          <span className="text-6xl font-bold text-violet-500/40 dark:text-violet-400/30">{name[0].toUpperCase()}</span>
+        </div>
       )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/50 via-white/20 to-transparent dark:from-gray-900/95 dark:via-gray-900/50 dark:via-gray-900/20" />

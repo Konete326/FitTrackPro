@@ -112,7 +112,7 @@ function BrowseTrainers() {
               </div>
             </div>
             <Button variant="secondary" className="!py-1.5 !px-3 !text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => setShowRemoveConfirm(true)}>
-              <FiTrash2 className="w-3.5 h-3.5 mr-1" /> Remove
+              <FiX className="w-3.5 h-3.5 mr-1" /> Unassign
             </Button>
           </div>
         </Card>
@@ -184,7 +184,7 @@ function BrowseTrainers() {
         </div>
       )}
 
-      <ConfirmModal isOpen={showRemoveConfirm} onClose={() => setShowRemoveConfirm(false)} onConfirm={handleRemoveTrainer} title="Remove Trainer" message="Are you sure you want to remove your assigned trainer? You can request a new trainer anytime." />
+      <ConfirmModal isOpen={showRemoveConfirm} onClose={() => setShowRemoveConfirm(false)} onConfirm={handleRemoveTrainer} title="Unassign Trainer" message="Are you sure you want to unassign your current trainer? You can request a new trainer anytime." />
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={`Request ${selectedTrainer?.Profile?.Name || selectedTrainer?.Username || 'Trainer'}`}>
         <form onSubmit={handleSendRequest} className="space-y-4">
