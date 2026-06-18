@@ -12,7 +12,7 @@ import Modal from '../../components/common/Modal';
 import TrainerCard from '../../components/TrainerCard';
 import { getAvailableTrainers, createRequest, getMyRequests, removeTrainer } from '../../services/trainerRequestService';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiUsers, FiSend, FiCheck, FiClock, FiX, FiTrash2 } from 'react-icons/fi';
+import { FiUsers, FiSend, FiClock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function BrowseTrainers() {
@@ -76,7 +76,6 @@ function BrowseTrainers() {
   };
 
   const currentTrainer = user?.TrainerId;
-  const assignedTrainer = trainers.find(t => t._id === currentTrainer);
 
   const handleRemoveTrainer = async () => {
     try {
@@ -98,25 +97,6 @@ function BrowseTrainers() {
   return (
     <DashboardLayout>
       <PageHeader title="Browse Trainers" description="Find and connect with a personal trainer" />
-
-      {currentTrainer && assignedTrainer && (
-        <Card className="mb-6 border-green-200 dark:border-green-800/40 bg-green-50 dark:bg-green-900/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center shrink-0">
-                <FiCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-medium text-green-700 dark:text-green-400">Assigned Trainer: {assignedTrainer.Profile?.Name || assignedTrainer.Username}</p>
-                <p className="text-sm text-green-600 dark:text-green-500">@{assignedTrainer.Username}{assignedTrainer.Profile?.Specialties?.length > 0 ? ` • ${assignedTrainer.Profile.Specialties.slice(0, 2).join(', ')}` : ''}</p>
-              </div>
-            </div>
-            <Button variant="secondary" className="!py-1.5 !px-3 !text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => setShowRemoveConfirm(true)}>
-              <FiX className="w-3.5 h-3.5 mr-1" /> Unassign
-            </Button>
-          </div>
-        </Card>
-      )}
 
       {myRequests.length > 0 && (
         <Card className="!p-0 mb-6">
