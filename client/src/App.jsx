@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Agentation } from 'agentation';
 import {
   Routes,
   Route,
@@ -108,6 +109,7 @@ function App() {
         <Route path="/admin/profile" element={<ProtectedRoute roles={['Admin']}><AdminProfile /></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute roles={['Admin']}><AdminSettings /></ProtectedRoute>} />
       </Routes>
+      {import.meta.env.DEV && <Agentation />}
     </>
   );
 }

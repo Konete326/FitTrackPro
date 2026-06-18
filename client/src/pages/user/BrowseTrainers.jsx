@@ -6,15 +6,17 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
+import ConfirmModal from '../../components/common/ConfirmModal';
 import Modal from '../../components/common/Modal';
-import { getAvailableTrainers, createRequest, getMyRequests } from '../../services/trainerRequestService';
+import TrainerCard from '../../components/TrainerCard';
+import { getAvailableTrainers, createRequest, getMyRequests, removeTrainer } from '../../services/trainerRequestService';
 import { getTrainerPublicProfile } from '../../services/trainerService';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiUsers, FiSend, FiCheck, FiClock, FiX, FiMessageSquare, FiAward, FiBriefcase, FiTarget, FiImage } from 'react-icons/fi';
+import { FiUsers, FiSend, FiCheck, FiClock, FiX, FiMessageSquare, FiAward, FiBriefcase, FiTarget, FiImage, FiTrash2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function BrowseTrainers() {
-  const { user } = useAuth();
+  const { user, loadUser } = useAuth();
   const [trainers, setTrainers] = useState([]);
   const [myRequests, setMyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +27,7 @@ function BrowseTrainers() {
   const [search, setSearch] = useState('');
   const [selectedTrainerProfile, setSelectedTrainerProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -85,6 +88,19 @@ function BrowseTrainers() {
   };
 
   const currentTrainer = user?.TrainerId;
+  const assignedTrainer = trainers.find(t => t._id === currentTrainer);
+
+  const handleRemoveTrainer = async () => {
+    try {
+      await removeTrainer();
+      await loadUser();
+      toast.success('Trainer removed');
+      setShowRemoveConfirm(false);
+      fetchData();
+    } catch {
+      toast.error('Failed to remove trainer');
+    }
+  };
 
   const filteredTrainers = trainers.filter(t => {
     const name = (t.Profile?.Name || t.Username || '').toLowerCase();
@@ -95,16 +111,21 @@ function BrowseTrainers() {
     <DashboardLayout>
       <PageHeader title="Browse Trainers" description="Find and connect with a personal trainer" />
 
-      {currentTrainer && (
+      {currentTrainer && assignedTrainer && (
         <Card className="mb-6 border-green-200 dark:border-green-800/40 bg-green-50 dark:bg-green-900/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center">
-              <FiCheck className="w-5 h-5" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center shrink-0">
+                <FiCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-medium text-green-700 dark:text-green-400">Assigned Trainer: {assignedTrainer.Profile?.Name || assignedTrainer.Username}</p>
+                <p className="text-sm text-green-600 dark:text-green-500">@{assignedTrainer.Username}{assignedTrainer.Profile?.Specialties?.length > 0 ? ` • ${assignedTrainer.Profile.Specialties.slice(0, 2).join(', ')}` : ''}</p>
+              </div>
             </div>
-            <div>
-              <p className="font-medium text-green-700 dark:text-green-400">You have an assigned trainer</p>
-              <p className="text-sm text-green-600 dark:text-green-500">Check your dashboard for trainer-assigned workouts and goals.</p>
-            </div>
+            <Button variant="secondary" className="!py-1.5 !px-3 !text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => setShowRemoveConfirm(true)}>
+              <FiTrash2 className="w-3.5 h-3.5 mr-1" /> Remove
+            </Button>
           </div>
         </Card>
       )}
@@ -161,63 +182,21 @@ function BrowseTrainers() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTrainers.map((trainer) => {
-            const reqStatus = getRequestStatus(trainer._id);
-            return (
-              <Card key={trainer._id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => openTrainerProfile(trainer)}>
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-20 h-20 rounded-full bg-violet-500/10 flex items-center justify-center overflow-hidden mb-3">
-                    {trainer.Profile?.ProfilePicture ? (
-                      <img src={trainer.Profile.ProfilePicture} alt={trainer.Profile?.Name} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-2xl font-bold text-violet-500">{(trainer.Profile?.Name || trainer.Username || 'T')[0].toUpperCase()}</span>
-                    )}
-                  </div>
-                  <h3 className="font-semibold text-gray-800 dark:text-gray-100">{trainer.Profile?.Name || trainer.Username}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">@{trainer.Username}</p>
-                  {trainer.Profile?.Bio && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">{trainer.Profile.Bio}</p>
-                  )}
-                  {trainer.Profile?.Specialties?.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2 justify-center">
-                      {trainer.Profile.Specialties.slice(0, 3).map((s) => (
-                        <Badge key={s} variant="violet" className="text-xs">{s}</Badge>
-                      ))}
-                    </div>
-                  )}
-                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
-                    {trainer.Stats?.TotalWorkouts !== undefined && (
-                      <span>{trainer.Stats.TotalWorkouts} workouts</span>
-                    )}
-                    {trainer.Profile?.Experience > 0 && (
-                      <span>{trainer.Profile.Experience} yrs exp</span>
-                    )}
-                  </div>
-                  <div className="mt-4 w-full" onClick={(e) => e.stopPropagation()}>
-                    {currentTrainer === trainer._id ? (
-                      <Badge variant="green" className="w-full justify-center py-2">Your Trainer</Badge>
-                    ) : reqStatus === 'Pending' ? (
-                      <Button variant="secondary" className="w-full" disabled>
-                        <FiClock className="w-4 h-4 mr-1" /> Request Pending
-                      </Button>
-                    ) : reqStatus === 'Approved' ? (
-                      <Badge variant="green" className="w-full justify-center py-2">Approved</Badge>
-                    ) : reqStatus === 'Rejected' ? (
-                      <Button variant="secondary" className="w-full" onClick={() => openRequest(trainer)}>
-                        <FiSend className="w-4 h-4 mr-1" /> Re-send Request
-                      </Button>
-                    ) : (
-                      <Button variant="primary" className="w-full" onClick={() => openRequest(trainer)}>
-                        <FiSend className="w-4 h-4 mr-1" /> Send Request
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
+          {filteredTrainers.map((trainer) => (
+            <TrainerCard
+              key={trainer._id}
+              trainer={trainer}
+              isAssigned={currentTrainer === trainer._id}
+              requestStatus={getRequestStatus(trainer._id)}
+              onSendRequest={() => openRequest(trainer)}
+              onViewProfile={() => openTrainerProfile(trainer)}
+              onRemove={() => setShowRemoveConfirm(true)}
+            />
+          ))}
         </div>
       )}
+
+      <ConfirmModal isOpen={showRemoveConfirm} onClose={() => setShowRemoveConfirm(false)} onConfirm={handleRemoveTrainer} title="Remove Trainer" message="Are you sure you want to remove your assigned trainer? You can request a new trainer anytime." />
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={`Request ${selectedTrainer?.Profile?.Name || selectedTrainer?.Username || 'Trainer'}`}>
         <form onSubmit={handleSendRequest} className="space-y-4">
@@ -364,7 +343,12 @@ function BrowseTrainers() {
               {/* Action Button */}
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                 {currentTrainer === selectedTrainerProfile._id ? (
-                  <Badge variant="green" className="w-full justify-center py-2">Your Trainer</Badge>
+                  <div className="space-y-2">
+                    <Badge variant="green" className="w-full justify-center py-2">Your Trainer</Badge>
+                    <button onClick={() => { setSelectedTrainerProfile(null); setShowRemoveConfirm(true); }} className="w-full text-xs text-red-500 hover:text-red-600 flex items-center justify-center gap-1 py-1">
+                      <FiTrash2 className="w-3 h-3" /> Remove trainer
+                    </button>
+                  </div>
                 ) : (
                   <Button variant="primary" className="w-full" onClick={() => { setSelectedTrainerProfile(null); openRequest(selectedTrainerProfile); }}>
                     <FiSend className="w-4 h-4 mr-1" /> Send Request

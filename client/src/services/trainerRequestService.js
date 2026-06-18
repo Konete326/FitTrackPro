@@ -13,3 +13,6 @@ export const updateRequestStatus = (id, status, adminNotes) =>
 
 export const getAvailableTrainers = () =>
   API.get('/trainer-requests/available-trainers');
+
+export const removeTrainer = () =>
+  API.delete('/trainer-requests/remove-trainer');

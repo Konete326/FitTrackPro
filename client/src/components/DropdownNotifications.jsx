@@ -3,10 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
 import { useAuth } from '../contexts/AuthContext';
 import ConfirmModal from './common/ConfirmModal';
+import Skeleton from './common/Skeleton';
 import { getNotifications, markAsRead, markAllAsRead, deleteNotification, clearAllNotifications } from '../services/notificationService';
+import { getLatestVersion, getLatestChanges } from '../data/changelog';
+import { FiZap, FiArrowRight } from 'react-icons/fi';
 
 const POLL_INTERVAL = 30000;
 const MAX_ITEMS = 5;
+const CURRENT_VERSION = '1.3.0';
+const DISMISSED_VERSION_KEY = 'fittrack_dismissed_version';
 
 function DropdownNotifications({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -15,6 +20,7 @@ function DropdownNotifications({ align }) {
   const [loading, setLoading] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [clearing, setClearing] = useState(false);
+  const [showUpdateBanner, setShowUpdateBanner] = useState(false);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -22,6 +28,24 @@ function DropdownNotifications({ align }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const role = user?.Role;
+
+  useEffect(() => {
+    const dismissed = localStorage.getItem(DISMISSED_VERSION_KEY);
+    if (dismissed !== CURRENT_VERSION) {
+      setShowUpdateBanner(true);
+    }
+  }, []);
+
+  const handleDismissUpdate = () => {
+    setShowUpdateBanner(false);
+    localStorage.setItem(DISMISSED_VERSION_KEY, CURRENT_VERSION);
+  };
+
+  const handleGoToChangelog = () => {
+    handleDismissUpdate();
+    setDropdownOpen(false);
+    navigate('/settings?tab=changelog');
+  };
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -234,8 +258,38 @@ function DropdownNotifications({ align }) {
             </div>
           </div>
 
+          {showUpdateBanner && (
+            <div className="mx-4 mb-2 p-3 rounded-lg bg-gradient-to-r from-violet-500/10 to-indigo-500/10 border border-violet-200 dark:border-violet-800/40">
+              <div className="flex items-center gap-2 mb-1.5">
+                <FiZap className="w-3.5 h-3.5 text-violet-500" />
+                <span className="text-xs font-bold text-violet-600 dark:text-violet-400">v{CURRENT_VERSION} available</span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 leading-relaxed">
+                {getLatestChanges()[0]?.text || 'New features and improvements'}
+              </p>
+              <div className="flex items-center gap-2">
+                <button onClick={handleGoToChangelog} className="text-xs font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 flex items-center gap-1">
+                  View changelog <FiArrowRight className="w-3 h-3" />
+                </button>
+                <button onClick={handleDismissUpdate} className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
+
           {loading ? (
-            <div className="py-6 text-center text-sm text-gray-400 dark:text-gray-500">Loading...</div>
+            <div className="divide-y divide-gray-100 dark:divide-gray-700/60">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="px-4 py-3 flex items-start gap-2.5">
+                  <span className="mt-1.5 w-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0 animate-pulse" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton type="text" className="!w-3/4" />
+                    <Skeleton type="text" className="!w-1/3 !h-3" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : notifications.length === 0 ? (
             <div className="py-6 px-4 text-center text-sm text-gray-400 dark:text-gray-500">No notifications</div>
           ) : (

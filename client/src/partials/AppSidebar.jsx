@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-const S = { w: 16, h: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
+const S = { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
 
 const ICONS = {
   dashboard: <svg {...S}><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /></svg>,
@@ -160,16 +160,16 @@ function NavUser({ expanded, user, onLogout }) {
           </div>
           <div className="p-1.5">
             <NavLink to="/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-md">
-              {getIcon("profile")}
+              <span className="w-4 h-4 shrink-0">{getIcon("profile")}</span>
               Profile
             </NavLink>
             <NavLink to="/settings" onClick={() => setOpen(false)} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-md">
-              {getIcon("settings")}
+              <span className="w-4 h-4 shrink-0">{getIcon("settings")}</span>
               Settings
             </NavLink>
             <div className="h-px bg-gray-200 dark:bg-gray-700/60 my-1" />
             <button onClick={onLogout} className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md">
-              {getIcon("logout")}
+              <span className="w-4 h-4 shrink-0">{getIcon("logout")}</span>
               Logout
             </button>
           </div>

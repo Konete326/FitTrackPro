@@ -19,9 +19,8 @@ import toast from 'react-hot-toast';
 
 // Check if user is online (currently logged in OR logged in within last 10 minutes)
 const isUserOnline = (user, currentUserId) => {
-  // Currently logged-in user is always online
-  if (user._id === currentUserId) return true;
-  // Check LastLogin for other users
+  if (!currentUserId) return false;
+  if (String(user._id) === String(currentUserId)) return true;
   if (!user.LastLogin) return false;
   const lastLoginTime = new Date(user.LastLogin).getTime();
   const tenMinutesAgo = Date.now() - 10 * 60 * 1000;

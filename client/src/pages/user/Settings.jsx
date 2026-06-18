@@ -9,15 +9,17 @@ import ConfirmModal from '../../components/common/ConfirmModal';
 import { useAuth } from '../../contexts/AuthContext';
 import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { updateProfile, updatePassword, deleteAccount } from '../../services/authService';
-import { useNavigate } from 'react-router-dom';
-import { FiUser, FiLock, FiSettings, FiAlertTriangle, FiUpload, FiX, FiHelpCircle, FiBookOpen, FiMessageCircle, FiGlobe } from 'react-icons/fi';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { FiUser, FiLock, FiSettings, FiAlertTriangle, FiUpload, FiX, FiHelpCircle, FiBookOpen, FiMessageCircle, FiGlobe, FiGitBranch } from 'react-icons/fi';
+import Changelog from '../../components/Changelog';
 import toast from 'react-hot-toast';
 
 function Settings() {
   const { user, updateUser, logoutUser } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const fileRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'profile');
   const [saving, setSaving] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [preview, setPreview] = useState(user?.Profile?.ProfilePicture || '');
@@ -159,6 +161,7 @@ function Settings() {
     { id: 'password', label: 'Password', icon: <FiLock className="w-4 h-4" /> },
     { id: 'preferences', label: 'Preferences', icon: <FiSettings className="w-4 h-4" /> },
     { id: 'help', label: 'Help & Support', icon: <FiHelpCircle className="w-4 h-4" /> },
+    { id: 'changelog', label: 'Changelog', icon: <FiGitBranch className="w-4 h-4" /> },
     { id: 'danger', label: 'Danger Zone', icon: <FiAlertTriangle className="w-4 h-4" /> },
   ];
 
@@ -335,6 +338,13 @@ function Settings() {
                   </div>
                 </a>
               </div>
+            </Card>
+          )}
+
+          {activeTab === 'changelog' && (
+            <Card>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">What's New</h3>
+              <Changelog />
             </Card>
           )}
 

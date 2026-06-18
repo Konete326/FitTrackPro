@@ -47,7 +47,7 @@ function PublicLayout({ children }) {
               {user ? (
                 <Link
                   to={user.Role === 'Admin' ? '/admin/dashboard' : user.Role === 'Trainer' ? '/trainer/dashboard' : '/dashboard'}
-                  className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-4 py-2 rounded-lg hidden sm:inline-flex"
+                  className="btn bg-violet-600 text-white hover:bg-violet-700 text-sm px-5 py-2 rounded-lg font-medium hidden sm:inline-flex"
                 >
                   Dashboard
                 </Link>
@@ -55,13 +55,13 @@ function PublicLayout({ children }) {
                 <>
                   <Link
                     to="/login"
-                    className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition hidden sm:inline-flex"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition hidden sm:inline-flex"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="btn bg-violet-500 text-white hover:bg-violet-600 text-sm px-4 py-2 rounded-lg hidden sm:inline-flex"
+                    className="btn bg-violet-600 text-white hover:bg-violet-700 text-sm px-5 py-2 rounded-lg font-medium hidden sm:inline-flex"
                   >
                     Get Started
                   </Link>

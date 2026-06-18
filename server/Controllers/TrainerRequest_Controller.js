@@ -44,9 +44,21 @@ const getMyRequests = async (req, res, next) => {
 
 const getAvailableTrainers = async (req, res, next) => {
   try {
-    const trainers = await User.find({ Role: 'Trainer', IsActive: true }).select('Username Profile.Name Profile.ProfilePicture Stats').lean();
+    const trainers = await User.find({ Role: 'Trainer', IsActive: true }).select('Username Profile.Name Profile.ProfilePicture Profile.Bio Profile.Specialties Profile.Experience Stats').lean();
     res.status(200).json({ success: true, count: trainers.length, data: trainers });
   } catch (error) { next(error); }
 };
 
-module.exports = { createRequest, getAllRequests, updateRequestStatus, getAvailableTrainers, getMyRequests };
+const removeTrainer = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user.TrainerId) return res.status(400).json({ success: false, message: 'No trainer assigned' });
+    const trainerId = user.TrainerId;
+    user.TrainerId = null;
+    await user.save();
+    await Notification.create({ UserId: trainerId, Type: 'System', Title: 'Client Unassigned', Message: `${user.Profile?.Name || user.Username} has been removed from your clients.`, Link: '/trainer/clients' });
+    res.status(200).json({ success: true, message: 'Trainer removed successfully' });
+  } catch (error) { next(error); }
+};
+
+module.exports = { createRequest, getAllRequests, updateRequestStatus, getAvailableTrainers, getMyRequests, removeTrainer };

@@ -7,6 +7,7 @@ const {
   updateRequestStatus,
   getAvailableTrainers,
   getMyRequests,
+  removeTrainer,
 } = require('../Controllers/TrainerRequest_Controller');
 
 router.use(protect);
@@ -14,6 +15,7 @@ router.use(protect);
 router.get('/available-trainers', getAvailableTrainers);
 router.get('/my-requests', getMyRequests);
 router.post('/', createRequest);
+router.delete('/remove-trainer', removeTrainer);
 
 router.get('/', authorize('Admin'), getAllRequests);
 router.put('/:id', idParamValidation, authorize('Admin'), updateRequestStatus);
