@@ -12,7 +12,7 @@ import ConfirmModal from '../../components/common/ConfirmModal';
 import Skeleton from '../../components/common/Skeleton';
 import { useValidation, validators } from '../../hooks/useValidation';
 import { createGoal, getGoals, updateGoal, deleteGoal, updateGoalProgress, completeGoal, activateGoal, pauseGoal, getGoalStats } from '../../services/goalService';
-import { FiTarget, FiPlus, FiTrash2, FiEdit2, FiPlay, FiPause, FiCheck, FiChevronDown, FiChevronRight, FiTrendingUp, FiActivity, FiZap, FiWind, FiHeart, FiDroplet, FiMoon, FiAward, FiSearch } from 'react-icons/fi';
+import { FiTarget, FiPlus, FiTrash2, FiEdit2, FiPlay, FiPause, FiCheck, FiChevronDown, FiChevronRight, FiChevronLeft, FiTrendingUp, FiActivity, FiZap, FiWind, FiHeart, FiDroplet, FiMoon, FiAward, FiSearch } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
@@ -28,6 +28,7 @@ function Goals() {
   const [expandedId, setExpandedId] = useState(null);
   const [progressInputs, setProgressInputs] = useState({});
   const [stats, setStats] = useState(null);
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     Title: '', Description: '', Type: 'Custom', TargetValue: '', CurrentValue: 0, Unit: '',
     Frequency: 'Daily', StartDate: format(new Date(), 'yyyy-MM-dd'), EndDate: '',
@@ -63,6 +64,7 @@ function Goals() {
       Frequency: 'Daily', StartDate: format(new Date(), 'yyyy-MM-dd'), EndDate: '',
     });
     setEditingGoal(null);
+    setStep(0);
   };
 
   const openCreate = () => { resetForm(); setShowModal(true); };
@@ -195,6 +197,13 @@ function Goals() {
       return matchesSearch && matchesStatus && matchesType;
     });
   }, [goals, searchTerm, statusFilter, typeFilter]);
+
+  const steps = ['Goal Info', 'Target & Schedule', 'Review & Create'];
+
+  const canNext = () => {
+    if (step === 0) return formData.Title.trim().length > 0;
+    return true;
+  };
 
   return (
     <DashboardLayout>
@@ -350,152 +359,199 @@ function Goals() {
 
       <Modal isOpen={showModal} onClose={() => { setShowModal(false); resetForm(); }} title={editingGoal ? 'Edit Goal' : 'Create Goal'} size="lg">
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Title with icon */}
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-500/20 flex items-center justify-center">
-              <FiTarget className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-            </div>
-            <div className="flex-1">
-              <Input value={formData.Title} onChange={(e) => updateGoalField('Title', e.target.value)} onBlur={(e) => goalHandleBlur('Title', e.target.value)} error={goalErrors.Title} required placeholder="e.g., Lose 10kg in 3 months" className="!mb-0" />
-            </div>
+          {/* Step Indicators */}
+          <div className="flex items-center gap-2 mb-2">
+            {steps.map((s, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => { if (i <= step || canNext()) setStep(i); }}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                  i === step
+                    ? 'bg-violet-500 text-white shadow-sm'
+                    : i < step
+                    ? 'bg-violet-500/10 text-violet-600 dark:text-violet-400'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                {i < step ? <FiCheck className="w-3 h-3" /> : <span className="w-4 h-4 rounded-full border border-current flex items-center justify-center text-[10px]">{i + 1}</span>}
+                <span className="hidden sm:inline">{s}</span>
+              </button>
+            ))}
           </div>
 
-          {/* Goal Type - Visual Selector */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Goal Type</label>
-            <div className="grid grid-cols-4 gap-2">
-              {typeOptions.map((opt) => {
-                const iconMap = {
-                  'Weight-Loss': <FiTrendingUp className="w-4 h-4" />,
-                  'Muscle-Building': <FiActivity className="w-4 h-4" />,
-                  'Endurance': <FiZap className="w-4 h-4" />,
-                  'Flexibility': <FiWind className="w-4 h-4" />,
-                  'Nutrition': <FiHeart className="w-4 h-4" />,
-                  'Hydration': <FiDroplet className="w-4 h-4" />,
-                  'Sleep': <FiMoon className="w-4 h-4" />,
-                  'Custom': <FiAward className="w-4 h-4" />,
-                };
-                const colorMap = {
-                  'Weight-Loss': 'rose',
-                  'Muscle-Building': 'blue',
-                  'Endurance': 'amber',
-                  'Flexibility': 'green',
-                  'Nutrition': 'emerald',
-                  'Hydration': 'cyan',
-                  'Sleep': 'indigo',
-                  'Custom': 'violet',
-                };
-                const isSelected = formData.Type === opt.value;
-                const color = colorMap[opt.value];
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => {
-                      setFormData({ ...formData, Type: opt.value, Unit: getUnitSuggestion(opt.value) });
-                    }}
-                    className={`relative flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-200 ${
-                      isSelected
-                        ? `border-${color}-500 bg-${color}-50 dark:bg-${color}-500/10 shadow-sm`
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
-                    }`}
-                  >
-                    <span className={`${isSelected ? `text-${color}-600 dark:text-${color}-400` : 'text-gray-500 dark:text-gray-400'}`}>
-                      {iconMap[opt.value]}
-                    </span>
-                    <span className={`text-xs font-medium ${isSelected ? `text-${color}-700 dark:text-${color}-300` : 'text-gray-600 dark:text-gray-400'}`}>
-                      {opt.label}
-                    </span>
-                    {isSelected && (
-                      <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full bg-${color}-500 flex items-center justify-center`}>
-                        <FiCheck className="w-2.5 h-2.5 text-white" />
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Target & Progress */}
-          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 space-y-3">
-            <div className="flex items-center gap-2 mb-1">
-              <FiTarget className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Target & Progress</span>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Target</label>
-                <Input type="number" step="any" value={formData.TargetValue} onChange={(e) => setFormData({ ...formData, TargetValue: e.target.value })} placeholder="100" className="!mb-0" />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Current</label>
-                <Input type="number" step="any" value={formData.CurrentValue} onChange={(e) => setFormData({ ...formData, CurrentValue: e.target.value })} placeholder="0" className="!mb-0" />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Unit</label>
-                <Input value={formData.Unit} onChange={(e) => setFormData({ ...formData, Unit: e.target.value })} placeholder="kg, min..." className="!mb-0" />
-              </div>
-            </div>
-            {/* Progress Preview */}
-            {formData.TargetValue && Number(formData.TargetValue) > 0 && (
-              <div className="pt-2">
-                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                  <span>Progress Preview</span>
-                  <span>{Math.min(100, Math.round((Number(formData.CurrentValue) / Number(formData.TargetValue)) * 100))}%</span>
+          {/* ═══ Step 1: Goal Info ═══ */}
+          {step === 0 && (
+            <div className="space-y-5">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-500/20 flex items-center justify-center">
+                  <FiTarget className="w-5 h-5 text-violet-600 dark:text-violet-400" />
                 </div>
-                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(100, (Number(formData.CurrentValue) / Number(formData.TargetValue)) * 100)}%` }}
-                  />
+                <div className="flex-1">
+                  <Input value={formData.Title} onChange={(e) => updateGoalField('Title', e.target.value)} onBlur={(e) => goalHandleBlur('Title', e.target.value)} error={goalErrors.Title} required placeholder="e.g., Lose 10kg in 3 months" className="!mb-0" />
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Frequency & Duration */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frequency</label>
-              <div className="flex gap-2">
-                {['Daily', 'Weekly', 'Monthly', 'Once'].map((freq) => (
-                  <button
-                    key={freq}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, Frequency: freq })}
-                    className={`flex-1 py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
-                      formData.Frequency === freq
-                        ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300'
-                        : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'
-                    }`}
-                  >
-                    {freq}
-                  </button>
-                ))}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Goal Type</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {typeOptions.map((opt) => {
+                    const iconMap = {
+                      'Weight-Loss': <FiTrendingUp className="w-4 h-4" />,
+                      'Muscle-Building': <FiActivity className="w-4 h-4" />,
+                      'Endurance': <FiZap className="w-4 h-4" />,
+                      'Flexibility': <FiWind className="w-4 h-4" />,
+                      'Nutrition': <FiHeart className="w-4 h-4" />,
+                      'Hydration': <FiDroplet className="w-4 h-4" />,
+                      'Sleep': <FiMoon className="w-4 h-4" />,
+                      'Custom': <FiAward className="w-4 h-4" />,
+                    };
+                    const isSelected = formData.Type === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => { setFormData({ ...formData, Type: opt.value, Unit: getUnitSuggestion(opt.value) }); }}
+                        className={`relative flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-200 ${
+                          isSelected
+                            ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10 shadow-sm'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
+                        }`}
+                      >
+                        <span className={isSelected ? 'text-violet-600 dark:text-violet-400' : 'text-gray-500 dark:text-gray-400'}>
+                          {iconMap[opt.value]}
+                        </span>
+                        <span className={`text-xs font-medium ${isSelected ? 'text-violet-700 dark:text-violet-300' : 'text-gray-600 dark:text-gray-400'}`}>
+                          {opt.label}
+                        </span>
+                        {isSelected && (
+                          <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-violet-500 flex items-center justify-center">
+                            <FiCheck className="w-2.5 h-2.5 text-white" />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration</label>
-              <div className="flex gap-2 items-center">
-                <Input type="date" value={formData.StartDate} onChange={(e) => setFormData({ ...formData, StartDate: e.target.value })} className="!mb-0 flex-1" />
-                <span className="text-gray-400 text-xs">to</span>
-                <Input type="date" value={formData.EndDate} onChange={(e) => setFormData({ ...formData, EndDate: e.target.value })} className="!mb-0 flex-1" />
+          )}
+
+          {/* ═══ Step 2: Target & Schedule ═══ */}
+          {step === 1 && (
+            <div className="space-y-5">
+              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <FiTarget className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Target & Progress</span>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Target</label>
+                    <Input type="number" step="any" value={formData.TargetValue} onChange={(e) => setFormData({ ...formData, TargetValue: e.target.value })} placeholder="100" className="!mb-0" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Current</label>
+                    <Input type="number" step="any" value={formData.CurrentValue} onChange={(e) => setFormData({ ...formData, CurrentValue: e.target.value })} placeholder="0" className="!mb-0" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Unit</label>
+                    <Input value={formData.Unit} onChange={(e) => setFormData({ ...formData, Unit: e.target.value })} placeholder="kg, min..." className="!mb-0" />
+                  </div>
+                </div>
+                {formData.TargetValue && Number(formData.TargetValue) > 0 && (
+                  <div className="pt-2">
+                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      <span>Progress Preview</span>
+                      <span>{Math.min(100, Math.round((Number(formData.CurrentValue) / Number(formData.TargetValue)) * 100))}%</span>
+                    </div>
+                    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, (Number(formData.CurrentValue) / Number(formData.TargetValue)) * 100)}%` }} />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frequency</label>
+                  <div className="flex gap-2">
+                    {['Daily', 'Weekly', 'Monthly', 'Once'].map((freq) => (
+                      <button key={freq} type="button" onClick={() => setFormData({ ...formData, Frequency: freq })}
+                        className={`flex-1 py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
+                          formData.Frequency === freq ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'
+                        }`}
+                      >{freq}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration</label>
+                  <div className="flex gap-2 items-center">
+                    <Input type="date" value={formData.StartDate} onChange={(e) => setFormData({ ...formData, StartDate: e.target.value })} className="!mb-0 flex-1" />
+                    <span className="text-gray-400 text-xs">to</span>
+                    <Input type="date" value={formData.EndDate} onChange={(e) => setFormData({ ...formData, EndDate: e.target.value })} className="!mb-0 flex-1" />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
-            <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Why is this goal important to you?" />
-          </div>
+          {/* ═══ Step 3: Review & Create ═══ */}
+          {step === 2 && (
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
+                <textarea value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="Why is this goal important to you?" />
+              </div>
 
-          {/* Actions */}
+              {/* Summary */}
+              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 space-y-3">
+                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <FiCheck className="w-4 h-4 text-violet-500" /> Summary
+                </h4>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 dark:text-gray-400">Title</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formData.Title || '—'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 dark:text-gray-400">Type</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{typeOptions.find(t => t.value === formData.Type)?.label}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 dark:text-gray-400">Target</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formData.TargetValue || '—'} {formData.Unit || ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 dark:text-gray-400">Frequency</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{formData.Frequency}</span>
+                  </div>
+                  {formData.EndDate && (
+                    <div className="flex justify-between col-span-2">
+                      <span className="text-gray-500 dark:text-gray-400">Duration</span>
+                      <span className="font-medium text-gray-800 dark:text-gray-200">{format(new Date(formData.StartDate), 'MMM d')} → {format(new Date(formData.EndDate), 'MMM d, yyyy')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation */}
           <div className="flex gap-3 pt-2">
-            <Button type="submit" variant="primary" className="flex-1" icon={<FiTarget className="w-4 h-4" />}>
-              {editingGoal ? 'Update Goal' : 'Create Goal'}
-            </Button>
+            {step > 0 && (
+              <Button type="button" variant="secondary" onClick={() => setStep(step - 1)} icon={<FiChevronLeft className="w-4 h-4" />}>Back</Button>
+            )}
+            {step < steps.length - 1 ? (
+              <Button type="button" variant="primary" className="flex-1" onClick={() => setStep(step + 1)} iconRight={<FiChevronRight className="w-4 h-4" />} disabled={!canNext()}>
+                Next
+              </Button>
+            ) : (
+              <Button type="submit" variant="primary" className="flex-1" icon={<FiTarget className="w-4 h-4" />}>
+                {editingGoal ? 'Update Goal' : 'Create Goal'}
+              </Button>
+            )}
             <Button type="button" variant="secondary" onClick={() => { setShowModal(false); resetForm(); }}>Cancel</Button>
           </div>
         </form>

@@ -131,7 +131,7 @@ function AppSidebar({
         ref={sidebar}
         className={`flex flex-col fixed lg:static z-40 h-[100dvh] shrink-0 overflow-hidden
           transition-all duration-300 ease-out
-          bg-[#0f1117] border-r border-white/5
+          bg-[#050607] border-r border-white/5
           w-64 lg:w-[68px]
           ${sidebarExpanded ? "lg:!w-64" : ""}
           ${sidebarOpen ? "translate-x-0" : "-translate-x-64 lg:translate-x-0"}
@@ -306,7 +306,7 @@ function AppSidebar({
                 </div>
               )}
               {/* Online indicator */}
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-[#0f1117] rounded-full" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-[#050607] rounded-full" />
             </div>
             <div className={`overflow-hidden transition-all duration-300 ease-out ${
               sidebarExpanded ? "opacity-100" : "opacity-0 w-0"
