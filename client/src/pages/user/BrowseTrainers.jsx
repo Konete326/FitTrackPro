@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import PageHeader from '../../components/common/PageHeader';
 import Card from '../../components/common/Card';
@@ -10,13 +11,13 @@ import ConfirmModal from '../../components/common/ConfirmModal';
 import Modal from '../../components/common/Modal';
 import TrainerCard from '../../components/TrainerCard';
 import { getAvailableTrainers, createRequest, getMyRequests, removeTrainer } from '../../services/trainerRequestService';
-import { getTrainerPublicProfile } from '../../services/trainerService';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiUsers, FiSend, FiCheck, FiClock, FiX, FiMessageSquare, FiAward, FiBriefcase, FiTarget, FiImage, FiTrash2 } from 'react-icons/fi';
+import { FiUsers, FiSend, FiCheck, FiClock, FiX, FiTrash2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function BrowseTrainers() {
   const { user, loadUser } = useAuth();
+  const navigate = useNavigate();
   const [trainers, setTrainers] = useState([]);
   const [myRequests, setMyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,8 +26,6 @@ function BrowseTrainers() {
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [search, setSearch] = useState('');
-  const [selectedTrainerProfile, setSelectedTrainerProfile] = useState(null);
-  const [profileLoading, setProfileLoading] = useState(false);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -72,19 +71,8 @@ function BrowseTrainers() {
     return req?.Status || null;
   };
 
-  const openTrainerProfile = async (trainer) => {
-    setProfileLoading(true);
-    setSelectedTrainerProfile(trainer);
-    try {
-      const res = await getTrainerPublicProfile(trainer._id);
-      if (res.data?.success) {
-        setSelectedTrainerProfile(res.data.data);
-      }
-    } catch {
-      toast.error('Failed to load trainer profile');
-    } finally {
-      setProfileLoading(false);
-    }
+  const openTrainerProfile = (trainer) => {
+    navigate(`/trainer-profile/${trainer._id}`);
   };
 
   const currentTrainer = user?.TrainerId;
@@ -230,134 +218,6 @@ function BrowseTrainers() {
             <Button type="button" variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
           </div>
         </form>
-      </Modal>
-
-      {/* Trainer Profile Modal */}
-      <Modal isOpen={!!selectedTrainerProfile} onClose={() => setSelectedTrainerProfile(null)} title="" size="lg" className="!p-0">
-        {profileLoading ? (
-          <div className="p-8 text-center">
-            <div className="animate-spin w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full mx-auto mb-3"></div>
-            <p className="text-gray-500">Loading profile...</p>
-          </div>
-        ) : selectedTrainerProfile && (
-          <div className="-mt-4">
-            {/* Background Image */}
-            <div className="relative h-40 bg-gradient-to-r from-violet-500 to-purple-600 rounded-t-xl overflow-hidden">
-              {selectedTrainerProfile.Profile?.BackgroundImage && (
-                <img src={selectedTrainerProfile.Profile.BackgroundImage} alt="Cover" className="w-full h-full object-cover" />
-              )}
-            </div>
-            {/* Profile Info */}
-            <div className="px-6 pb-6 -mt-10">
-              <div className="flex items-end gap-4 mb-4">
-                <div className="w-20 h-20 rounded-xl bg-violet-500/10 flex items-center justify-center overflow-hidden ring-4 ring-white dark:ring-gray-800">
-                  {selectedTrainerProfile.Profile?.ProfilePicture ? (
-                    <img src={selectedTrainerProfile.Profile.ProfilePicture} alt={selectedTrainerProfile.Profile?.Name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-2xl font-bold text-violet-500">{(selectedTrainerProfile.Profile?.Name || 'T')[0].toUpperCase()}</span>
-                  )}
-                </div>
-                <div className="flex-1 pb-1">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{selectedTrainerProfile.Profile?.Name || selectedTrainerProfile.Username}</h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">@{selectedTrainerProfile.Username}</p>
-                </div>
-              </div>
-
-              {/* Bio */}
-              {selectedTrainerProfile.Profile?.Bio && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{selectedTrainerProfile.Profile.Bio}</p>
-              )}
-
-              {/* Stats */}
-              <div className="flex gap-4 mb-4 text-sm">
-                {selectedTrainerProfile.Profile?.Experience > 0 && (
-                  <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                    <FiBriefcase className="w-4 h-4" />
-                    <span>{selectedTrainerProfile.Profile.Experience} years experience</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Specialties */}
-              {selectedTrainerProfile.Profile?.Specialties?.length > 0 && (
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <FiTarget className="w-4 h-4 text-violet-500" />
-                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Specialties</h4>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTrainerProfile.Profile.Specialties.map((s) => (
-                      <Badge key={s} variant="violet">{s}</Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Services */}
-              {selectedTrainerProfile.Profile?.Services?.length > 0 && (
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <FiBriefcase className="w-4 h-4 text-sky-500" />
-                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Services</h4>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTrainerProfile.Profile.Services.map((s) => (
-                      <Badge key={s} variant="sky">{s}</Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Certifications */}
-              {selectedTrainerProfile.Profile?.Certifications?.length > 0 && (
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <FiAward className="w-4 h-4 text-amber-500" />
-                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Certifications</h4>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTrainerProfile.Profile.Certifications.map((c) => (
-                      <Badge key={c} variant="amber">{c}</Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Gallery */}
-              {selectedTrainerProfile.Profile?.Gallery?.length > 0 && (
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <FiImage className="w-4 h-4 text-green-500" />
-                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Gallery</h4>
-                  </div>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {selectedTrainerProfile.Profile.Gallery.map((img, idx) => (
-                      <div key={idx} className="aspect-square rounded-lg overflow-hidden">
-                        <img src={img} alt={`Work ${idx + 1}`} className="w-full h-full object-cover hover:scale-110 transition-transform" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Action Button */}
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                {currentTrainer === selectedTrainerProfile._id ? (
-                  <div className="space-y-2">
-                    <Badge variant="green" className="w-full justify-center py-2">Your Trainer</Badge>
-                    <button onClick={() => { setSelectedTrainerProfile(null); setShowRemoveConfirm(true); }} className="w-full text-xs text-red-500 hover:text-red-600 flex items-center justify-center gap-1 py-1">
-                      <FiTrash2 className="w-3 h-3" /> Remove trainer
-                    </button>
-                  </div>
-                ) : (
-                  <Button variant="primary" className="w-full" onClick={() => { setSelectedTrainerProfile(null); openRequest(selectedTrainerProfile); }}>
-                    <FiSend className="w-4 h-4 mr-1" /> Send Request
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </Modal>
     </DashboardLayout>
   );

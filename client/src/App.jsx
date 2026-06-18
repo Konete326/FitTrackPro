@@ -29,6 +29,7 @@ import WaterLog from './pages/user/WaterLog';
 import ProgressTracking from './pages/user/ProgressTracking';
 import SleepLog from './pages/user/SleepLog';
 import BrowseTrainers from './pages/user/BrowseTrainers';
+import TrainerPublicProfile from './pages/user/TrainerPublicProfile';
 import Goals from './pages/user/Goals';
 import Achievements from './pages/user/Achievements';
 import Profile from './pages/user/Profile';
@@ -85,6 +86,7 @@ function App() {
         <Route path="/progress" element={<ProtectedRoute roles={['User']}><ProgressTracking /></ProtectedRoute>} />
         <Route path="/sleep" element={<ProtectedRoute roles={['User']}><SleepLog /></ProtectedRoute>} />
         <Route path="/browse-trainers" element={<ProtectedRoute roles={['User']}><BrowseTrainers /></ProtectedRoute>} />
+        <Route path="/trainer-profile/:id" element={<ProtectedRoute roles={['User']}><TrainerPublicProfile /></ProtectedRoute>} />
         <Route path="/goals" element={<ProtectedRoute roles={['User']}><Goals /></ProtectedRoute>} />
         <Route path="/achievements" element={<ProtectedRoute roles={['User']}><Achievements /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute roles={['User']}><Profile /></ProtectedRoute>} />
