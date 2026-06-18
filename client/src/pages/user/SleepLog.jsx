@@ -329,14 +329,6 @@ function SleepLog() {
               <span>Excellent</span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <Input label="Deep Sleep (min)" type="number" min="0" value={formData.DeepSleep} onChange={(e) => setFormData({ ...formData, DeepSleep: parseInt(e.target.value) || 0 })} />
-            <Input label="Light Sleep (min)" type="number" min="0" value={formData.LightSleep} onChange={(e) => setFormData({ ...formData, LightSleep: parseInt(e.target.value) || 0 })} />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <Input label="REM Sleep (min)" type="number" min="0" value={formData.RemSleep} onChange={(e) => setFormData({ ...formData, RemSleep: parseInt(e.target.value) || 0 })} />
-            <Input label="Awake Count" type="number" min="0" value={formData.AwakeCount} onChange={(e) => setFormData({ ...formData, AwakeCount: parseInt(e.target.value) || 0 })} />
-          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
             <textarea

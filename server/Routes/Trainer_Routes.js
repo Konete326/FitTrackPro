@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { protect, authorize } = require('../Middleware/Auth');
 const { idParamValidation } = require('../Middleware/Validator');
+const { upload } = require('../Middleware/Multer');
 const {
   getClients,
   getClientDetails,
@@ -13,6 +14,10 @@ const {
   getWorkoutTemplates,
   deleteWorkoutTemplate,
   getTrainerDashboardStats,
+  updateTrainerProfile,
+  uploadTrainerImage,
+  removeGalleryImage,
+  getTrainerPublicProfile,
 } = require('../Controllers/Trainer_Controller');
 const {
   createMealPlanForClient,
@@ -47,5 +52,13 @@ router.route('/templates')
   .get(getWorkoutTemplates);
 
 router.delete('/templates/:id', idParamValidation, deleteWorkoutTemplate);
+
+// Trainer profile management
+router.put('/profile', updateTrainerProfile);
+router.post('/profile/image', upload.single('image'), uploadTrainerImage);
+router.delete('/profile/gallery-image', removeGalleryImage);
+
+// Public trainer profile (accessible by all authenticated users)
+router.get('/:id/public', protect, getTrainerPublicProfile);
 
 module.exports = router;

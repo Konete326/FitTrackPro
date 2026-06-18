@@ -17,10 +17,13 @@ import { FiPlus, FiSearch, FiTrash2, FiUserCheck, FiUserX, FiEdit2 } from 'react
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
-// Check if user is online (logged in within last 10 minutes)
-const isUserOnline = (lastLogin) => {
-  if (!lastLogin) return false;
-  const lastLoginTime = new Date(lastLogin).getTime();
+// Check if user is online (currently logged in OR logged in within last 10 minutes)
+const isUserOnline = (user, currentUserId) => {
+  // Currently logged-in user is always online
+  if (user._id === currentUserId) return true;
+  // Check LastLogin for other users
+  if (!user.LastLogin) return false;
+  const lastLoginTime = new Date(user.LastLogin).getTime();
   const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
   return lastLoginTime > tenMinutesAgo;
 };
@@ -148,16 +151,20 @@ function UserManagement() {
 
   return (
     <AdminLayout pageTitle="User Management">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div className="flex flex-wrap gap-3">
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input type="text" placeholder="Search users..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="form-input pl-10 w-52 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
-          </div>
-          <Select value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); setPage(1); }} options={[{ value: '', label: 'All Roles' }, { value: 'User', label: 'User' }, { value: 'Trainer', label: 'Trainer' }, { value: 'Admin', label: 'Admin' }]} className="w-32" />
-          <Select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }} options={[{ value: '', label: 'All Status' }, { value: 'true', label: 'Active' }, { value: 'false', label: 'Inactive' }]} className="w-32" />
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mb-6">
+        <div className="sm:col-span-6 relative">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input type="text" placeholder="Search users..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="form-input pl-10 w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
         </div>
-        <Button variant="primary" icon={<FiPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>Create User</Button>
+        <div className="sm:col-span-2">
+          <Select value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); setPage(1); }} options={[{ value: '', label: 'All Roles' }, { value: 'User', label: 'User' }, { value: 'Trainer', label: 'Trainer' }, { value: 'Admin', label: 'Admin' }]} className="w-full" />
+        </div>
+        <div className="sm:col-span-2">
+          <Select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }} options={[{ value: '', label: 'All Status' }, { value: 'true', label: 'Active' }, { value: 'false', label: 'Inactive' }]} className="w-full" />
+        </div>
+        <div className="sm:col-span-2 flex sm:justify-end">
+          <Button variant="primary" icon={<FiPlus className="w-4 h-4" />} onClick={() => setShowCreate(true)}>Create User</Button>
+        </div>
       </div>
 
       {loading ? (
@@ -184,7 +191,7 @@ function UserManagement() {
                           <div className="w-8 h-8 rounded-full bg-violet-500/10 flex items-center justify-center overflow-hidden">
                             {u.Profile?.ProfilePicture ? <img src={u.Profile.ProfilePicture} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-violet-500">{(u.Profile?.Name || u.Username || 'U')[0].toUpperCase()}</span>}
                           </div>
-                          <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 border-2 border-white dark:border-gray-900 rounded-full ${isUserOnline(u.LastLogin) ? 'bg-green-500' : 'bg-red-500'}`} />
+                          <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 border-2 border-white dark:border-gray-900 rounded-full ${isUserOnline(u, currentUser?._id) ? 'bg-green-500' : 'bg-red-500'}`} />
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{u.Profile?.Name || u.Username}</p>

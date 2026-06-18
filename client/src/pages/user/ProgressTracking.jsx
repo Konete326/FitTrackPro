@@ -12,7 +12,7 @@ import Modal from '../../components/common/Modal';
 import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import { createProgress, getProgress, deleteProgress, getProgressTrends, getMeasurementsSummary, getMilestones } from '../../services/progressService';
-import { FiTrendingUp, FiPlus, FiTrash2, FiCamera, FiAward, FiActivity, FiTarget } from 'react-icons/fi';
+import { FiTrendingUp, FiPlus, FiTrash2, FiCamera, FiAward, FiActivity, FiTarget, FiChevronRight, FiChevronLeft, FiCheck } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { Line } from 'react-chartjs-2';
@@ -30,6 +30,12 @@ function ProgressTracking() {
   const [milestones, setMilestones] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMetric, setSelectedMetric] = useState('Weight');
+  const [step, setStep] = useState(0);
+  const steps = [
+    { label: 'Body', icon: <FiActivity className="w-4 h-4" /> },
+    { label: 'Measure', icon: <FiTarget className="w-4 h-4" /> },
+    { label: 'Wellness', icon: <FiTrendingUp className="w-4 h-4" /> },
+  ];
   const [formData, setFormData] = useState({
     Date: format(new Date(), 'yyyy-MM-dd'),
     Weight: '',
@@ -96,6 +102,7 @@ function ProgressTracking() {
       await createProgress(payload);
       toast.success(formData.IsMilestone ? 'Milestone recorded!' : 'Progress logged');
       setShowModal(false);
+      setStep(0);
       fetchData();
     } catch {
       toast.error('Failed to log progress');
@@ -334,55 +341,105 @@ function ProgressTracking() {
         </div>
       )}
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Log Progress">
-        <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
-          <Input label="Date" type="date" value={formData.Date} onChange={(e) => setFormData({ ...formData, Date: e.target.value })} required />
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setStep(0); }} title="Log Progress">
+        {/* Step Indicator */}
+        <div className="flex items-center gap-2 mb-5">
+          {steps.map((s, i) => (
+            <React.Fragment key={i}>
+              <button
+                type="button"
+                onClick={() => setStep(i)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition ${
+                  i === step
+                    ? 'bg-violet-500 text-white'
+                    : i < step
+                    ? 'bg-violet-500/10 text-violet-500'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                {i < step ? <FiCheck className="w-3 h-3" /> : s.icon}
+                {s.label}
+              </button>
+              {i < steps.length - 1 && (
+                <div className={`flex-1 h-px ${i < step ? 'bg-violet-500/30' : 'bg-gray-200 dark:bg-gray-700'}`} />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <Input label="Weight (kg)" type="number" step="0.1" min="0" value={formData.Weight} onChange={(e) => setFormData({ ...formData, Weight: e.target.value })} />
-            <Input label="Body Fat (%)" type="number" step="0.1" min="0" max="100" value={formData.BodyFatPercentage} onChange={(e) => setFormData({ ...formData, BodyFatPercentage: e.target.value })} />
-            <Input label="Muscle (kg)" type="number" step="0.1" min="0" value={formData.MuscleMass} onChange={(e) => setFormData({ ...formData, MuscleMass: e.target.value })} />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+          {/* Step 1: Body Stats */}
+          {step === 0 && (
+            <div className="space-y-4">
+              <Input label="Date" type="date" value={formData.Date} onChange={(e) => setFormData({ ...formData, Date: e.target.value })} required />
+              <div className="grid grid-cols-3 gap-3">
+                <Input label="Weight (kg)" type="number" step="0.1" min="0" value={formData.Weight} onChange={(e) => setFormData({ ...formData, Weight: e.target.value })} />
+                <Input label="Body Fat (%)" type="number" step="0.1" min="0" max="100" value={formData.BodyFatPercentage} onChange={(e) => setFormData({ ...formData, BodyFatPercentage: e.target.value })} />
+                <Input label="Muscle (kg)" type="number" step="0.1" min="0" value={formData.MuscleMass} onChange={(e) => setFormData({ ...formData, MuscleMass: e.target.value })} />
+              </div>
+            </div>
+          )}
 
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 pt-2">Body Measurements</h4>
-          <div className="grid grid-cols-3 gap-3">
-            <Input label="Chest" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Chest']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Chest': e.target.value })} />
-            <Input label="Waist" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Waist']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Waist': e.target.value })} />
-            <Input label="Hips" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Hips']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Hips': e.target.value })} />
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            <Input label="Arms" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Arms']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Arms': e.target.value })} />
-            <Input label="Thighs" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Thighs']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Thighs': e.target.value })} />
-            <Input label="Neck" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Neck']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Neck': e.target.value })} />
-          </div>
+          {/* Step 2: Body Measurements */}
+          {step === 1 && (
+            <div className="space-y-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">All measurements in cm. Leave blank to skip.</p>
+              <div className="grid grid-cols-3 gap-3">
+                <Input label="Chest" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Chest']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Chest': e.target.value })} />
+                <Input label="Waist" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Waist']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Waist': e.target.value })} />
+                <Input label="Hips" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Hips']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Hips': e.target.value })} />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <Input label="Arms" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Arms']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Arms': e.target.value })} />
+                <Input label="Thighs" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Thighs']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Thighs': e.target.value })} />
+                <Input label="Neck" type="number" step="0.1" min="0" value={formData['BodyMeasurements.Neck']} onChange={(e) => setFormData({ ...formData, 'BodyMeasurements.Neck': e.target.value })} />
+              </div>
+            </div>
+          )}
 
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 pt-2">Wellness</h4>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Energy: {formData.EnergyLevel}/10</label>
-            <input type="range" min="1" max="10" value={formData.EnergyLevel} onChange={(e) => setFormData({ ...formData, EnergyLevel: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sleep Quality: {formData.SleepQuality}/10</label>
-            <input type="range" min="1" max="10" value={formData.SleepQuality} onChange={(e) => setFormData({ ...formData, SleepQuality: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-violet-500" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stress Level: {formData.StressLevel}/10</label>
-            <input type="range" min="1" max="10" value={formData.StressLevel} onChange={(e) => setFormData({ ...formData, StressLevel: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-500" />
-          </div>
+          {/* Step 3: Wellness + Notes */}
+          {step === 2 && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Energy: {formData.EnergyLevel}/10</label>
+                <input type="range" min="1" max="10" value={formData.EnergyLevel} onChange={(e) => setFormData({ ...formData, EnergyLevel: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sleep Quality: {formData.SleepQuality}/10</label>
+                <input type="range" min="1" max="10" value={formData.SleepQuality} onChange={(e) => setFormData({ ...formData, SleepQuality: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-violet-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stress Level: {formData.StressLevel}/10</label>
+                <input type="range" min="1" max="10" value={formData.StressLevel} onChange={(e) => setFormData({ ...formData, StressLevel: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+                <textarea value={formData.Notes} onChange={(e) => setFormData({ ...formData, Notes: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="How are you feeling?" />
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={formData.IsMilestone} onChange={(e) => setFormData({ ...formData, IsMilestone: e.target.checked })} className="rounded border-gray-300 dark:border-gray-600 text-violet-500 focus:ring-violet-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Mark as milestone</span>
+              </label>
+            </div>
+          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
-            <textarea value={formData.Notes} onChange={(e) => setFormData({ ...formData, Notes: e.target.value })} rows={2} className="form-textarea w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-violet-500 focus:border-violet-500" placeholder="How are you feeling?" />
-          </div>
-
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={formData.IsMilestone} onChange={(e) => setFormData({ ...formData, IsMilestone: e.target.checked })} className="rounded border-gray-300 dark:border-gray-600 text-violet-500 focus:ring-violet-500" />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Mark as milestone</span>
-          </label>
-
+          {/* Navigation Buttons */}
           <div className="flex gap-3 pt-2">
-            <Button type="submit" variant="primary" className="flex-1">Log Progress</Button>
-            <Button type="button" variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
+            {step > 0 && (
+              <Button type="button" variant="secondary" onClick={() => setStep(step - 1)} icon={<FiChevronLeft className="w-4 h-4" />}>
+                Back
+              </Button>
+            )}
+            {step < steps.length - 1 ? (
+              <Button type="button" variant="primary" className="flex-1" onClick={() => setStep(step + 1)} iconRight={<FiChevronRight className="w-4 h-4" />}>
+                Next
+              </Button>
+            ) : (
+              <Button type="submit" variant="primary" className="flex-1" icon={<FiCheck className="w-4 h-4" />}>
+                Log Progress
+              </Button>
+            )}
+            <Button type="button" variant="secondary" onClick={() => { setShowModal(false); setStep(0); }}>Cancel</Button>
           </div>
         </form>
       </Modal>

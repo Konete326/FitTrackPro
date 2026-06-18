@@ -10,7 +10,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useValidation, validators, hints } from '../../hooks/useValidation';
 import { updateProfile, updatePassword, deleteAccount } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
-import { FiUser, FiLock, FiSettings, FiAlertTriangle, FiUpload, FiX } from 'react-icons/fi';
+import { FiUser, FiLock, FiSettings, FiAlertTriangle, FiUpload, FiX, FiHelpCircle, FiBookOpen, FiMessageCircle, FiGlobe } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function Settings() {
@@ -158,6 +158,7 @@ function Settings() {
     { id: 'profile', label: 'Profile', icon: <FiUser className="w-4 h-4" /> },
     { id: 'password', label: 'Password', icon: <FiLock className="w-4 h-4" /> },
     { id: 'preferences', label: 'Preferences', icon: <FiSettings className="w-4 h-4" /> },
+    { id: 'help', label: 'Help & Support', icon: <FiHelpCircle className="w-4 h-4" /> },
     { id: 'danger', label: 'Danger Zone', icon: <FiAlertTriangle className="w-4 h-4" /> },
   ];
 
@@ -299,6 +300,41 @@ function Settings() {
                   <Button type="submit" variant="primary" loading={saving}>Save Preferences</Button>
                 </div>
               </form>
+            </Card>
+          )}
+
+          {activeTab === 'help' && (
+            <Card>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Help & Support</h3>
+              <div className="space-y-4">
+                <a href="/about" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition group">
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                    <FiBookOpen className="w-5 h-5 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 group-hover:text-blue-500 transition">Documentation</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Browse guides and learn how to use FitTrack</p>
+                  </div>
+                </a>
+                <a href="/faq" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition group">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
+                    <FiGlobe className="w-5 h-5 text-emerald-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 group-hover:text-emerald-500 transition">Support Site</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Find answers to frequently asked questions</p>
+                  </div>
+                </a>
+                <a href="/contact" className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700/60 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition group">
+                  <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
+                    <FiMessageCircle className="w-5 h-5 text-violet-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 group-hover:text-violet-500 transition">Contact Us</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Get in touch with our support team</p>
+                  </div>
+                </a>
+              </div>
             </Card>
           )}
 

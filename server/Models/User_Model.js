@@ -54,6 +54,13 @@ const User_Schema = new mongoose.Schema({
     Goals: { type: String },
     Bio: { type: String, maxlength: 500 },
     ProfilePicture: { type: String, default: '' },
+    // Trainer-specific fields
+    BackgroundImage: { type: String, default: '' },
+    Specialties: [{ type: String }],
+    Services: [{ type: String }],
+    Certifications: [{ type: String }],
+    Experience: { type: Number, default: 0 },
+    Gallery: [{ type: String }],
   },
   Settings: {
     MeasurementUnit: { type: String, enum: ['metric', 'imperial'], default: 'metric' },

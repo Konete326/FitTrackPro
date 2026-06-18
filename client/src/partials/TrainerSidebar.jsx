@@ -13,20 +13,16 @@ const sections = [
     name: "Account",
     links: [
       { to: "/trainer/profile", label: "Profile" },
+      { to: "/trainer/profile/edit", label: "Edit Public Profile" },
       { to: "/trainer/settings", label: "Settings" },
     ],
   },
-];
-
-const panelSwitcherLinks = [
-  { to: "/dashboard", label: "User Panel", prefix: "/dashboard" },
 ];
 
 function TrainerSidebar({ sidebarOpen, setSidebarOpen }) {
   return (
     <AppSidebar
       sections={sections}
-      panelSwitcherLinks={panelSwitcherLinks}
       homePath="/trainer/dashboard"
       title="FitTrack Pro"
       subtitle="Trainer Panel"

@@ -10,7 +10,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getAchievements } from '../../services/achievementService';
 import { getGoals } from '../../services/goalService';
 import { useNavigate } from 'react-router-dom';
-import { FiUser, FiMail, FiCalendar, FiEdit2, FiActivity, FiZap, FiAward, FiTarget } from 'react-icons/fi';
+import { FiUser, FiMail, FiCalendar, FiEdit2, FiActivity, FiZap, FiAward, FiTarget, FiCheckCircle } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 function Profile() {
@@ -64,7 +64,7 @@ function Profile() {
           <div className="flex flex-wrap gap-2 mt-4 justify-center">
             <Badge variant="violet">{user.Role}</Badge>
             {profile.FitnessLevel && <Badge variant="sky">{profile.FitnessLevel}</Badge>}
-            {user.IsVerified && <Badge variant="green">Verified</Badge>}
+            {user.IsVerified && <Badge variant="green"><FiCheckCircle className="w-3 h-3 text-blue-500 mr-1" />Verified</Badge>}
           </div>
           <div className="mt-6 space-y-2 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-2"><FiMail className="w-4 h-4" />{user.Email}</div>

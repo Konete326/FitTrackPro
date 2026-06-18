@@ -47,3 +47,17 @@ export const deleteClientMealPlan = (clientId, planId) =>
 
 export const toggleClientMealPlan = (clientId, planId, isActive) =>
   API.put(`/trainer/clients/${clientId}/meal-plans/${planId}/toggle`, { IsActive: isActive });
+
+// Trainer profile management
+export const updateTrainerProfile = (data) => API.put('/trainer/profile', data);
+
+export const uploadTrainerImage = (formData) =>
+  API.post('/trainer/profile/image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+export const removeGalleryImage = (imageUrl) =>
+  API.delete('/trainer/profile/gallery-image', { data: { imageUrl } });
+
+export const getTrainerPublicProfile = (trainerId) =>
+  API.get(`/trainer/${trainerId}/public`);

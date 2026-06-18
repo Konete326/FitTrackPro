@@ -61,11 +61,11 @@ function TrainerManagement() {
     <>
     <AdminLayout pageTitle="Trainer Management">
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mb-6">
-        <div className="sm:col-span-8 relative">
+        <div className="sm:col-span-10 relative">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input type="text" placeholder="Search trainers..." value={search} onChange={(e) => setSearch(e.target.value)} className="form-input pl-10 w-full bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700/60 rounded-lg" />
         </div>
-        <div className="sm:col-span-4 flex sm:justify-end">
+        <div className="sm:col-span-2 flex sm:justify-end">
           <Button variant="primary" icon={<FiPlus className="w-4 h-4" />} onClick={() => navigate('/admin/create-trainer')}>Add Trainer</Button>
         </div>
       </div>

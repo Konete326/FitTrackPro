@@ -8,7 +8,7 @@ import Skeleton from '../../components/common/Skeleton';
 import { useAuth } from '../../contexts/AuthContext';
 import { getClients, getDashboardStats } from '../../services/trainerService';
 import { useNavigate } from 'react-router-dom';
-import { FiUser, FiMail, FiCalendar, FiEdit2, FiUsers, FiClipboard } from 'react-icons/fi';
+import { FiUser, FiMail, FiCalendar, FiEdit2, FiUsers, FiClipboard, FiCheckCircle } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 function TrainerProfile() {
@@ -56,6 +56,7 @@ function TrainerProfile() {
           <div className="flex flex-wrap gap-2 mt-4 justify-center">
             <Badge variant="violet">Trainer</Badge>
             {profile.FitnessLevel && <Badge variant="sky">{profile.FitnessLevel}</Badge>}
+            {user.IsVerified && <Badge variant="green"><FiCheckCircle className="w-3 h-3 text-blue-500 mr-1" />Verified</Badge>}
           </div>
           <div className="mt-6 space-y-2 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-2"><FiMail className="w-4 h-4" />{user.Email}</div>

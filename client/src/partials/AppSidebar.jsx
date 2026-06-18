@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-/* ─── SVG Icon Set (stroke-based, consistent 16x16) ── */
-const S = { w: 16, h: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
+/* ─── SVG Icon Set (stroke-based, consistent 14x14) ── */
+const S = { w: 14, h: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
 
 const ICONS = {
   dashboard: <svg {...S}><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /></svg>,
@@ -135,7 +135,7 @@ function AppSidebar({
           w-64 lg:w-[68px]
           ${sidebarExpanded ? "lg:!w-64" : ""}
           ${sidebarOpen ? "translate-x-0" : "-translate-x-64 lg:translate-x-0"}
-          lg:ml-3 lg:my-3 lg:rounded-2xl lg:h-[calc(100dvh-24px)] lg:border lg:border-white/[0.06]
+          lg:ml-3 lg:my-3 lg:h-[calc(100dvh-24px)] lg:border lg:border-white/[0.06]
           no-scrollbar
         `}
       >
@@ -234,7 +234,7 @@ function AppSidebar({
                     {({ isActive }) => (
                       <>
                         {/* Icon container */}
-                        <span className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ${
+                        <span className={`shrink-0 w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-300 ${
                           isActive ? "text-violet-400" : "text-gray-500"
                         }`}>
                           {getIcon(link.to)}
@@ -270,7 +270,7 @@ function AppSidebar({
                   >
                     {({ isActive: a }) => (
                       <>
-                        <span className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ${
+                        <span className={`shrink-0 w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-300 ${
                           a || pathname.startsWith(link.prefix)
                             ? "text-violet-400"
                             : "text-gray-500"

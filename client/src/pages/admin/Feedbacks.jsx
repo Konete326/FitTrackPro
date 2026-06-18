@@ -96,18 +96,18 @@ function Feedbacks() {
                 key={fb._id}
                 onClick={() => handleSelect(fb)}
                 className={`p-4 rounded-xl cursor-pointer transition border ${selected?._id === fb._id
-                  ? 'border-violet-500 bg-violet-500/5 dark:bg-violet-500/10'
+                  ? 'border-gray-400 dark:border-gray-500 bg-gray-100 dark:bg-gray-700/50'
                   : 'border-gray-200 dark:border-gray-700/60 bg-gray-50 dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
-                } ${!fb.IsRead ? 'border-l-4 border-l-violet-500' : ''}`}
+                } ${!fb.IsRead ? 'border-l-4 border-l-blue-500' : ''}`}
               >
                 <div className="flex items-start gap-3">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${!fb.IsRead ? 'bg-violet-500/10 text-violet-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'}`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${!fb.IsRead ? 'bg-blue-500/10 text-blue-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'}`}>
                     {!fb.IsRead ? <FiMail className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <p className="font-medium text-sm text-gray-800 dark:text-gray-100 truncate">{fb.Name || 'User'}</p>
-                      {!fb.IsRead && <Badge variant="violet">New</Badge>}
+                      {!fb.IsRead && <Badge variant="blue">New</Badge>}
                       {fb.Replies?.length > 0 && (
                         <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded-full">{fb.Replies.length}</span>
                       )}
@@ -116,7 +116,7 @@ function Feedbacks() {
                     <div className="flex items-center justify-between mt-1.5">
                       <span className="text-xs text-gray-400 dark:text-gray-500">{format(new Date(fb.createdAt), 'MMM dd, HH:mm')}</span>
                       {!fb.IsRead && (
-                        <button onClick={(e) => handleMarkRead(e, fb._id)} className="text-xs text-violet-500 hover:text-violet-600 dark:text-violet-400">
+                        <button onClick={(e) => handleMarkRead(e, fb._id)} className="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400">
                           <FiCheck className="w-3.5 h-3.5" />
                         </button>
                       )}

@@ -8,7 +8,7 @@ import StatCard from '../../components/common/StatCard';
 import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
 import { getAchievements, getAchievementStats, getLeaderboard } from '../../services/achievementService';
-import { FiAward, FiStar, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import { FiAward, FiStar, FiTrendingUp, FiUsers, FiSearch } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 function Achievements() {
@@ -17,6 +17,7 @@ function Achievements() {
   const [totalPoints, setTotalPoints] = useState(0);
   const [leaderboard, setLeaderboard] = useState([]);
   const [typeFilter, setTypeFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('achievements');
 
   const fetchData = useCallback(async () => {
@@ -64,6 +65,13 @@ function Achievements() {
     { id: 'leaderboard', label: 'Leaderboard', icon: <FiUsers className="w-4 h-4" /> },
   ];
 
+  const filteredAchievements = achievements.filter((a) => {
+    const matchesSearch = !searchTerm ||
+      a.Title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      a.Description?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
+
   return (
     <DashboardLayout>
       <PageHeader title="Achievements" description="Your badges, points, and rankings" />
@@ -92,21 +100,33 @@ function Achievements() {
 
       {activeTab === 'achievements' && (
         <>
-          <div className="flex flex-wrap gap-3 mb-6">
-            <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} options={[{ value: '', label: 'All Types' }, ...typeOptions]} className="w-40" />
+          <div className="grid grid-cols-12 gap-3 mb-6">
+            <div className="col-span-10 relative">
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search achievements..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="form-input w-full pl-10 !bg-gray-50 dark:!bg-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/60 rounded-lg focus:ring-0 focus:border-gray-300 dark:focus:border-gray-600 transition"
+              />
+            </div>
+            <div className="col-span-2">
+              <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} options={[{ value: '', label: 'All Types' }, ...typeOptions]} className="w-full" />
+            </div>
           </div>
 
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[...Array(6)].map((_, i) => <Skeleton key={i} type="card" />)}
             </div>
-          ) : achievements.length === 0 ? (
+          ) : filteredAchievements.length === 0 ? (
             <Card>
-              <EmptyState icon={<FiAward className="w-12 h-12" />} title="No achievements yet" description="Keep working out, logging nutrition, and hitting goals to earn achievements!" />
+              <EmptyState icon={<FiAward className="w-12 h-12" />} title={achievements.length === 0 ? "No achievements yet" : "No results found"} description={achievements.length === 0 ? "Keep working out, logging nutrition, and hitting goals to earn achievements!" : "Try adjusting your search or filter."} />
             </Card>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {achievements.map((ach) => (
+              {filteredAchievements.map((ach) => (
                 <Card key={ach._id} className="hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 bg-violet-500/10 dark:bg-violet-500/20 rounded-xl flex items-center justify-center text-2xl shrink-0">

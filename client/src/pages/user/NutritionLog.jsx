@@ -11,9 +11,11 @@ import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import { getNutritions, createNutrition, deleteNutrition, searchFoods, getDailySummary, getMyMealPlans } from '../../services/nutritionService';
-import { FiPlus, FiTrash2, FiSearch, FiCoffee, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiSearch, FiCoffee, FiChevronDown, FiChevronUp, FiEdit3, FiClock } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+
+const RECENT_FOODS_KEY = 'fittrack_recent_foods';
 
 function NutritionLog() {
   const [entries, setEntries] = useState([]);
@@ -31,6 +33,30 @@ function NutritionLog() {
   const [activeTab, setActiveTab] = useState('log');
   const [expandedPlan, setExpandedPlan] = useState(null);
   const [expandedDay, setExpandedDay] = useState(null);
+  const [inputMode, setInputMode] = useState('direct'); // 'direct' or 'search'
+  const [directFood, setDirectFood] = useState({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' });
+  const [recentFoods, setRecentFoods] = useState([]);
+
+  // Load recent foods from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(RECENT_FOODS_KEY);
+      if (stored) setRecentFoods(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  const saveRecentFood = (foods) => {
+    const newItems = foods.map((f) => ({
+      Name: f.Name, Calories: f.Calories, Protein: f.Protein, Carbs: f.Carbs, Fat: f.Fat, MealType: mealType, savedAt: Date.now(),
+    }));
+    setRecentFoods((prev) => {
+      const combined = [...newItems, ...prev.filter((f) => !newItems.some((n) => n.Name === f.Name && n.MealType === f.MealType))].slice(0, 50);
+      localStorage.setItem(RECENT_FOODS_KEY, JSON.stringify(combined));
+      return combined;
+    });
+  };
+
+  const suggestedFoods = recentFoods.filter((f) => f.MealType === mealType).slice(0, 8);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -65,6 +91,17 @@ function NutritionLog() {
     setFoodSearch('');
   };
 
+  const addDirectFood = () => {
+    if (!directFood.Name.trim()) { toast.error('Enter food name'); return; }
+    const cal = Number(directFood.Calories) || 0;
+    setSelectedFoods([...selectedFoods, { Name: directFood.Name.trim(), Calories: cal, Protein: Number(directFood.Protein) || 0, Carbs: Number(directFood.Carbs) || 0, Fat: Number(directFood.Fat) || 0, Quantity: 1 }]);
+    setDirectFood({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' });
+  };
+
+  const addFromSuggestion = (food) => {
+    setSelectedFoods([...selectedFoods, { Name: food.Name, Calories: food.Calories, Protein: food.Protein || 0, Carbs: food.Carbs || 0, Fat: food.Fat || 0, Quantity: 1 }]);
+  };
+
   const removeFood = (index) => setSelectedFoods(selectedFoods.filter((_, i) => i !== index));
 
   const handleSubmit = async () => {
@@ -81,8 +118,11 @@ function NutritionLog() {
         })),
       });
       toast.success('Meal logged!');
+      saveRecentFood(selectedFoods);
       setShowModal(false);
       setSelectedFoods([]);
+      setInputMode('direct');
+      setDirectFood({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' });
       fetchData();
     } catch { toast.error('Failed to log meal'); }
     finally { setSubmitting(false); }
@@ -259,20 +299,63 @@ function NutritionLog() {
         </div>
       )}
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Log Meal" size="lg" footer={
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setInputMode('direct'); setDirectFood({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' }); }} title="Log Meal" size="lg" footer={
         <>
           <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
           <Button onClick={handleSubmit} loading={submitting}>Save Meal</Button>
         </>
       }>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Select label="Meal Type" options={['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-workout', 'Post-workout'].map((v) => ({ value: v, label: v }))} value={mealType} onChange={(e) => setMealType(e.target.value)} />
+          <Select label="Meal Type" options={['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-workout', 'Post-workout'].map((v) => ({ value: v, label: v }))} value={mealType} onChange={(e) => setMealType(e.target.value)} />
+
+          {/* Suggestions from history */}
+          {suggestedFoods.length > 0 && selectedFoods.length === 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <FiClock className="w-3.5 h-3.5 text-gray-400" />
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Suggested for {mealType}</p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {suggestedFoods.map((food, i) => (
+                  <button key={i} type="button" onClick={() => addFromSuggestion(food)} className="px-2.5 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-violet-500 hover:text-white transition">
+                    {food.Name} <span className="text-gray-400 dark:text-gray-500">({food.Calories} cal)</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Input mode toggle */}
+          <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <button type="button" onClick={() => setInputMode('direct')} className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${inputMode === 'direct' ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>
+              <FiEdit3 className="w-3.5 h-3.5" /> Quick Add
+            </button>
+            <button type="button" onClick={() => setInputMode('search')} className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${inputMode === 'search' ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>
+              <FiSearch className="w-3.5 h-3.5" /> Search Database
+            </button>
+          </div>
+
+          {/* Direct add mode */}
+          {inputMode === 'direct' && (
+            <div className="space-y-3">
+              <Input label="Food Name" placeholder="e.g., Chicken Biryani" value={directFood.Name} onChange={(e) => setDirectFood({ ...directFood, Name: e.target.value })} />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <Input label="Calories" type="number" placeholder="kcal" value={directFood.Calories} onChange={(e) => setDirectFood({ ...directFood, Calories: e.target.value })} />
+                <Input label="Protein" type="number" placeholder="g" value={directFood.Protein} onChange={(e) => setDirectFood({ ...directFood, Protein: e.target.value })} />
+                <Input label="Carbs" type="number" placeholder="g" value={directFood.Carbs} onChange={(e) => setDirectFood({ ...directFood, Carbs: e.target.value })} />
+                <Input label="Fat" type="number" placeholder="g" value={directFood.Fat} onChange={(e) => setDirectFood({ ...directFood, Fat: e.target.value })} />
+              </div>
+              <Button type="button" variant="secondary" size="sm" onClick={addDirectFood} icon={<FiPlus className="w-4 h-4" />}>Add to Meal</Button>
+            </div>
+          )}
+
+          {/* Search mode */}
+          {inputMode === 'search' && (
             <div className="flex items-end gap-2">
               <Input placeholder="Search food..." value={foodSearch} onChange={(e) => setFoodSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleFoodSearch())} icon={<FiSearch className="w-4 h-4" />} className="flex-1" />
               <Button variant="secondary" size="md" onClick={handleFoodSearch}>Search</Button>
             </div>
-          </div>
+          )}
           {foodResults.length > 0 && (
             <div className="border border-gray-200 dark:border-gray-700/60 rounded-lg max-h-40 overflow-y-auto">
               {foodResults.map((food, i) => (

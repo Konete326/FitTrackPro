@@ -5,7 +5,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FiUser, FiMail, FiCalendar, FiEdit2, FiShield } from 'react-icons/fi';
+import { FiUser, FiMail, FiCalendar, FiEdit2, FiShield, FiCheckCircle } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 function AdminProfile() {
@@ -35,7 +35,7 @@ function AdminProfile() {
           <p className="text-sm text-gray-500 dark:text-gray-400">@{user.Username}</p>
           <div className="flex flex-wrap gap-2 mt-4 justify-center">
             <Badge variant="red">Admin</Badge>
-            {user.IsVerified && <Badge variant="green">Verified</Badge>}
+            {user.IsVerified && <Badge variant="green"><FiCheckCircle className="w-3 h-3 text-blue-500 mr-1" />Verified</Badge>}
           </div>
           <div className="mt-6 space-y-2 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-2"><FiMail className="w-4 h-4" />{user.Email}</div>

@@ -2,6 +2,7 @@ const User = require('../Models/User_Model');
 const Workout = require('../Models/Workout_Model');
 const Goal = require('../Models/Goal_Model');
 const Notification = require('../Models/Notification_Model');
+const { uploadToCloudinary, deleteFromCloudinary } = require('../Utils/Cloudinary');
 
 const getClients = async (req, res, next) => {
   try {
@@ -104,4 +105,109 @@ const getTrainerDashboardStats = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
-module.exports = { getClients, getClientDetails, assignWorkout, setClientGoal, addClientNote, sendMessageToClient, removeClient, createWorkoutTemplate, getWorkoutTemplates, deleteWorkoutTemplate, getTrainerDashboardStats };
+const updateTrainerProfile = async (req, res, next) => {
+  try {
+    const trainer = await User.findById(req.user._id);
+    if (!trainer || trainer.Role !== 'Trainer') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const { Bio, Specialties, Services, Certifications, Experience, BackgroundImage } = req.body;
+    
+    if (Bio !== undefined) trainer.Profile.Bio = Bio;
+    if (Specialties !== undefined) trainer.Profile.Specialties = Specialties;
+    if (Services !== undefined) trainer.Profile.Services = Services;
+    if (Certifications !== undefined) trainer.Profile.Certifications = Certifications;
+    if (Experience !== undefined) trainer.Profile.Experience = Experience;
+    if (BackgroundImage !== undefined) trainer.Profile.BackgroundImage = BackgroundImage;
+
+    await trainer.save({ validateBeforeSave: false });
+    res.status(200).json({ success: true, data: trainer });
+  } catch (error) { next(error); }
+};
+
+const uploadTrainerImage = async (req, res, next) => {
+  try {
+    const trainer = await User.findById(req.user._id);
+    if (!trainer || trainer.Role !== 'Trainer') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    const { type } = req.body;
+    const folder = 'fittrack-pro/trainers';
+    const publicId = `${trainer._id}-${type}-${Date.now()}`;
+    const imageUrl = await uploadToCloudinary(req.file.buffer, folder, publicId);
+
+    if (type === 'profile') {
+      if (trainer.Profile.ProfilePicture) {
+        await deleteFromCloudinary(trainer.Profile.ProfilePicture);
+      }
+      trainer.Profile.ProfilePicture = imageUrl;
+    } else if (type === 'background') {
+      if (trainer.Profile.BackgroundImage) {
+        await deleteFromCloudinary(trainer.Profile.BackgroundImage);
+      }
+      trainer.Profile.BackgroundImage = imageUrl;
+    } else if (type === 'gallery') {
+      if (trainer.Profile.Gallery.length >= 10) {
+        return res.status(400).json({ success: false, message: 'Gallery limit reached (10 images max)' });
+      }
+      trainer.Profile.Gallery.push(imageUrl);
+    } else {
+      return res.status(400).json({ success: false, message: 'Invalid image type' });
+    }
+
+    await trainer.save({ validateBeforeSave: false });
+    res.status(200).json({ success: true, data: trainer, imageUrl });
+  } catch (error) { next(error); }
+};
+
+const removeGalleryImage = async (req, res, next) => {
+  try {
+    const trainer = await User.findById(req.user._id);
+    if (!trainer || trainer.Role !== 'Trainer') {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const { imageUrl } = req.body;
+    await deleteFromCloudinary(imageUrl);
+    trainer.Profile.Gallery = trainer.Profile.Gallery.filter(img => img !== imageUrl);
+    await trainer.save({ validateBeforeSave: false });
+
+    res.status(200).json({ success: true, data: trainer });
+  } catch (error) { next(error); }
+};
+
+const getTrainerPublicProfile = async (req, res, next) => {
+  try {
+    const trainer = await User.findById(req.params.id).select('-Password -ResetPasswordToken -ResetPasswordExpire');
+    if (!trainer || trainer.Role !== 'Trainer') {
+      return res.status(404).json({ success: false, message: 'Trainer not found' });
+    }
+
+    const publicProfile = {
+      _id: trainer._id,
+      Username: trainer.Username,
+      Profile: {
+        Name: trainer.Profile.Name,
+        Bio: trainer.Profile.Bio,
+        ProfilePicture: trainer.Profile.ProfilePicture,
+        BackgroundImage: trainer.Profile.BackgroundImage,
+        Specialties: trainer.Profile.Specialties,
+        Services: trainer.Profile.Services,
+        Certifications: trainer.Profile.Certifications,
+        Experience: trainer.Profile.Experience,
+        Gallery: trainer.Profile.Gallery,
+      },
+      Stats: trainer.Stats,
+    };
+
+    res.status(200).json({ success: true, data: publicProfile });
+  } catch (error) { next(error); }
+};
+
+module.exports = { getClients, getClientDetails, assignWorkout, setClientGoal, addClientNote, sendMessageToClient, removeClient, createWorkoutTemplate, getWorkoutTemplates, deleteWorkoutTemplate, getTrainerDashboardStats, updateTrainerProfile, uploadTrainerImage, removeGalleryImage, getTrainerPublicProfile };
