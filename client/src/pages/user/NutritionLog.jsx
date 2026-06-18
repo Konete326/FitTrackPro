@@ -10,8 +10,9 @@ import Modal from '../../components/common/Modal';
 import Skeleton from '../../components/common/Skeleton';
 import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
-import { getNutritions, createNutrition, deleteNutrition, searchFoods, getDailySummary, getMyMealPlans } from '../../services/nutritionService';
-import { FiPlus, FiTrash2, FiSearch, FiCoffee, FiChevronDown, FiChevronUp, FiEdit3, FiClock } from 'react-icons/fi';
+import { getNutritions, createNutrition, deleteNutrition, getDailySummary, getMyMealPlans } from '../../services/nutritionService';
+import { searchPakistaniFoods, getFoodsByMealType } from '../../data/pakistaniFoods';
+import { FiPlus, FiTrash2, FiSearch, FiCoffee, FiChevronDown, FiChevronUp, FiEdit3, FiClock, FiX, FiArrowLeft } from 'react-icons/fi';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 
@@ -22,9 +23,10 @@ function NutritionLog() {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [dailyTotals, setDailyTotals] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showLogForm, setShowLogForm] = useState(false);
   const [foodSearch, setFoodSearch] = useState('');
   const [foodResults, setFoodResults] = useState([]);
+  const [showFoodDropdown, setShowFoodDropdown] = useState(false);
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [mealType, setMealType] = useState('Breakfast');
   const [submitting, setSubmitting] = useState(false);
@@ -77,17 +79,19 @@ function NutritionLog() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const handleFoodSearch = async () => {
-    if (!foodSearch.trim()) return;
-    try {
-      const { data } = await searchFoods({ query: foodSearch });
-      setFoodResults(data.data || []);
-    } catch { toast.error('Failed to search foods'); }
-  };
+  // Real-time local food search
+  useEffect(() => {
+    if (showLogForm && foodSearch.trim().length > 0) {
+      const results = searchPakistaniFoods(foodSearch, mealType);
+      setFoodResults(results.slice(0, 30));
+    } else if (showLogForm && foodSearch.trim().length === 0) {
+      const results = getFoodsByMealType(mealType);
+      setFoodResults(results.slice(0, 30));
+    }
+  }, [foodSearch, mealType, showLogForm]);
 
   const addFood = (food) => {
-    setSelectedFoods([...selectedFoods, { ...food, Quantity: 1 }]);
-    setFoodResults([]);
+    setSelectedFoods([...selectedFoods, { Name: food.Name, Calories: food.Calories, Protein: food.Protein, Carbs: food.Carbs, Fat: food.Fat, Quantity: 1 }]);
     setFoodSearch('');
   };
 
@@ -119,10 +123,10 @@ function NutritionLog() {
       });
       toast.success('Meal logged!');
       saveRecentFood(selectedFoods);
-      setShowModal(false);
+      setShowLogForm(false);
       setSelectedFoods([]);
-      setInputMode('direct');
       setDirectFood({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' });
+      setFoodSearch('');
       fetchData();
     } catch { toast.error('Failed to log meal'); }
     finally { setSubmitting(false); }
@@ -148,7 +152,7 @@ function NutritionLog() {
         actions={
           <div className="flex gap-3">
             <Input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
-            <Button icon={<FiPlus className="w-4 h-4" />} onClick={() => setShowModal(true)}>Log Meal</Button>
+            <Button icon={<FiPlus className="w-4 h-4" />} onClick={() => setShowLogForm(true)}>Log Meal</Button>
           </div>
         }
       />
@@ -265,7 +269,7 @@ function NutritionLog() {
       {loading ? (
         <div className="space-y-4">{[...Array(3)].map((_, i) => <Skeleton key={i} type="rect" />)}</div>
       ) : entries.length === 0 ? (
-        <Card><EmptyState icon={<FiPlus className="w-16 h-16" />} title="No meals logged" description="Log your first meal for this day" action="Log Meal" onAction={() => setShowModal(true)} /></Card>
+        <Card><EmptyState icon={<FiPlus className="w-16 h-16" />} title="No meals logged" description="Log your first meal for this day" action="Log Meal" onAction={() => setShowLogForm(true)} /></Card>
       ) : (
         <div className="space-y-4">
           {entries.map((entry) => (
@@ -299,21 +303,34 @@ function NutritionLog() {
         </div>
       )}
 
-      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setInputMode('direct'); setDirectFood({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' }); }} title="Log Meal" size="lg" footer={
-        <>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-          <Button onClick={handleSubmit} loading={submitting}>Save Meal</Button>
-        </>
-      }>
-        <div className="space-y-4">
-          <Select label="Meal Type" options={['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-workout', 'Post-workout'].map((v) => ({ value: v, label: v }))} value={mealType} onChange={(e) => setMealType(e.target.value)} />
+      {/* ===== SPLIT PAGE LOG MEAL VIEW ===== */}
+      {showLogForm && (
+        <div className="mb-6">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <button onClick={() => { setShowLogForm(false); setFoodSearch(''); setDirectFood({ Name: '', Calories: '', Protein: '', Carbs: '', Fat: '' }); }} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-gray-500 dark:text-gray-400">
+                <FiArrowLeft className="w-5 h-5" />
+              </button>
+              <div>
+                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Log Meal</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{format(new Date(selectedDate, 'yyyy-MM-dd'), 'EEEE, MMM d')}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Select options={['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-workout', 'Post-workout'].map((v) => ({ value: v, label: v }))} value={mealType} onChange={(e) => setMealType(e.target.value)} />
+              <Button onClick={handleSubmit} loading={submitting} disabled={selectedFoods.length === 0}>
+                Save Meal ({selectedFoods.length})
+              </Button>
+            </div>
+          </div>
 
-          {/* Suggestions from history */}
+          {/* Suggestions */}
           {suggestedFoods.length > 0 && selectedFoods.length === 0 && (
-            <div>
+            <Card className="mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <FiClock className="w-3.5 h-3.5 text-gray-400" />
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Suggested for {mealType}</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Quick picks for {mealType}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {suggestedFoods.map((food, i) => (
@@ -322,68 +339,104 @@ function NutritionLog() {
                   </button>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
-          {/* Input mode toggle */}
-          <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
-            <button type="button" onClick={() => setInputMode('direct')} className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${inputMode === 'direct' ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>
-              <FiEdit3 className="w-3.5 h-3.5" /> Quick Add
-            </button>
-            <button type="button" onClick={() => setInputMode('search')} className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${inputMode === 'search' ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400'}`}>
-              <FiSearch className="w-3.5 h-3.5" /> Search Database
-            </button>
-          </div>
-
-          {/* Direct add mode */}
-          {inputMode === 'direct' && (
-            <div className="space-y-3">
-              <Input label="Food Name" placeholder="e.g., Chicken Biryani" value={directFood.Name} onChange={(e) => setDirectFood({ ...directFood, Name: e.target.value })} />
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <Input label="Calories" type="number" placeholder="kcal" value={directFood.Calories} onChange={(e) => setDirectFood({ ...directFood, Calories: e.target.value })} />
-                <Input label="Protein" type="number" placeholder="g" value={directFood.Protein} onChange={(e) => setDirectFood({ ...directFood, Protein: e.target.value })} />
-                <Input label="Carbs" type="number" placeholder="g" value={directFood.Carbs} onChange={(e) => setDirectFood({ ...directFood, Carbs: e.target.value })} />
-                <Input label="Fat" type="number" placeholder="g" value={directFood.Fat} onChange={(e) => setDirectFood({ ...directFood, Fat: e.target.value })} />
-              </div>
-              <Button type="button" variant="secondary" size="sm" onClick={addDirectFood} icon={<FiPlus className="w-4 h-4" />}>Add to Meal</Button>
-            </div>
-          )}
-
-          {/* Search mode */}
-          {inputMode === 'search' && (
-            <div className="flex items-end gap-2">
-              <Input placeholder="Search food..." value={foodSearch} onChange={(e) => setFoodSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleFoodSearch())} icon={<FiSearch className="w-4 h-4" />} className="flex-1" />
-              <Button variant="secondary" size="md" onClick={handleFoodSearch}>Search</Button>
-            </div>
-          )}
-          {foodResults.length > 0 && (
-            <div className="border border-gray-200 dark:border-gray-700/60 rounded-lg max-h-40 overflow-y-auto">
-              {foodResults.map((food, i) => (
-                <button key={i} onClick={() => addFood(food)} className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition text-sm text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
-                  {food.Name} {food.Brand && <span className="text-gray-400">- {food.Brand}</span>} <span className="text-gray-400">({food.Calories} cal)</span>
-                </button>
-              ))}
-            </div>
-          )}
-          {selectedFoods.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Selected Foods</p>
-              {selectedFoods.map((food, i) => (
-                <div key={i} className="flex items-center justify-between bg-gray-100 dark:bg-gray-900 rounded-lg p-3">
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{food.Name}</p>
-                    <p className="text-xs text-gray-500">{food.Calories} cal per serving</p>
+          {/* Split Layout: Left = Quick Add + Selected, Right = Search Database */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* LEFT COLUMN: Quick Add + Selected Foods */}
+            <div className="space-y-4">
+              <Card>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
+                    <FiEdit3 className="w-4 h-4 text-violet-500" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <input type="number" min="1" value={food.Quantity} onChange={(e) => { const f = [...selectedFoods]; f[i].Quantity = Number(e.target.value) || 1; setSelectedFoods(f); }} className="w-16 form-input text-center bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 rounded text-sm" />
-                    <button onClick={() => removeFood(i)} className="text-red-500 hover:text-red-600"><FiTrash2 className="w-4 h-4" /></button>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Quick Add</h3>
+                    <p className="text-xs text-gray-400">Enter custom food manually</p>
                   </div>
                 </div>
-              ))}
+                <div className="space-y-3">
+                  <Input label="Food Name" placeholder="e.g., Chicken Biryani" value={directFood.Name} onChange={(e) => setDirectFood({ ...directFood, Name: e.target.value })} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input label="Calories" type="number" placeholder="kcal" value={directFood.Calories} onChange={(e) => setDirectFood({ ...directFood, Calories: e.target.value })} />
+                    <Input label="Protein" type="number" placeholder="g" value={directFood.Protein} onChange={(e) => setDirectFood({ ...directFood, Protein: e.target.value })} />
+                    <Input label="Carbs" type="number" placeholder="g" value={directFood.Carbs} onChange={(e) => setDirectFood({ ...directFood, Carbs: e.target.value })} />
+                    <Input label="Fat" type="number" placeholder="g" value={directFood.Fat} onChange={(e) => setDirectFood({ ...directFood, Fat: e.target.value })} />
+                  </div>
+                  <Button type="button" variant="secondary" size="sm" onClick={addDirectFood} icon={<FiPlus className="w-4 h-4" />} disabled={!directFood.Name.trim()}>Add to Meal</Button>
+                </div>
+              </Card>
+
+              {/* Selected Foods */}
+              {selectedFoods.length > 0 && (
+                <Card>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Selected Foods ({selectedFoods.length})</h3>
+                    <span className="text-xs font-medium text-violet-500">
+                      {selectedFoods.reduce((sum, f) => sum + (f.Calories * f.Quantity), 0)} total cal
+                    </span>
+                  </div>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {selectedFoods.map((food, i) => (
+                      <div key={i} className="flex items-center justify-between bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">
+                        <div className="flex-1 min-w-0 mr-3">
+                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{food.Name}</p>
+                          <p className="text-xs text-gray-500">{food.Calories} cal · P:{food.Protein}g C:{food.Carbs}g F:{food.Fat}g</p>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <input type="number" min="1" value={food.Quantity} onChange={(e) => { const f = [...selectedFoods]; f[i].Quantity = Number(e.target.value) || 1; setSelectedFoods(f); }} className="w-14 form-input text-center bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 rounded text-sm" />
+                          <button onClick={() => removeFood(i)} className="p-1 text-gray-400 hover:text-red-500 transition"><FiTrash2 className="w-4 h-4" /></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              )}
             </div>
-          )}
+
+            {/* RIGHT COLUMN: Search Desi Foods Database */}
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center">
+                    <FiSearch className="w-4 h-4 text-sky-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Desi Food Database</h3>
+                    <p className="text-xs text-gray-400">100+ Pakistani foods · click to add</p>
+                  </div>
+                </div>
+              </div>
+              <Input placeholder="Search biryani, daal, roti, paratha..." value={foodSearch} onChange={(e) => setFoodSearch(e.target.value)} icon={<FiSearch className="w-4 h-4" />} />
+              <div className="mt-3 border border-gray-200 dark:border-gray-700/60 rounded-lg max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700/40">
+                {foodResults.length > 0 ? (
+                  foodResults.map((food, i) => (
+                    <button key={i} type="button" onClick={() => addFood(food)} className="w-full text-left px-3 py-2.5 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition flex items-center justify-between group">
+                      <div>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{food.Name}</span>
+                        <div className="flex gap-2 mt-0.5 text-[10px] text-gray-400">
+                          <span>P:{food.Protein}g</span>
+                          <span>C:{food.Carbs}g</span>
+                          <span>F:{food.Fat}g</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400">{food.Calories} cal</span>
+                        <span className="w-6 h-6 rounded-full bg-violet-500/10 text-violet-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                          <FiPlus className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-3 py-8 text-center text-sm text-gray-400 dark:text-gray-500">No foods found</div>
+                )}
+              </div>
+            </Card>
+          </div>
         </div>
-      </Modal>
+      )}
         </>
       )}
 

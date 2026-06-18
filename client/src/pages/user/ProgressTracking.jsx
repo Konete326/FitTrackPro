@@ -400,13 +400,15 @@ function ProgressTracking() {
           {/* Step 3: Wellness + Notes */}
           {step === 2 && (
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Energy: {formData.EnergyLevel}/10</label>
-                <input type="range" min="1" max="10" value={formData.EnergyLevel} onChange={(e) => setFormData({ ...formData, EnergyLevel: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sleep Quality: {formData.SleepQuality}/10</label>
-                <input type="range" min="1" max="10" value={formData.SleepQuality} onChange={(e) => setFormData({ ...formData, SleepQuality: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-violet-500" />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Energy: {formData.EnergyLevel}/10</label>
+                  <input type="range" min="1" max="10" value={formData.EnergyLevel} onChange={(e) => setFormData({ ...formData, EnergyLevel: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sleep Quality: {formData.SleepQuality}/10</label>
+                  <input type="range" min="1" max="10" value={formData.SleepQuality} onChange={(e) => setFormData({ ...formData, SleepQuality: parseInt(e.target.value) })} className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-violet-500" />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stress Level: {formData.StressLevel}/10</label>

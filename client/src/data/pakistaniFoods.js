@@ -1,0 +1,146 @@
+// Pakistani Desi Food Database with nutritional info per serving
+// Categories: Breakfast, Lunch, Dinner, Snack
+
+export const PAKISTANI_FOODS = [
+  // ===== BREAKFAST (Nashta) =====
+  { Name: 'Paratha', Calories: 260, Protein: 4, Carbs: 32, Fat: 13, MealType: 'Breakfast' },
+  { Name: 'Aloo Paratha', Calories: 300, Protein: 5, Carbs: 38, Fat: 14, MealType: 'Breakfast' },
+  { Name: 'Gobi Paratha', Calories: 280, Protein: 5, Carbs: 35, Fat: 13, MealType: 'Breakfast' },
+  { Name: 'Mooli Paratha', Calories: 270, Protein: 5, Carbs: 34, Fat: 12, MealType: 'Breakfast' },
+  { Name: 'Anda Paratha', Calories: 350, Protein: 12, Carbs: 32, Fat: 19, MealType: 'Breakfast' },
+  { Name: 'Poori', Calories: 230, Protein: 4, Carbs: 28, Fat: 11, MealType: 'Breakfast' },
+  { Name: 'Halwa Poori (1 plate)', Calories: 550, Protein: 8, Carbs: 65, Fat: 28, MealType: 'Breakfast' },
+  { Name: 'Chana Masala (1 katori)', Calories: 180, Protein: 9, Carbs: 25, Fat: 5, MealType: 'Breakfast' },
+  { Name: 'Lassi (Sweet)', Calories: 200, Protein: 6, Carbs: 28, Fat: 7, MealType: 'Breakfast' },
+  { Name: 'Lassi (Salt)', Calories: 120, Protein: 5, Carbs: 10, Fat: 6, MealType: 'Breakfast' },
+  { Name: 'Doodh Patti Chai', Calories: 120, Protein: 4, Carbs: 12, Fat: 6, MealType: 'Breakfast' },
+  { Name: 'Anda Bhurji (2 eggs)', Calories: 220, Protein: 14, Carbs: 4, Fat: 17, MealType: 'Breakfast' },
+  { Name: 'Fried Eggs (2)', Calories: 200, Protein: 12, Carbs: 1, Fat: 16, MealType: 'Breakfast' },
+  { Name: 'Omelette (2 eggs)', Calories: 240, Protein: 14, Carbs: 3, Fat: 19, MealType: 'Breakfast' },
+  { Name: 'Shami Kebabs (2 pcs)', Calories: 180, Protein: 12, Carbs: 10, Fat: 10, MealType: 'Breakfast' },
+  { Name: 'Nihari (1 katori)', Calories: 320, Protein: 22, Carbs: 12, Fat: 21, MealType: 'Breakfast' },
+  { Name: 'Paye (1 bowl)', Calories: 280, Protein: 18, Carbs: 8, Fat: 20, MealType: 'Breakfast' },
+  { Name: 'Sir Pai (1 plate)', Calories: 350, Protein: 20, Carbs: 10, Fat: 26, MealType: 'Breakfast' },
+  { Name: 'Puri Chana (1 plate)', Calories: 450, Protein: 14, Carbs: 52, Fat: 20, MealType: 'Breakfast' },
+  { Name: 'Daliya (1 bowl)', Calories: 180, Protein: 6, Carbs: 32, Fat: 3, MealType: 'Breakfast' },
+  { Name: 'Oats Porridge', Calories: 160, Protein: 6, Carbs: 27, Fat: 3, MealType: 'Breakfast' },
+  { Name: 'Bread Butter (2 slices)', Calories: 250, Protein: 6, Carbs: 28, Fat: 13, MealType: 'Breakfast' },
+  { Name: 'French Toast (2 pcs)', Calories: 300, Protein: 10, Carbs: 30, Fat: 15, MealType: 'Breakfast' },
+  { Name: 'Pancakes (2 pcs)', Calories: 280, Protein: 7, Carbs: 38, Fat: 11, MealType: 'Breakfast' },
+  { Name: 'Dates (5 pcs)', Calories: 140, Protein: 1, Carbs: 36, Fat: 0, MealType: 'Breakfast' },
+  { Name: 'Banana (1 medium)', Calories: 105, Protein: 1, Carbs: 27, Fat: 0, MealType: 'Breakfast' },
+  { Name: 'Yoghurt (1 cup)', Calories: 100, Protein: 6, Carbs: 8, Fat: 5, MealType: 'Breakfast' },
+  { Name: 'Haleem (1 bowl)', Calories: 300, Protein: 18, Carbs: 30, Fat: 12, MealType: 'Breakfast' },
+
+  // ===== LUNCH =====
+  { Name: 'Chicken Biryani (1 plate)', Calories: 500, Protein: 28, Carbs: 55, Fat: 18, MealType: 'Lunch' },
+  { Name: 'Mutton Biryani (1 plate)', Calories: 580, Protein: 30, Carbs: 52, Fat: 26, MealType: 'Lunch' },
+  { Name: 'Beef Biryani (1 plate)', Calories: 560, Protein: 30, Carbs: 52, Fat: 24, MealType: 'Lunch' },
+  { Name: 'Chicken Pulao (1 plate)', Calories: 450, Protein: 24, Carbs: 55, Fat: 14, MealType: 'Lunch' },
+  { Name: 'Mutton Pulao (1 plate)', Calories: 520, Protein: 26, Carbs: 52, Fat: 22, MealType: 'Lunch' },
+  { Name: 'Daal Chawal (1 plate)', Calories: 380, Protein: 14, Carbs: 58, Fat: 10, MealType: 'Lunch' },
+  { Name: 'Daal Mash (1 katori)', Calories: 200, Protein: 12, Carbs: 28, Fat: 5, MealType: 'Lunch' },
+  { Name: 'Daal Chana (1 katori)', Calories: 190, Protein: 11, Carbs: 27, Fat: 5, MealType: 'Lunch' },
+  { Name: 'Daal Moong (1 katori)', Calories: 170, Protein: 10, Carbs: 25, Fat: 4, MealType: 'Lunch' },
+  { Name: 'Daal Masoor (1 katori)', Calories: 180, Protein: 11, Carbs: 26, Fat: 4, MealType: 'Lunch' },
+  { Name: 'Roti (1 plain)', Calories: 120, Protein: 4, Carbs: 22, Fat: 2, MealType: 'Lunch' },
+  { Name: 'Tandoori Roti', Calories: 140, Protein: 4, Carbs: 26, Fat: 2, MealType: 'Lunch' },
+  { Name: 'Naan (plain)', Calories: 200, Protein: 6, Carbs: 34, Fat: 4, MealType: 'Lunch' },
+  { Name: 'Butter Naan', Calories: 280, Protein: 6, Carbs: 34, Fat: 12, MealType: 'Lunch' },
+  { Name: 'Garlic Naan', Calories: 300, Protein: 6, Carbs: 36, Fat: 14, MealType: 'Lunch' },
+  { Name: 'Chicken Karahi (1 katori)', Calories: 320, Protein: 28, Carbs: 8, Fat: 20, MealType: 'Lunch' },
+  { Name: 'Mutton Karahi (1 katori)', Calories: 380, Protein: 26, Carbs: 6, Fat: 28, MealType: 'Lunch' },
+  { Name: 'Beef Karahi (1 katori)', Calories: 360, Protein: 28, Carbs: 6, Fat: 25, MealType: 'Lunch' },
+  { Name: 'Chicken Handi (1 katori)', Calories: 300, Protein: 26, Carbs: 10, Fat: 17, MealType: 'Lunch' },
+  { Name: 'Aloo Gosht (1 katori)', Calories: 350, Protein: 22, Carbs: 18, Fat: 21, MealType: 'Lunch' },
+  { Name: 'Bhindi Masala (1 katori)', Calories: 150, Protein: 4, Carbs: 14, Fat: 9, MealType: 'Lunch' },
+  { Name: 'Baingan Bharta (1 katori)', Calories: 140, Protein: 3, Carbs: 12, Fat: 9, MealType: 'Lunch' },
+  { Name: 'Aloo Gobi (1 katori)', Calories: 160, Protein: 4, Carbs: 18, Fat: 8, MealType: 'Lunch' },
+  { Name: 'Methi Aloo (1 katori)', Calories: 150, Protein: 3, Carbs: 16, Fat: 8, MealType: 'Lunch' },
+  { Name: 'Palak Gosht (1 katori)', Calories: 300, Protein: 22, Carbs: 10, Fat: 19, MealType: 'Lunch' },
+  { Name: 'Saag (1 katori)', Calories: 130, Protein: 5, Carbs: 10, Fat: 8, MealType: 'Lunch' },
+  { Name: 'Raita (1 katori)', Calories: 80, Protein: 4, Carbs: 6, Fat: 4, MealType: 'Lunch' },
+  { Name: 'Salad (1 plate)', Calories: 50, Protein: 2, Carbs: 10, Fat: 0, MealType: 'Lunch' },
+  { Name: 'Chicken Tikka (6 pcs)', Calories: 280, Protein: 32, Carbs: 4, Fat: 14, MealType: 'Lunch' },
+  { Name: 'Seekh Kebabs (4 pcs)', Calories: 300, Protein: 22, Carbs: 6, Fat: 21, MealType: 'Lunch' },
+  { Name: 'Chapli Kebab (2 pcs)', Calories: 320, Protein: 18, Carbs: 10, Fat: 23, MealType: 'Lunch' },
+  { Name: 'Chicken Malai Boti (6 pcs)', Calories: 260, Protein: 28, Carbs: 6, Fat: 14, MealType: 'Lunch' },
+  { Name: 'Mutton Chaap (6 pcs)', Calories: 340, Protein: 24, Carbs: 4, Fat: 25, MealType: 'Lunch' },
+
+  // ===== DINNER =====
+  { Name: 'Chicken Biryani (dinner plate)', Calories: 500, Protein: 28, Carbs: 55, Fat: 18, MealType: 'Dinner' },
+  { Name: 'Mutton Biryani (dinner plate)', Calories: 580, Protein: 30, Carbs: 52, Fat: 26, MealType: 'Dinner' },
+  { Name: 'Chicken Qorma (1 katori)', Calories: 340, Protein: 26, Carbs: 10, Fat: 22, MealType: 'Dinner' },
+  { Name: 'Mutton Qorma (1 katori)', Calories: 400, Protein: 24, Carbs: 8, Fat: 30, MealType: 'Dinner' },
+  { Name: 'Beef Qorma (1 katori)', Calories: 380, Protein: 26, Carbs: 8, Fat: 27, MealType: 'Dinner' },
+  { Name: 'Chicken White Karahi', Calories: 310, Protein: 28, Carbs: 6, Fat: 20, MealType: 'Dinner' },
+  { Name: 'Mutton Rogan Josh (1 katori)', Calories: 380, Protein: 24, Carbs: 8, Fat: 28, MealType: 'Dinner' },
+  { Name: 'Nihari (1 full plate)', Calories: 500, Protein: 32, Carbs: 18, Fat: 33, MealType: 'Dinner' },
+  { Name: 'Haleem (1 full plate)', Calories: 450, Protein: 25, Carbs: 42, Fat: 18, MealType: 'Dinner' },
+  { Name: 'Chicken Tikka Boti (8 pcs)', Calories: 350, Protein: 38, Carbs: 6, Fat: 18, MealType: 'Dinner' },
+  { Name: 'Mutton Boti (8 pcs)', Calories: 420, Protein: 32, Carbs: 4, Fat: 30, MealType: 'Dinner' },
+  { Name: 'Fish Fried (2 pcs)', Calories: 320, Protein: 22, Carbs: 14, Fat: 19, MealType: 'Dinner' },
+  { Name: 'Fish Grill (1 fillet)', Calories: 250, Protein: 30, Carbs: 2, Fat: 13, MealType: 'Dinner' },
+  { Name: 'Prawns Masala (1 katori)', Calories: 240, Protein: 24, Carbs: 10, Fat: 12, MealType: 'Dinner' },
+  { Name: 'Chicken Rezala (1 katori)', Calories: 330, Protein: 26, Carbs: 8, Fat: 22, MealType: 'Dinner' },
+  { Name: 'Mutton Shinwari (1 katori)', Calories: 360, Protein: 28, Carbs: 4, Fat: 26, MealType: 'Dinner' },
+  { Name: 'Chicken BBQ (half)', Calories: 400, Protein: 38, Carbs: 2, Fat: 26, MealType: 'Dinner' },
+  { Name: 'Aloo Matar (1 katori)', Calories: 170, Protein: 5, Carbs: 22, Fat: 7, MealType: 'Dinner' },
+  { Name: 'Chana Masala (1 katori)', Calories: 180, Protein: 9, Carbs: 25, Fat: 5, MealType: 'Dinner' },
+  { Name: 'Rajma (1 katori)', Calories: 200, Protein: 10, Carbs: 28, Fat: 5, MealType: 'Dinner' },
+  { Name: 'Mix Sabzi (1 katori)', Calories: 140, Protein: 4, Carbs: 14, Fat: 8, MealType: 'Dinner' },
+  { Name: 'Karela (1 katori)', Calories: 120, Protein: 3, Carbs: 10, Fat: 8, MealType: 'Dinner' },
+  { Name: 'Tinda Masala (1 katori)', Calories: 130, Protein: 3, Carbs: 12, Fat: 7, MealType: 'Dinner' },
+  { Name: 'Lauki (1 katori)', Calories: 110, Protein: 3, Carbs: 12, Fat: 5, MealType: 'Dinner' },
+  { Name: 'Torai (1 katori)', Calories: 120, Protein: 3, Carbs: 10, Fat: 7, MealType: 'Dinner' },
+
+  // ===== SNACKS =====
+  { Name: 'Samosa (1 pc)', Calories: 180, Protein: 3, Carbs: 20, Fat: 10, MealType: 'Snack' },
+  { Name: 'Pakora (5 pcs)', Calories: 220, Protein: 4, Carbs: 22, Fat: 13, MealType: 'Snack' },
+  { Name: 'Aloo Tikki (2 pcs)', Calories: 200, Protein: 3, Carbs: 24, Fat: 10, MealType: 'Snack' },
+  { Name: 'Dahi Bhalla (2 pcs)', Calories: 180, Protein: 5, Carbs: 20, Fat: 9, MealType: 'Snack' },
+  { Name: 'Chana Chaat (1 plate)', Calories: 200, Protein: 8, Carbs: 28, Fat: 6, MealType: 'Snack' },
+  { Name: 'Fruit Chaat (1 plate)', Calories: 120, Protein: 2, Carbs: 28, Fat: 1, MealType: 'Snack' },
+  { Name: 'Gol Gappay (6 pcs)', Calories: 180, Protein: 3, Carbs: 28, Fat: 6, MealType: 'Snack' },
+  { Name: 'Dahi Puri (6 pcs)', Calories: 220, Protein: 4, Carbs: 30, Fat: 9, MealType: 'Snack' },
+  { Name: 'Bhel Puri (1 plate)', Calories: 200, Protein: 4, Carbs: 32, Fat: 6, MealType: 'Snack' },
+  { Name: 'Papri Chaat (1 plate)', Calories: 250, Protein: 4, Carbs: 30, Fat: 12, MealType: 'Snack' },
+  { Name: 'Lassi (Sweet, 1 glass)', Calories: 200, Protein: 6, Carbs: 28, Fat: 7, MealType: 'Snack' },
+  { Name: 'Rooh Afza (1 glass)', Calories: 150, Protein: 1, Carbs: 36, Fat: 0, MealType: 'Snack' },
+  { Name: 'Sugarcane Juice (1 glass)', Calories: 130, Protein: 0, Carbs: 32, Fat: 0, MealType: 'Snack' },
+  { Name: 'Mango (1 medium)', Calories: 135, Protein: 1, Carbs: 35, Fat: 1, MealType: 'Snack' },
+  { Name: 'Apple (1 medium)', Calories: 95, Protein: 0, Carbs: 25, Fat: 0, MealType: 'Snack' },
+  { Name: 'Guava (1 medium)', Calories: 70, Protein: 3, Carbs: 14, Fat: 1, MealType: 'Snack' },
+  { Name: 'Orange (1 medium)', Calories: 62, Protein: 1, Carbs: 15, Fat: 0, MealType: 'Snack' },
+  { Name: 'Watermelon (1 slice)', Calories: 86, Protein: 2, Carbs: 22, Fat: 0, MealType: 'Snack' },
+  { Name: 'Banana (1 medium)', Calories: 105, Protein: 1, Carbs: 27, Fat: 0, MealType: 'Snack' },
+  { Name: 'Biscuits (4 pcs)', Calories: 180, Protein: 2, Carbs: 26, Fat: 8, MealType: 'Snack' },
+  { Name: 'Namkeen (1 small bowl)', Calories: 150, Protein: 3, Carbs: 18, Fat: 7, MealType: 'Snack' },
+  { Name: 'Popcorn (1 bowl)', Calories: 120, Protein: 4, Carbs: 20, Fat: 3, MealType: 'Snack' },
+  { Name: 'Roasted Chana (1 bowl)', Calories: 140, Protein: 8, Carbs: 20, Fat: 3, MealType: 'Snack' },
+  { Name: 'Makhana (1 bowl)', Calories: 100, Protein: 4, Carbs: 18, Fat: 1, MealType: 'Snack' },
+  { Name: 'Jalebi (3 pcs)', Calories: 250, Protein: 2, Carbs: 42, Fat: 8, MealType: 'Snack' },
+  { Name: 'Gulab Jamun (2 pcs)', Calories: 280, Protein: 3, Carbs: 38, Fat: 13, MealType: 'Snack' },
+  { Name: 'Rasgulla (2 pcs)', Calories: 180, Protein: 6, Carbs: 24, Fat: 7, MealType: 'Snack' },
+  { Name: 'Kheer (1 katori)', Calories: 220, Protein: 6, Carbs: 32, Fat: 8, MealType: 'Snack' },
+  { Name: 'Firni (1 katori)', Calories: 200, Protein: 5, Carbs: 30, Fat: 7, MealType: 'Snack' },
+  { Name: 'Gajar Ka Halwa (1 katori)', Calories: 250, Protein: 4, Carbs: 34, Fat: 11, MealType: 'Snack' },
+  { Name: 'Zarda (1 plate)', Calories: 300, Protein: 4, Carbs: 45, Fat: 11, MealType: 'Snack' },
+  { Name: 'Sheer Khurma (1 bowl)', Calories: 280, Protein: 7, Carbs: 35, Fat: 12, MealType: 'Snack' },
+];
+
+// Get foods filtered by meal type
+export const getFoodsByMealType = (mealType) => {
+  return PAKISTANI_FOODS.filter((f) => f.MealType === mealType);
+};
+
+// Search foods by name (case-insensitive)
+export const searchPakistaniFoods = (query, mealType = null) => {
+  const q = query.toLowerCase().trim();
+  let foods = PAKISTANI_FOODS;
+  if (mealType) {
+    foods = foods.filter((f) => f.MealType === mealType);
+  }
+  if (!q) return foods;
+  return foods.filter((f) => f.Name.toLowerCase().includes(q));
+};

@@ -11,7 +11,11 @@ const get_waterIntake = async (req, res, next) => {
   try {
     const { date, page = 1, limit = 50 } = req.query;
     const filter = { UserId: req.user._id };
-    if (date) filter.Date = { $gte: new Date(date), $lt: new Date(new Date(date).getTime() + 86400000) };
+    if (date) {
+      const [y, m, d] = date.split('-').map(Number);
+      const localStart = new Date(y, m - 1, d, 0, 0, 0, 0);
+      filter.Date = { $gte: localStart, $lt: new Date(localStart.getTime() + 86400000) };
+    }
     const data = await Water.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(Math.min(parseInt(limit), 50)).lean();
     res.status(200).json({ success: true, count: data.length, data });
   } catch (error) { next(error); }
@@ -35,8 +39,8 @@ const delete_Water = async (req, res, next) => {
 const get_dailySummary = async (req, res, next) => {
   try {
     const { date } = req.params;
-    const targetDate = date ? new Date(date) : new Date();
-    const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
+    const targetDate = date ? (() => { const [y, m, d] = date.split('-').map(Number); return new Date(y, m - 1, d); })() : new Date();
+    const startOfDay = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 0, 0, 0, 0);
     const endOfDay = new Date(startOfDay.getTime() + 86400000);
     const result = await Water.aggregate([
       { $match: { UserId: req.user._id, Date: { $gte: startOfDay, $lt: endOfDay } } },
