@@ -2,29 +2,33 @@ import AppSidebar from "./AppSidebar";
 
 const sections = [
   {
-    name: "Fitness",
-    links: [
-      { to: "/dashboard", label: "Dashboard", exact: true },
-      { to: "/workouts", label: "Workouts" },
-      { to: "/nutrition", label: "Nutrition" },
-      { to: "/water", label: "Water" },
-      { to: "/progress", label: "Progress" },
-      { to: "/sleep", label: "Sleep" },
-      { to: "/goals", label: "Goals" },
+    title: "Fitness",
+    iconKey: "dashboard",
+    isActive: true,
+    items: [
+      { title: "Dashboard", url: "/dashboard", exact: true },
+      { title: "Workouts", url: "/workouts" },
+      { title: "Nutrition", url: "/nutrition" },
+      { title: "Water", url: "/water" },
+      { title: "Progress", url: "/progress" },
+      { title: "Sleep", url: "/sleep" },
+      { title: "Goals", url: "/goals" },
     ],
   },
   {
-    name: "Connect",
-    links: [
-      { to: "/browse-trainers", label: "Browse Trainers" },
-      { to: "/achievements", label: "Achievements" },
+    title: "Connect",
+    iconKey: "trainers",
+    items: [
+      { title: "Browse Trainers", url: "/browse-trainers" },
+      { title: "Achievements", url: "/achievements" },
     ],
   },
   {
-    name: "Account",
-    links: [
-      { to: "/profile", label: "Profile" },
-      { to: "/settings", label: "Settings" },
+    title: "Account",
+    iconKey: "profile",
+    items: [
+      { title: "Profile", url: "/profile" },
+      { title: "Settings", url: "/settings" },
     ],
   },
 ];

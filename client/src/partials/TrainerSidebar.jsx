@@ -2,19 +2,22 @@ import AppSidebar from "./AppSidebar";
 
 const sections = [
   {
-    name: "Trainer",
-    links: [
-      { to: "/trainer/dashboard", label: "Dashboard", exact: true },
-      { to: "/trainer/clients", label: "My Clients" },
-      { to: "/trainer/templates", label: "Templates" },
+    title: "Trainer",
+    iconKey: "trainers",
+    isActive: true,
+    items: [
+      { title: "Dashboard", url: "/trainer/dashboard", exact: true },
+      { title: "My Clients", url: "/trainer/clients" },
+      { title: "Templates", url: "/trainer/templates" },
     ],
   },
   {
-    name: "Account",
-    links: [
-      { to: "/trainer/profile", label: "Profile" },
-      { to: "/trainer/profile/edit", label: "Edit Public Profile" },
-      { to: "/trainer/settings", label: "Settings" },
+    title: "Account",
+    iconKey: "profile",
+    items: [
+      { title: "Profile", url: "/trainer/profile" },
+      { title: "Edit Public Profile", url: "/trainer/profile/edit" },
+      { title: "Settings", url: "/trainer/settings" },
     ],
   },
 ];
