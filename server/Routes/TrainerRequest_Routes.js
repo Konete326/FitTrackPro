@@ -6,11 +6,13 @@ const {
   getAllRequests,
   updateRequestStatus,
   getAvailableTrainers,
+  getMyRequests,
 } = require('../Controllers/TrainerRequest_Controller');
 
 router.use(protect);
 
 router.get('/available-trainers', getAvailableTrainers);
+router.get('/my-requests', getMyRequests);
 router.post('/', createRequest);
 
 router.get('/', authorize('Admin'), getAllRequests);

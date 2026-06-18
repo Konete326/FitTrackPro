@@ -94,11 +94,11 @@ function LogWorkout() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input label="Title" placeholder="e.g., Morning Upper Body" value={form.Title} onChange={(e) => updateField('Title', e.target.value)} onBlur={(e) => handleBlur('Title', e.target.value)} error={errors.Title} required icon={<FiTarget className="w-4 h-4" />} />
-              <Select label="Type" options={['Weightlifting', 'Cardio', 'HIIT', 'Yoga', 'Sports', 'Other'].map((v) => ({ value: v, label: v }))} value={form.Type} onChange={(e) => updateField('Type', e.target.value)} />
+              <Select label="Type" options={['Weightlifting', 'Cardio', 'HIIT', 'Yoga', 'CrossFit', 'Strength', 'Flexibility', 'Sports', 'Other'].map((v) => ({ value: v, label: v }))} value={form.Type} onChange={(e) => updateField('Type', e.target.value)} />
               <Select label="Difficulty" options={['Beginner', 'Intermediate', 'Advanced'].map((v) => ({ value: v, label: v }))} value={form.Difficulty} onChange={(e) => updateField('Difficulty', e.target.value)} />
               <Input label="Duration" type="number" placeholder="45" value={form.Duration} onChange={(e) => updateField('Duration', e.target.value)} onBlur={(e) => handleBlur('Duration', e.target.value)} error={errors.Duration} helperText="0-1440 minutes" icon={<FiClock className="w-4 h-4" />} />
               <Select label="Location" options={[{ value: '', label: 'Select location' }, ...workoutLocations.map((v) => ({ value: v, label: v }))]} value={form.Location} onChange={(e) => updateField('Location', e.target.value)} icon={<FiMapPin className="w-4 h-4" />} />
-              <Input label="Tags" placeholder="e.g., strength, upper body" value={form.Tags} onChange={(e) => updateField('Tags', e.target.value)} helperText="Separate with commas" icon={<FiTag className="w-4 h-4" />} />
+              <Input label="Tags (optional)" placeholder="e.g., strength, upper body" value={form.Tags} onChange={(e) => updateField('Tags', e.target.value)} helperText="Separate with commas" icon={<FiTag className="w-4 h-4" />} />
             </div>
           </Card>
 

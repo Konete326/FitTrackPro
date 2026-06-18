@@ -123,7 +123,7 @@ function BrowseTrainers() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{req.TrainerId?.Profile?.Name || req.TrainerId?.Username || 'Trainer'}</p>
-                    {req.message && <p className="text-xs text-gray-500 dark:text-gray-400">{req.message}</p>}
+                    {req.Message && <p className="text-xs text-gray-500 dark:text-gray-400">{req.Message}</p>}
                   </div>
                 </div>
                 <Badge

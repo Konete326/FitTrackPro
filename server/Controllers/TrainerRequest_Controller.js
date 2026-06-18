@@ -32,6 +32,16 @@ const updateRequestStatus = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
+const getMyRequests = async (req, res, next) => {
+  try {
+    const data = await TrainerRequest.find({ UserId: req.user._id })
+      .populate('TrainerId', 'Username Profile.Name Profile.ProfilePicture Stats')
+      .sort({ createdAt: -1 })
+      .lean();
+    res.status(200).json({ success: true, count: data.length, data });
+  } catch (error) { next(error); }
+};
+
 const getAvailableTrainers = async (req, res, next) => {
   try {
     const trainers = await User.find({ Role: 'Trainer', IsActive: true }).select('Username Profile.Name Profile.ProfilePicture Stats').lean();
@@ -39,4 +49,4 @@ const getAvailableTrainers = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
-module.exports = { createRequest, getAllRequests, updateRequestStatus, getAvailableTrainers };
+module.exports = { createRequest, getAllRequests, updateRequestStatus, getAvailableTrainers, getMyRequests };

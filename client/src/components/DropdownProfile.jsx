@@ -36,6 +36,7 @@ function DropdownProfile({ align }) {
   const avatarUrl = user?.Profile?.ProfilePicture || UserAvatar;
 
   const settingsPath = user?.Role === 'Admin' ? '/admin/settings' : user?.Role === 'Trainer' ? '/trainer/settings' : '/settings';
+  const profilePath = user?.Role === 'Admin' ? '/admin/profile' : user?.Role === 'Trainer' ? '/trainer/profile' : '/profile';
 
   const handleLogout = async () => {
     setDropdownOpen(false);
@@ -52,7 +53,14 @@ function DropdownProfile({ align }) {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <img className="w-8 h-8 rounded-full object-cover" src={avatarUrl} width="32" height="32" alt={displayName} />
+        <img 
+          className="w-8 h-8 rounded-full object-cover ring-2 ring-violet-500/20 transition-all duration-300 hover:ring-violet-500/40 cursor-pointer" 
+          src={avatarUrl} 
+          width="32" 
+          height="32" 
+          alt={displayName}
+          onClick={() => navigate(profilePath)}
+        />
         <div className="flex items-center truncate">
           <span className="truncate ml-2 text-sm font-medium text-gray-600 dark:text-gray-100 group-hover:text-gray-800 dark:group-hover:text-white">{displayName}</span>
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" viewBox="0 0 12 12">
@@ -81,6 +89,15 @@ function DropdownProfile({ align }) {
             <div className="text-xs text-gray-500 dark:text-gray-400 italic">{displayRole}</div>
           </div>
           <ul>
+            <li>
+              <Link
+                className="font-medium text-sm text-gray-700 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-400 flex items-center py-1 px-3"
+                to={profilePath}
+                onClick={() => setDropdownOpen(false)}
+              >
+                My Profile
+              </Link>
+            </li>
             <li>
               <Link
                 className="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"

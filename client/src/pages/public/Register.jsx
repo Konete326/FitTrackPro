@@ -6,20 +6,14 @@ import * as yup from 'yup';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../contexts/AuthContext';
 import Input from '../../components/common/Input';
-import Select from '../../components/common/Select';
 import Button from '../../components/common/Button';
-import { FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiUpload } from 'react-icons/fi';
+import { FiMail, FiLock, FiUser, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const schema = yup.object({
   Username: yup.string().required('Username is required').min(3).max(30).matches(/^[a-zA-Z0-9_]+$/, 'Only letters, numbers, and underscores'),
   Email: yup.string().required('Email is required').email('Invalid email'),
   Password: yup.string().required('Password is required').min(8, 'Min 8 characters'),
   'Profile[Name]': yup.string().required('Name is required'),
-  'Profile[Age]': yup.number().required('Age is required').min(13).max(120).typeError('Age must be a number'),
-  'Profile[Gender]': yup.string().required('Gender is required').oneOf(['Male', 'Female', 'Other']),
-  'Profile[Height]': yup.number().required('Height is required').positive().typeError('Must be a number'),
-  'Profile[Weight]': yup.number().required('Weight is required').positive().typeError('Must be a number'),
-  'Profile[FitnessLevel]': yup.string().required('Fitness level is required').oneOf(['Beginner', 'Intermediate', 'Advanced']),
 });
 
 function Register() {
@@ -27,8 +21,6 @@ function Register() {
   const { registerUser, user, loading: authLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [profilePic, setProfilePic] = useState(null);
-  const [preview, setPreview] = useState(null);
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
   useEffect(() => {
@@ -37,18 +29,6 @@ function Register() {
     }
   }, [user, authLoading, navigate]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image must be less than 5MB');
-        return;
-      }
-      setProfilePic(file);
-      setPreview(URL.createObjectURL(file));
-    }
-  };
-
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
@@ -56,9 +36,8 @@ function Register() {
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value);
       });
-      if (profilePic) formData.append('ProfilePicture', profilePic);
       await registerUser(formData);
-      toast.success('Account created successfully!');
+      toast.success('Account created! You can complete your profile in Settings.');
       navigate('/dashboard');
     } catch (err) {
       toast.error(err.message);
@@ -81,23 +60,6 @@ function Register() {
 
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-xs p-6 md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="flex flex-col items-center mb-6">
-              <div className="relative">
-                <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-                  {preview ? (
-                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                  ) : (
-                    <FiUser className="w-8 h-8 text-gray-400" />
-                  )}
-                </div>
-                <label className="absolute -bottom-1 -right-1 w-8 h-8 bg-violet-500 text-white rounded-full flex items-center justify-center cursor-pointer hover:bg-violet-600 transition">
-                  <FiUpload className="w-3.5 h-3.5" />
-                  <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-                </label>
-              </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">Profile picture (optional, max 5MB)</p>
-            </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Username" placeholder="john_doe" icon={<FiUser className="w-4 h-4" />} {...register('Username')} error={errors.Username?.message} />
               <Input label="Full Name" placeholder="John Doe" {...register('Profile[Name]')} error={errors['Profile[Name]']?.message} />
@@ -119,20 +81,9 @@ function Register() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input label="Age" type="number" placeholder="25" {...register('Profile[Age]')} error={errors['Profile[Age]']?.message} />
-              <Select label="Gender" options={[{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }, { value: 'Other', label: 'Other' }]} placeholder="Select gender" {...register('Profile[Gender]')} error={errors['Profile[Gender]']?.message} />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input label="Height (cm)" type="number" placeholder="175" {...register('Profile[Height]')} error={errors['Profile[Height]']?.message} />
-              <Input label="Weight (kg)" type="number" placeholder="70" {...register('Profile[Weight]')} error={errors['Profile[Weight]']?.message} />
-            </div>
-
-            <Select label="Fitness Level" options={[{ value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]} placeholder="Select fitness level" {...register('Profile[FitnessLevel]')} error={errors['Profile[FitnessLevel]']?.message} />
-
             <Button type="submit" loading={submitting} className="w-full">Create Account</Button>
           </form>
+          <p className="text-xs text-center text-gray-400 dark:text-gray-500 mt-4">You can add more details like age, height, weight, and fitness level later in your profile settings.</p>
         </div>
 
         <p className="text-center mt-6 text-sm text-gray-500 dark:text-gray-400">
